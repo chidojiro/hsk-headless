@@ -6,3 +6,4 @@ export { default as useControllable } from './useControllable';
 export { default as useVisibilityControl } from './useVisibilityControl';
 export * from './useVisibilityControl';
 export { default as usePagination } from './usePagination';
+export { default as useOverlayingLoader } from './useOverlayingLoader';

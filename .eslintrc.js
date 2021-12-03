@@ -4,7 +4,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'react-app',
+    'react-app/jest',
+    'plugin:@typescript-eslint/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -16,5 +22,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'no-prototype-builtins': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'import/no-anonymous-default-export': 'off',
   },
 };
