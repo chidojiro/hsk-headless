@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
+    "test": "jest --maxWorkers=1",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -45,8 +46,10 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
     "eslint-plugin-testing-library": "^5.0.1",
+    "jest": "^27.4.4",
     "postcss": "^8.4.4",
     "prettier": "^2.5.0",
+    "ts-jest": "^27.1.1",
     "typescript": "^4.3.2",
     "typescript-transform-paths": "^3.3.1"
   }
