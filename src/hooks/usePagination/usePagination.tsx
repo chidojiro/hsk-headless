@@ -1,130 +1,148 @@
-import { useControllable } from '../../hooks'
-import React from 'react'
+import { useControllable } from '../../hooks';
+import React from 'react';
 
-export interface PaginationItem {
-  type: 'page' | 'next' | 'previous' | 'ellipsis'
-  onClick?: React.ReactEventHandler
-  page?: number
-  selected?: boolean
-  disabled?: boolean
+export interface Item {
+  type: 'page' | 'next' | 'previous' | 'ellipsis';
+  onClick?: () => void;
+  page?: number;
+  selected: boolean;
+  disabled: boolean;
 }
 
-type Props = {
-  page?: number
-  totalRecord: number
-  perPage?: number
-  onChange?: (page: number) => void
-  pageRange?: number
-  pageEndpointRange?: number
-}
+export type Props = {
+  page?: number;
+  totalRecord: number;
+  perPage?: number;
+  onChange?: (page: number) => void;
+  centerItemsCount?: number;
+  sideItemsCount?: number;
+};
 
-type UsePaginationReturn = {
-  items: PaginationItem[]
-}
+export type Return = {
+  items: Item[];
+};
 
 const usePagination = ({
   page: pageProp,
   totalRecord = 0,
-  perPage = 15,
+  perPage = 10,
   onChange,
-  pageRange = 3,
-  pageEndpointRange: pageEndpointRangeProp = 5
-}: Props): UsePaginationReturn => {
-  const [page, setPage] = useControllable({ value: pageProp, onChange, defaultValue: 1 })
+  centerItemsCount = 3,
+  sideItemsCount: sideItemsCountProp = 5,
+}: Props): Return => {
+  const [page, setPage] = useControllable({ value: pageProp, onChange, defaultValue: 1 });
 
-  const pageEndpointRange = Math.max(pageEndpointRangeProp, pageRange)
+  const sideItemsCount = Math.max(sideItemsCountProp, centerItemsCount) || 1;
 
-  const totalPage = Math.ceil(totalRecord / perPage)
+  const totalPage = Math.ceil(totalRecord / perPage) || 1;
 
   const resolveShowingRange = () => {
     const numberToRange = (num: number, offset = 0) => {
-      return new Array(num).fill(null).map((_, idx) => idx + 1 + offset)
-    }
+      return new Array(num).fill(null).map((_, idx) => idx + 1 + offset);
+    };
 
-    if (totalPage <= pageEndpointRange + 1) return numberToRange(totalPage)
+    if (totalPage <= sideItemsCount + 1) return numberToRange(totalPage);
 
-    if (page >= pageEndpointRange && page <= totalPage - pageEndpointRange + 1)
-      return numberToRange(pageRange, page - Math.floor(pageRange / 2) - 1)
+    if (page >= sideItemsCount && page <= totalPage - sideItemsCount + 1)
+      return numberToRange(centerItemsCount, page - Math.floor(centerItemsCount / 2) - 1);
 
-    if (page < pageEndpointRange) return numberToRange(pageEndpointRange)
+    if (page < sideItemsCount) return numberToRange(sideItemsCount);
 
-    if (page > totalPage - pageEndpointRange + 1) return numberToRange(pageEndpointRange, totalPage - pageEndpointRange)
+    if (page > totalPage - sideItemsCount + 1) return numberToRange(sideItemsCount, totalPage - sideItemsCount);
 
-    return numberToRange(totalPage)
-  }
+    return numberToRange(totalPage);
+  };
 
-  const showingRange = resolveShowingRange()
+  const showingRange = resolveShowingRange();
+
+  const isNextDisabled = page >= totalPage;
 
   const next = React.useCallback(() => {
-    setPage((p: number) => Math.min(p + 1, totalPage))
-  }, [setPage, totalPage])
+    if (isNextDisabled) return;
+    console.log('hellooo');
+
+    setPage((p: number) => Math.min(p + 1, totalPage));
+  }, [isNextDisabled, setPage, totalPage]);
+
+  const isPrevDisabled = page === 1;
 
   const prev = React.useCallback(() => {
-    setPage((p: number) => Math.max(p - 1, 1))
-  }, [setPage])
+    if (isPrevDisabled) return;
+
+    setPage((p: number) => Math.max(p - 1, 1));
+  }, [isPrevDisabled, setPage]);
 
   const clickPage = React.useCallback(
     (page: number) => {
-      setPage(page)
+      setPage(page);
     },
     [setPage]
-  )
+  );
 
-  const nextItem = React.useMemo<PaginationItem>(
+  const nextItem = React.useMemo<Item>(
     () => ({
       type: 'next',
       onClick: next,
-      disabled: page >= totalPage
+      disabled: isNextDisabled,
+      selected: false,
     }),
-    [next, page, totalPage]
-  )
+    [isNextDisabled, next]
+  );
 
-  const prevItem = React.useMemo<PaginationItem>(
+  const prevItem = React.useMemo<Item>(
     () => ({
       type: 'previous',
       onClick: prev,
-      disabled: page === 1
+      disabled: isPrevDisabled,
+      selected: false,
     }),
-    [page, prev]
-  )
+    [isPrevDisabled, prev]
+  );
 
-  const ellipsisItem = React.useMemo<PaginationItem>(
+  const ellipsisItem = React.useMemo<Item>(
     () => ({
-      type: 'ellipsis'
+      type: 'ellipsis',
+      disabled: false,
+      selected: false,
     }),
     []
-  )
+  );
 
-  const firstPageItem = React.useMemo<PaginationItem>(
+  const firstPageItem = React.useMemo<Item>(
     () => ({
       type: 'page',
       page: 1,
-      onClick: () => clickPage(1)
+      onClick: () => clickPage(1),
+      disabled: false,
+      selected: false,
     }),
     [clickPage]
-  )
+  );
 
-  const lastPageItem = React.useMemo<PaginationItem>(
+  const lastPageItem = React.useMemo<Item>(
     () => ({
       type: 'page',
       page: totalPage,
-      onClick: () => clickPage(totalPage)
+      onClick: () => clickPage(totalPage),
+      disabled: false,
+      selected: false,
     }),
     [clickPage, totalPage]
-  )
+  );
 
-  const showingRangeItems = React.useMemo<PaginationItem[]>(
+  const showingRangeItems = React.useMemo<Item[]>(
     () =>
       showingRange.map(showingPage => ({
         type: 'page',
         page: showingPage,
         selected: showingPage === page,
-        onClick: () => clickPage(showingPage)
+        onClick: () => clickPage(showingPage),
+        disabled: false,
       })),
     [clickPage, page, showingRange]
-  )
+  );
 
-  const returnValue = React.useMemo<UsePaginationReturn>(
+  const returnValue = React.useMemo<Return>(
     () => ({
       items: [
         prevItem,
@@ -133,9 +151,9 @@ const usePagination = ({
         ...showingRangeItems,
         showingRange[showingRange.length - 1] < totalPage - 1 && ellipsisItem,
         showingRange[showingRange.length - 1] < totalPage && lastPageItem,
-        nextItem
-      ].filter((item): item is PaginationItem => !!item),
-      showingRange: { from: (page - 1) * perPage + 1, to: Math.min(totalRecord, page * perPage), total: totalRecord }
+        nextItem,
+      ].filter((item): item is Item => !!item),
+      showingRange: { from: (page - 1) * perPage + 1, to: Math.min(totalRecord, page * perPage), total: totalRecord },
     }),
     [
       ellipsisItem,
@@ -148,11 +166,11 @@ const usePagination = ({
       showingRange,
       showingRangeItems,
       totalPage,
-      totalRecord
+      totalRecord,
     ]
-  )
+  );
 
-  return returnValue
-}
+  return returnValue;
+};
 
-export default usePagination
+export default usePagination;
