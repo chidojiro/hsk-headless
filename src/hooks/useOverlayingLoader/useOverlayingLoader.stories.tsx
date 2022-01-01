@@ -2,22 +2,21 @@ import React from 'react';
 import { ComponentStory } from '@storybook/react';
 
 import useOverlayingLoader from './useOverlayingLoader';
-import styled from 'styled-components';
 
 export default {
   title: 'Hooks/useOverlayingLoader',
 };
 
-const StyledWrapper = styled.div`
-  background: wheat;
-`;
-
-const Template: ComponentStory<any> = ({ active, hostWidth, hostHeight, loader }: any) => {
+const Template: ComponentStory<any> = ({ active, hostWidth, hostHeight }: any) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  useOverlayingLoader({ active, host: ref, loader });
+  useOverlayingLoader({
+    active,
+    host: ref,
+    overlayingLoader: <div className='flex items-center justify-center w-full h-full'>Loading...</div>,
+  });
 
-  return <StyledWrapper style={{ width: hostWidth, height: hostHeight }} ref={ref}></StyledWrapper>;
+  return <div className='bg-gray-300' style={{ width: hostWidth, height: hostHeight }} ref={ref}></div>;
 };
 
 export const Basic = Template.bind({});
@@ -25,5 +24,4 @@ Basic.args = {
   active: false,
   hostWidth: '100vw',
   hostHeight: '100vh',
-  loader: 'Loading...',
 };

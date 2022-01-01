@@ -1,26 +1,18 @@
 import ReactDOM from 'react-dom';
 import { v4 as UUID } from 'uuid';
-import styled from 'styled-components';
 import { AssertUtils } from 'utils';
 import React from 'react';
 
-type Configs = {
+export type Props = {
   active: boolean;
   host: React.RefObject<HTMLElement> | HTMLElement | null;
-  loader?: React.ReactNode;
+  overlayingLoader?: React.ReactNode;
 };
-
-const StyledOverlayingSpinner = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
 
 const OVERLAYING_SPINNER_CLASS_NAME = 'hsk-overlaying-spinner';
 const OVERLAYING_SPINNER_DATA_SPINNER_IDS = 'data-spinnerids';
 
-const useOverlayingLoader = ({ active, host: hostProp, loader = 'loading...' }: Configs) => {
+const useOverlayingLoader = ({ active, host: hostProp, overlayingLoader = 'loading...' }: Props) => {
   const idRef = React.useRef(UUID());
 
   const getHostElement = React.useCallback(() => {
@@ -83,22 +75,20 @@ const useOverlayingLoader = ({ active, host: hostProp, loader = 'loading...' }: 
       overlayingSpinnerContainer.classList.add(OVERLAYING_SPINNER_CLASS_NAME);
       overlayingSpinnerContainer.style.cssText = `
         position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        z-index: 99999;
-        background-color: #fff;
-        opacity: 50%;
-        pointer-event: none;
       `;
       registerSpinnerId();
 
       host.appendChild(overlayingSpinnerContainer);
 
-      ReactDOM.render(<StyledOverlayingSpinner>{loader}</StyledOverlayingSpinner>, overlayingSpinnerContainer);
+      ReactDOM.render(<>{overlayingLoader}</>, overlayingSpinnerContainer);
     } else {
       unregisterSpinnerId();
     }
-  }, [active, getOverlayingSpinnerContainer, registerSpinnerId, loader, unregisterSpinnerId, getHostElement]);
+  }, [active, getOverlayingSpinnerContainer, registerSpinnerId, overlayingLoader, unregisterSpinnerId, getHostElement]);
 
   React.useLayoutEffect(() => {
     return () => {
