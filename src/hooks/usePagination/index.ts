@@ -1,4 +1,4 @@
-export { default } from './usePagination';
+export { usePagination } from './usePagination';
 export type {
   Return as UsePaginationReturn,
   Props as UsePaginationProps,

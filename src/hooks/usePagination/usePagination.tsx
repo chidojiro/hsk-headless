@@ -22,7 +22,7 @@ export type Return = {
   items: Item[];
 };
 
-const usePagination = ({
+export const usePagination = ({
   page: pageProp,
   totalRecord = 0,
   perPage = 10,
@@ -172,5 +172,3 @@ const usePagination = ({
 
   return returnValue;
 };
-
-export default usePagination;
