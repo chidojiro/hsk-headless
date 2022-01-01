@@ -6,13 +6,13 @@ import React from 'react';
 export type Props = {
   active: boolean;
   host: React.RefObject<HTMLElement> | HTMLElement | null;
-  overlayingLoader?: React.ReactNode;
+  component?: React.ReactNode;
 };
 
 const OVERLAYING_SPINNER_CLASS_NAME = 'hsk-overlaying-spinner';
 const OVERLAYING_SPINNER_DATA_SPINNER_IDS = 'data-spinnerids';
 
-const useOverlayingLoader = ({ active, host: hostProp, overlayingLoader = 'loading...' }: Props) => {
+export const useOverlayingLoader = ({ active, host: hostProp, component = 'loading...' }: Props) => {
   const idRef = React.useRef(UUID());
 
   const getHostElement = React.useCallback(() => {
@@ -84,11 +84,11 @@ const useOverlayingLoader = ({ active, host: hostProp, overlayingLoader = 'loadi
 
       host.appendChild(overlayingSpinnerContainer);
 
-      ReactDOM.render(<>{overlayingLoader}</>, overlayingSpinnerContainer);
+      ReactDOM.render(<>{component}</>, overlayingSpinnerContainer);
     } else {
       unregisterSpinnerId();
     }
-  }, [active, getOverlayingSpinnerContainer, registerSpinnerId, overlayingLoader, unregisterSpinnerId, getHostElement]);
+  }, [active, getOverlayingSpinnerContainer, registerSpinnerId, component, unregisterSpinnerId, getHostElement]);
 
   React.useLayoutEffect(() => {
     return () => {
@@ -97,5 +97,3 @@ const useOverlayingLoader = ({ active, host: hostProp, overlayingLoader = 'loadi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
-
-export default useOverlayingLoader;

@@ -13,7 +13,7 @@ const Template: ComponentStory<any> = ({ active, hostWidth, hostHeight }: any) =
   useOverlayingLoader({
     active,
     host: ref,
-    overlayingLoader: <div className='flex items-center justify-center w-full h-full'>Loading...</div>,
+    component: <div className='flex items-center justify-center w-full h-full'>Loading...</div>,
   });
 
   return <div className='bg-gray-300' style={{ width: hostWidth, height: hostHeight }} ref={ref}></div>;

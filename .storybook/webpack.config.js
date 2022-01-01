@@ -12,7 +12,7 @@ module.exports = ({ config }) => {
     hooks: path.resolve(__dirname, '..', 'src', 'hooks'),
     types: path.resolve(__dirname, '..', 'src', 'types'),
     providers: path.resolve(__dirname, '..', 'src', 'providers'),
-    constants: path.resolve(__dirname, '..', 'src', 'constants'),
+    consts: path.resolve(__dirname, '..', 'src', 'consts'),
   };
 
   return config;

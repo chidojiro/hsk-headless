@@ -10,13 +10,13 @@ export type UseControllableProps<T = any> = {
   changeAs?: (value: any) => T;
 };
 
-function useControllable<T>({
+export const useControllable = <T>({
   value: valueProp,
   onChange,
   defaultValue,
   valueAs,
   changeAs,
-}: UseControllableProps<T>): any {
+}: UseControllableProps<T>): any => {
   const isControlled = valueProp !== undefined && valueProp !== null;
   const prevValueRef = React.useRef(valueProp);
 
@@ -55,6 +55,4 @@ function useControllable<T>({
   }
 
   return UncontrolledState;
-}
-
-export default useControllable;
+};
