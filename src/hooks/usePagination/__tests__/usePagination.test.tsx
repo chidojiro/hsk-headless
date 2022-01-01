@@ -1,4 +1,4 @@
-import usePagination, { UsePaginationProps } from '..';
+import { usePagination, UsePaginationProps } from '..';
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { PaginationItem, UsePaginationReturn } from '..';
 

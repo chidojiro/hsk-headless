@@ -19,7 +19,7 @@ const Template: ComponentStory<any> = (props: UsePaginationProps) => {
           key={_idx}
           onClick={onClick}
           disabled={disabled}
-          className={classNames({ 'border border-blue-500 border-solid px-2': selected })}>
+          className={classNames('px-2', { 'border border-blue-500 border-solid': selected, 'opacity-50': disabled })}>
           {(() => {
             switch (type) {
               case 'ellipsis':
