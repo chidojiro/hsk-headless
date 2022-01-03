@@ -1,7 +1,7 @@
 import { render, act } from '@testing-library/react';
 import React from 'react';
 import { Mounter } from '../../../tests';
-import useScrollDisable from '../useScrollDisable';
+import { useScrollDisable } from '..';
 
 const HookHost = ({ isDisabled }: any) => {
   useScrollDisable(isDisabled);

@@ -1,46 +1,46 @@
-import { render, act } from '@testing-library/react'
-import React from 'react'
-import useUpdateEffect from '../useUpdateEffect'
+import { render, act } from '@testing-library/react';
+import React from 'react';
+import { useUpdateEffect } from '..';
 
-const mockListener = jest.fn()
+const mockListener = jest.fn();
 
-const UPDATE_AFTER = 1000
+const UPDATE_AFTER = 1000;
 
 const HookHost = ({ updateAfter }: any) => {
-  const [state, setState] = React.useState(false)
+  const [state, setState] = React.useState(false);
 
   React.useEffect(() => {
     if (updateAfter) {
       setTimeout(() => {
-        setState(p => !p)
-      }, updateAfter)
+        setState(p => !p);
+      }, updateAfter);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useUpdateEffect(() => {
-    mockListener()
-  }, [state])
+    mockListener();
+  }, [state]);
 
-  return null
-}
+  return null;
+};
 
 const renderComponent = (updateAfter?: number) => {
-  return render(<HookHost updateAfter={updateAfter} />)
-}
+  return render(<HookHost updateAfter={updateAfter} />);
+};
 
 it('should call listener', () => {
-  renderComponent()
+  renderComponent();
 
-  expect(mockListener).not.toBeCalled()
-})
+  expect(mockListener).not.toBeCalled();
+});
 
 it('should not call listener', () => {
-  renderComponent(UPDATE_AFTER)
+  renderComponent(UPDATE_AFTER);
 
   act(() => {
-    jest.advanceTimersByTime(UPDATE_AFTER)
-  })
+    jest.advanceTimersByTime(UPDATE_AFTER);
+  });
 
-  expect(mockListener).toBeCalled()
-})
+  expect(mockListener).toBeCalled();
+});
