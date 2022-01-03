@@ -22,6 +22,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'no-prototype-builtins': 'off',
+    'no-debugger': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/no-anonymous-default-export': 'off',
   },

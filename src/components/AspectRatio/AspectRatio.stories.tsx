@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { AspectRatio } from '.';
 
 export default {
-  title: 'AspectRatio',
+  title: 'Components/AspectRatio',
   component: AspectRatio,
 } as ComponentMeta<typeof AspectRatio>;
 

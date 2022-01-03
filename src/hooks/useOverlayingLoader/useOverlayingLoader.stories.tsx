@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory } from '@storybook/react';
 
-import useOverlayingLoader from './useOverlayingLoader';
+import { useOverlayingLoader } from '.';
 
 export default {
   title: 'Hooks/useOverlayingLoader',
@@ -22,6 +22,6 @@ const Template: ComponentStory<any> = ({ active, hostWidth, hostHeight }: any) =
 export const Basic = Template.bind({});
 Basic.args = {
   active: false,
-  hostWidth: '100vw',
-  hostHeight: '100vh',
+  hostWidth: '80vw',
+  hostHeight: '80vh',
 };

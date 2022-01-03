@@ -7,3 +7,5 @@ export * from './useVisibilityControl';
 export * from './useVisibilityControl';
 export * from './usePagination';
 export * from './useOverlayingLoader';
+export * from './useNotification';
+export * from './useGlobalState';

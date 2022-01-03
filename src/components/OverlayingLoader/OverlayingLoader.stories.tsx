@@ -5,7 +5,7 @@ import { OverlayingLoader } from '.';
 import { lorem } from 'consts';
 
 export default {
-  title: 'OverlayingLoader',
+  title: 'Components/OverlayingLoader',
   component: OverlayingLoader,
 } as ComponentMeta<typeof OverlayingLoader>;
 
@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof OverlayingLoader> = args => (
   </OverlayingLoader>
 );
 
-export const AsDiv = Template.bind({});
-AsDiv.args = {
+export const Basic = Template.bind({});
+Basic.args = {
   active: false,
 };
