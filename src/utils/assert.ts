@@ -19,6 +19,4 @@ const isObject = (data: unknown) => {
   return typeof data === 'object' && data !== null && !Array.isArray(data);
 };
 
-const AssertUtils = { isRef, isArray, isFunction, isObject, isNull, isUndefined, isNullOrUndefined };
-
-export default AssertUtils;
+export const AssertUtils = { isRef, isArray, isFunction, isObject, isNull, isUndefined, isNullOrUndefined };

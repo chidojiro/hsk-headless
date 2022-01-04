@@ -26,6 +26,4 @@ const withDefaultValue =
     }, target);
   };
 
-const ObjectUtils = { withDefaultValue };
-
-export default ObjectUtils;
+export const ObjectUtils = { withDefaultValue };

@@ -16,6 +16,4 @@ const clear = localStorage.clear;
 
 const remove = localStorage.removeItem;
 
-const LocalStorage = { get, set, clear, remove };
-
-export default LocalStorage;
+export const LocalStorageUtils = { get, set, clear, remove };
