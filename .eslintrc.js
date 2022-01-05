@@ -25,5 +25,6 @@ module.exports = {
     'no-debugger': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/no-anonymous-default-export': 'off',
+    'react/prop-types': 'off',
   },
 };
