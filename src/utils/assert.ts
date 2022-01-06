@@ -19,4 +19,17 @@ const isObject = (data: unknown) => {
   return typeof data === 'object' && data !== null && !Array.isArray(data);
 };
 
-export const AssertUtils = { isRef, isArray, isFunction, isObject, isNull, isUndefined, isNullOrUndefined };
+const isChangeEvent = <T = any>(data: any): data is React.ChangeEvent<T> => {
+  return Object.prototype.hasOwnProperty.call(data?.target, 'value');
+};
+
+export const AssertUtils = {
+  isRef,
+  isArray,
+  isFunction,
+  isObject,
+  isNull,
+  isUndefined,
+  isNullOrUndefined,
+  isChangeEvent,
+};
