@@ -10,3 +10,4 @@ export * from './useOverlayingLoader';
 export * from './useNotification';
 export * from './useGlobalState';
 export * from './useIsoMorphicEffect';
+export * from './useClipboard';
