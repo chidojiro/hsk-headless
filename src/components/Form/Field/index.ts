@@ -1,2 +1,4 @@
-export { default } from './Field'
-export type { FormFieldProps } from './Field'
+import { Props } from './Field';
+export { Field } from './Field';
+
+export type FieldProps = Omit<Props, 'component'>;

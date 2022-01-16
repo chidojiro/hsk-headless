@@ -3,7 +3,7 @@ import { FieldValues, FormProvider, SubmitHandler, UseFormReturn } from 'react-h
 
 import { useStateToggle } from 'hooks';
 
-type Props<T = any> = Omit<
+export type Props<T = any> = Omit<
   React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
   'onSubmit'
 > & {

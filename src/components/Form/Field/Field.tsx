@@ -2,13 +2,12 @@ import { get } from 'lodash';
 import React from 'react';
 import { RegisterOptions, useController, useFormContext } from 'react-hook-form';
 
-export type FormFieldProps = {
+export type Props<T = any> = {
   rules?: RegisterOptions;
   name: string;
   noErrorMessage?: boolean;
   errorGroup?: string[];
   className?: string;
-  inputClassName?: string;
   onChange?: (e: any) => void;
   onBlur?: (e: any) => void;
   defaultValue?: any;
@@ -16,13 +15,10 @@ export type FormFieldProps = {
   emptyValue?: any;
   defaultChecked?: boolean;
   type?: 'checkbox' | 'radio' | 'common';
+  component: React.ComponentType<T>;
 };
 
-export type Props<T = any> = FormFieldProps & {
-  component: React.ComponentType<T>;
-} & T;
-
-const Field = <T,>({
+export const Field = <T,>({
   component,
   name,
   rules,
@@ -30,7 +26,6 @@ const Field = <T,>({
   onBlur: onBlurProp,
   defaultValue,
   className,
-  inputClassName,
   noErrorMessage,
   value: valueProp,
   errorGroup = [],
@@ -91,7 +86,7 @@ const Field = <T,>({
 
   const isCheckboxOrRadio = ['checkbox', 'radio'].includes(type);
 
-  const resolveValue = React.useMemo(
+  const resolveValue = React.useCallback(
     () => {
       if (isCheckboxOrRadio) return valueProp;
 
@@ -119,12 +114,14 @@ const Field = <T,>({
     /* eslint-enable react-hooks/exhaustive-deps */
   );
 
+  const hasError = !!errorMessage || hasGroupError;
+
   return (
     <Component
       onChange={handleChange}
       onBlur={handleBlur}
-      error={!!errorMessage || hasGroupError}
-      className={inputClassName}
+      error={hasError || (undefined as any)}
+      className={className}
       value={resolveValue()}
       checked={isCheckboxOrRadio ? !!value : false}
       {...restField}

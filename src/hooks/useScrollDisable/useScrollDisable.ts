@@ -1,35 +1,25 @@
 import React from 'react';
 
-export const useScrollDisable = (disable: boolean, target?: HTMLElement | null) => {
-  const hasDisabledRef = React.useRef(false);
-
-  const resolveScrollContainer = (element?: HTMLElement | null): HTMLElement => {
-    if (!element) return document.body;
-
-    const isScrollableElement = element.scrollHeight > element.clientHeight;
-
-    if (isScrollableElement) return element;
-
-    return resolveScrollContainer(element.parentElement);
-  };
-
-  const scrollContainer = resolveScrollContainer(target);
-
+export const useScrollDisable = (disable: boolean) => {
   React.useLayoutEffect(() => {
     if (disable) {
-      hasDisabledRef.current = true;
-      scrollContainer.style.setProperty('overflow', 'hidden', 'important');
-    } else if (hasDisabledRef.current) {
-      hasDisabledRef.current = false;
-      scrollContainer.style.removeProperty('overflow');
+      const currentWidth = document.documentElement.offsetWidth;
+
+      document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+
+      const fullWidth = document.documentElement.offsetWidth;
+
+      document.documentElement.style.setProperty('padding-right', fullWidth - currentWidth + 'px');
+    } else {
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('padding-right');
     }
-  }, [disable, scrollContainer]);
+  }, [disable]);
 
   React.useEffect(() => {
     return () => {
-      if (hasDisabledRef.current) {
-        scrollContainer.style.removeProperty('overflow');
-      }
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('padding-right');
     };
-  }, [scrollContainer.style]);
+  }, []);
 };

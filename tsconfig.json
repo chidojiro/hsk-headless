@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "outDir": "dist",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
@@ -13,11 +14,15 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "*": ["./src/*"]
+      "components": ["./components"],
+      "hooks": ["./hooks"],
+      "consts": ["./consts"],
+      "tests": ["./tests"],
+      "types": ["./types"],
+      "utils": ["./utils"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc",
+    "build": "ttsc",
     "test": "jest --maxWorkers=1",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
