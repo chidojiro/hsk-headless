@@ -17,12 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "components": ["./components"],
-      "hooks": ["./hooks"],
-      "consts": ["./consts"],
-      "tests": ["./tests"],
-      "types": ["./types"],
-      "utils": ["./utils"]
+      "*": ["./*", "node_modules"]
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },

@@ -152,7 +152,11 @@ export const usePagination = ({
         showingRange[showingRange.length - 1] < totalPage && lastPageItem,
         nextItem,
       ].filter((item): item is Item => !!item),
-      showingRange: { from: (page - 1) * perPage + 1, to: Math.min(totalRecord, page * perPage), total: totalRecord },
+      showingRange: {
+        from: totalRecord === 0 ? 0 : (page - 1) * perPage + 1,
+        to: Math.min(totalRecord, page * perPage),
+        total: totalRecord,
+      },
     }),
     [
       ellipsisItem,
