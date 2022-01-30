@@ -20,6 +20,11 @@ export type Props = {
 
 export type Return = {
   items: Item[];
+  showingRange: {
+    from: number;
+    to: number;
+    total: number;
+  };
 };
 
 export const usePagination = ({
@@ -30,9 +35,13 @@ export const usePagination = ({
   centerItemsCount = 3,
   sideItemsCount: sideItemsCountProp = 5,
 }: Props): Return => {
+  if (perPage === 0) throw new Error('invalid prop "perPage"');
+  if (sideItemsCountProp === 0) throw new Error('invalid prop "sideItemsCount"');
+  if (centerItemsCount === 0) throw new Error('invalid prop "centerItemsCount"');
+
   const [page, setPage] = useControllable({ value: pageProp, onChange, defaultValue: 1 });
 
-  const sideItemsCount = Math.max(sideItemsCountProp, centerItemsCount) || 1;
+  const sideItemsCount = Math.max(sideItemsCountProp, centerItemsCount);
 
   const totalPage = Math.ceil(totalRecord / perPage) || 1;
 
@@ -141,23 +150,24 @@ export const usePagination = ({
     [clickPage, page, showingRange]
   );
 
-  const returnValue = React.useMemo<Return>(
-    () => ({
-      items: [
-        prevItem,
-        showingRange[0] > 1 && firstPageItem,
-        showingRange[0] > 2 && ellipsisItem,
-        ...showingRangeItems,
-        showingRange[showingRange.length - 1] < totalPage - 1 && ellipsisItem,
-        showingRange[showingRange.length - 1] < totalPage && lastPageItem,
-        nextItem,
-      ].filter((item): item is Item => !!item),
-      showingRange: {
-        from: totalRecord === 0 ? 0 : (page - 1) * perPage + 1,
-        to: Math.min(totalRecord, page * perPage),
-        total: totalRecord,
-      },
-    }),
+  const returnValue = React.useMemo(
+    () =>
+      ({
+        items: [
+          prevItem,
+          showingRange[0] > 1 && firstPageItem,
+          showingRange[0] > 2 && ellipsisItem,
+          ...showingRangeItems,
+          showingRange[showingRange.length - 1] < totalPage - 1 && ellipsisItem,
+          showingRange[showingRange.length - 1] < totalPage && lastPageItem,
+          nextItem,
+        ].filter((item): item is Item => !!item),
+        showingRange: {
+          from: totalRecord === 0 ? 0 : (page - 1) * perPage + 1,
+          to: Math.min(totalRecord, page * perPage),
+          total: totalRecord,
+        },
+      } as Return),
     [
       ellipsisItem,
       firstPageItem,
