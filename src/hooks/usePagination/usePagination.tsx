@@ -18,13 +18,15 @@ export type Props = {
   sideItemsCount?: number;
 };
 
+export type ShowingPaginationRange = {
+  from: number;
+  to: number;
+  total: number;
+};
+
 export type Return = {
   items: Item[];
-  showingRange: {
-    from: number;
-    to: number;
-    total: number;
-  };
+  showingRange: ShowingPaginationRange;
 };
 
 export const usePagination = ({
@@ -39,11 +41,20 @@ export const usePagination = ({
   if (sideItemsCountProp === 0) throw new Error('invalid prop "sideItemsCount"');
   if (centerItemsCount === 0) throw new Error('invalid prop "centerItemsCount"');
 
-  const [page, setPage] = useControllable({ value: pageProp, onChange, defaultValue: 1 });
-
   const sideItemsCount = Math.max(sideItemsCountProp, centerItemsCount);
 
   const totalPage = Math.ceil(totalRecord / perPage) || 1;
+
+  const [page, setPage] = useControllable({ value: pageProp, onChange, defaultValue: 1 });
+
+  const validatePage = React.useCallback(() => {
+    if (page < 0) setPage(0);
+    if (page > totalPage) setPage(totalPage);
+  }, [page, setPage, totalPage]);
+
+  React.useEffect(() => {
+    validatePage();
+  }, [validatePage]);
 
   const resolveShowingRange = () => {
     const numberToRange = (num: number, offset = 0) => {

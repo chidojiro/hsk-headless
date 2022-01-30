@@ -1,6 +1,7 @@
 import { usePagination, UsePaginationProps } from '..';
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { PaginationItem, UsePaginationReturn } from '..';
+import { ShowingPaginationRange } from '../usePagination';
 
 const getItemPrevious = (result: RenderResult<UsePaginationReturn>) =>
   result.current.items[0] as Required<PaginationItem>;
@@ -23,18 +24,19 @@ const getItemLastPage = (result: RenderResult<UsePaginationReturn>) =>
 const getEllipsisItem = (result: RenderResult<UsePaginationReturn>) =>
   result.current.items.find(({ type }) => type === 'ellipsis') as Required<PaginationItem>;
 
-const defaultTotalRecord = 100;
-const defaultPerPage = 10;
-const defaultCenterItemsCount = 3;
-const defaultSideItemsCount = 5;
+const defaultProps: UsePaginationProps = {
+  totalRecord: 100,
+  perPage: 10,
+  centerItemsCount: 3,
+  sideItemsCount: 5,
+};
+
+const mockOnChange = jest.fn();
 
 const renderDefault = (props?: Partial<UsePaginationProps>) =>
   renderHook(() =>
     usePagination({
-      totalRecord: defaultTotalRecord,
-      perPage: defaultPerPage,
-      centerItemsCount: defaultCenterItemsCount,
-      sideItemsCount: defaultSideItemsCount,
+      ...defaultProps,
       ...props,
     })
   );
@@ -179,4 +181,55 @@ it('should disable item next', () => {
   });
 
   expect(getItemNext(result).disabled).toBe(true);
+});
+
+it('should return showing range', () => {
+  const { result } = renderDefault({ page: 5 });
+
+  expect(result.current.showingRange).toEqual({ from: 41, to: 50, total: 100 } as ShowingPaginationRange);
+});
+
+it('should return showing range starting with 0', () => {
+  const { result } = renderDefault({ totalRecord: 0 });
+
+  expect(result.current.showingRange).toEqual({ from: 0, to: 0, total: 0 } as ShowingPaginationRange);
+});
+
+it('should throw invalid prop perPage', () => {
+  expect(() => {
+    usePagination({
+      ...defaultProps,
+      perPage: 0,
+    });
+  }).toThrow('invalid prop "perPage"');
+});
+
+it('should throw invalid prop sideItemsCount', () => {
+  expect(() => {
+    usePagination({
+      ...defaultProps,
+      sideItemsCount: 0,
+    });
+  }).toThrow('invalid prop "sideItemsCount"');
+});
+
+it('should throw invalid prop centerItemsCount', () => {
+  expect(() => {
+    usePagination({
+      ...defaultProps,
+      centerItemsCount: 0,
+    });
+  }).toThrow('invalid prop "centerItemsCount"');
+});
+
+it('should not accept page < 0', () => {
+  renderDefault({ onChange: mockOnChange, page: -1 });
+
+  expect(mockOnChange).toBeCalledWith(0);
+});
+
+it('should not accept page > totalPage', () => {
+  renderDefault({ onChange: mockOnChange, page: 99 });
+
+  expect(mockOnChange).toBeCalledWith(10);
 });
