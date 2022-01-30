@@ -1,7 +1,8 @@
 {
   "name": "hsk-headless",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": false,
+  "main": "dist",
   "scripts": {
     "dev": "tsc --watch",
     "build": "ttsc",
