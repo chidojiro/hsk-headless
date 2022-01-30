@@ -1,6 +1,7 @@
 {
   "name": "hsk-headless",
-  "version": "0.0.0",
+  "version": "1.0.4",
+  "private": false,
   "scripts": {
     "dev": "tsc --watch",
     "build": "ttsc",
@@ -59,6 +60,7 @@
     "prettier": "^2.5.0",
     "tailwindcss": "^3.0.8",
     "ts-jest": "^27.1.1",
+    "ttypescript": "^1.5.13",
     "typescript": "^4.3.2",
     "typescript-transform-paths": "^3.3.1",
     "webpack": "^5.65.0"
