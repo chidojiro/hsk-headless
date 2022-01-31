@@ -18,7 +18,7 @@ export type Props = {
   sideItemsCount?: number;
 };
 
-export type ShowingPaginationRange = {
+export type ShowingRange = {
   from: number;
   to: number;
   total: number;
@@ -26,7 +26,7 @@ export type ShowingPaginationRange = {
 
 export type Return = {
   items: Item[];
-  showingRange: ShowingPaginationRange;
+  showingRange: ShowingRange;
 };
 
 export const usePagination = ({

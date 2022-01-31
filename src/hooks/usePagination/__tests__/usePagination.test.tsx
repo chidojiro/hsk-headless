@@ -1,7 +1,6 @@
 import { usePagination, UsePaginationProps } from '..';
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
-import { PaginationItem, UsePaginationReturn } from '..';
-import { ShowingPaginationRange } from '../usePagination';
+import { PaginationItem, UsePaginationReturn, ShowingPaginationRange } from '..';
 
 const getItemPrevious = (result: RenderResult<UsePaginationReturn>) =>
   result.current.items[0] as Required<PaginationItem>;
