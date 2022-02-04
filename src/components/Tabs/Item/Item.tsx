@@ -7,11 +7,12 @@ type TabItemRenderProp = (props: { onClick: () => void; isActive: boolean }) => 
 export type Props = HTMLDivProps & {
   children: TabItemRenderProp;
   content?: React.ReactNode;
+  value?: string;
 };
 
-export const Item = ({ children, content }: Props) => {
+export const Item = ({ children, content, value }: Props) => {
   const [index, setIndex] = React.useState(-1);
-  const { index: selectedIndex, handleChange, setContent, increaseTabsCount } = React.useContext(TabsContext);
+  const { value: selectedValue, handleChange, setContent, increaseTabsCount } = React.useContext(TabsContext);
 
   React.useEffect(() => {
     const index = increaseTabsCount();
@@ -19,10 +20,10 @@ export const Item = ({ children, content }: Props) => {
   }, [increaseTabsCount]);
 
   const onClick = React.useCallback(() => {
-    handleChange(index);
-  }, [handleChange, index]);
+    handleChange(value ?? index);
+  }, [handleChange, index, value]);
 
-  const isActive = index === selectedIndex;
+  const isActive = index === selectedValue || value === selectedValue;
 
   React.useEffect(() => {
     if (isActive) {

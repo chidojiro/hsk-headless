@@ -5,14 +5,16 @@ import { Children } from 'types';
 import { Content } from './Content';
 import { Item } from './Item';
 
+type Value = number | string;
+
 export type Props = Children & {
-  index?: number;
-  onChange?: (index: number) => void;
+  value?: Value;
+  onChange?: (value: Value) => void;
 };
 
 type TabsProvider = {
-  handleChange: (index: number) => void;
-  index?: number;
+  handleChange: (value: Value) => void;
+  value?: Value;
   content?: React.ReactNode;
   setContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   tabsCount: number;
@@ -20,7 +22,7 @@ type TabsProvider = {
 };
 
 export const TabsContext = React.createContext<TabsProvider>({
-  index: undefined,
+  value: undefined,
   handleChange: noop,
   content: undefined,
   setContent: noop,
@@ -28,8 +30,8 @@ export const TabsContext = React.createContext<TabsProvider>({
   increaseTabsCount: () => -1,
 });
 
-export const Tabs = ({ index: indexProp, onChange, children }: Props) => {
-  const [index, setIndex] = useControllable({ value: indexProp, onChange, defaultValue: 0 });
+export const Tabs = ({ value: valueProp, onChange, children }: Props) => {
+  const [value, setValue] = useControllable({ value: valueProp, onChange, defaultValue: 0 });
   const [content, setContent] = React.useState<React.ReactNode>();
   const tabsCountRef = React.useRef(-1);
 
@@ -40,8 +42,8 @@ export const Tabs = ({ index: indexProp, onChange, children }: Props) => {
   }, []);
 
   const providerValue: TabsProvider = React.useMemo(
-    () => ({ index, handleChange: setIndex, content, setContent, tabsCount: tabsCountRef.current, increaseTabsCount }),
-    [content, increaseTabsCount, setIndex, index]
+    () => ({ value, handleChange: setValue, content, setContent, tabsCount: tabsCountRef.current, increaseTabsCount }),
+    [content, increaseTabsCount, setValue, value]
   );
 
   return <TabsContext.Provider value={providerValue}>{children}</TabsContext.Provider>;

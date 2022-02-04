@@ -49,7 +49,7 @@ it('should select item index 0 by default', () => {
 });
 
 it('should be controlled', () => {
-  renderDefault({ index: 2 });
+  renderDefault({ value: 2 });
   expect(screen.queryByText('Tab 1')?.getAttribute('data-active')).toBe('false');
   expect(screen.queryByText('Tab 2')?.getAttribute('data-active')).toBe('false');
   expect(screen.queryByText('Tab 3')?.getAttribute('data-active')).toBe('true');

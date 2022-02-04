@@ -1,11 +1,11 @@
 export type ClassName = {
-  className?: string
-}
+  className?: string;
+};
 
-export type Dict = Record<string, any>
+export type Dict = Record<string, any>;
 
 export type Children = {
-  children?: React.ReactNode
-}
+  children?: React.ReactNode;
+};
 
-export type Fn = (...args: any[]) => any
+export type Fn = (...args: any[]) => any;
