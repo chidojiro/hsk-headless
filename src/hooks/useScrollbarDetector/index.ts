@@ -1,0 +1,1 @@
+export { useScrollbarDetector } from './useScrollbarDetector'
