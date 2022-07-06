@@ -40,6 +40,13 @@ export const OverlayLoader = ({ loading, children, loader }: OverlayLoaderProps)
       document.getElementById(idRef.current)?.remove();
       idRef.current = null;
     }
+
+    return () => {
+      if (idRef.current) {
+        document.getElementById(idRef.current)?.remove();
+        idRef.current = null;
+      }
+    };
   }, [loader, loading]);
 
   return <>{clonedChildren}</>;
