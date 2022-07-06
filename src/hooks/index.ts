@@ -16,3 +16,6 @@ export * from './useHandler';
 export * from './useFetcher';
 export * from './useIntersection';
 export * from './useInfiniteLoader';
+export * from './useQuery';
+export * from './useUrlState';
+export * from './useScrollbarDetector';
