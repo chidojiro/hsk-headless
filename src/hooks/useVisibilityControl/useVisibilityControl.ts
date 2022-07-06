@@ -1,42 +1,48 @@
 import React from 'react';
+import { Fn } from 'types';
 
-export type Control = {
+export type VisibilityControl = {
+  set: React.Dispatch<React.SetStateAction<boolean>>;
   open: () => void;
   close: () => void;
   toggle: () => void;
   visible: boolean;
 };
 
-export type Props = {
-  onClose?: () => void;
-  onShow?: () => void;
+type Props = {
+  defaultVisible?: boolean;
+  onOpen?: Fn;
+  onClose?: Fn;
 };
 
 export const useVisibilityControl = (props?: Props) => {
-  const { onClose, onShow } = props || {};
-  const [isActive, setIsActive] = React.useState(false);
+  const { defaultVisible, onOpen, onClose } = props ?? {};
+  const [visible, setVisible] = React.useState(!!defaultVisible);
 
   const open = React.useCallback(() => {
-    setIsActive(true);
-    onShow?.();
-  }, [onShow]);
+    setVisible(true);
+    onOpen?.();
+  }, [onOpen]);
 
   const close = React.useCallback(() => {
-    setIsActive(false);
+    setVisible(false);
     onClose?.();
   }, [onClose]);
 
   const toggle = React.useCallback(() => {
-    setIsActive(prev => {
+    setVisible(prev => {
       if (prev) {
         onClose?.();
       } else {
-        onShow?.();
+        onOpen?.();
       }
 
       return !prev;
     });
-  }, [onClose, onShow]);
+  }, [onClose, onOpen]);
 
-  return React.useMemo<Control>(() => ({ open, close, visible: isActive, toggle }), [open, close, isActive, toggle]);
+  return React.useMemo<VisibilityControl>(
+    () => ({ open, close, visible: visible, toggle, set: setVisible }),
+    [open, close, visible, toggle]
+  );
 };

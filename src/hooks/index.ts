@@ -14,3 +14,5 @@ export * from './useClipboard';
 export * from './useStateToggle';
 export * from './useHandler';
 export * from './useFetcher';
+export * from './useIntersection';
+export * from './useInfiniteLoader';
