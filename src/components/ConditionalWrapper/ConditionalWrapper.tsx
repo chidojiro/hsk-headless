@@ -1,15 +1,45 @@
-import React, { ReactNode } from 'react';
-import { HTMLDivProps } from 'types';
+import React from 'react';
+import { Children } from 'types';
 
-type Props<T> = {
-  active: boolean;
-  children: ReactNode;
-} & (({ component: 'div' } & HTMLDivProps) | ({ component: (props: T) => JSX.Element } & T));
+type Component = (props: any) => JSX.Element;
 
-export const ConditionalWrapper = <T,>({ active, component, children, ...componentProps }: Props<T>) => {
-  if (!active) return <>{children}</>;
+type BaseConfigOptions = {
+  component: Component;
+};
 
-  const Component = component as any;
+type IfConfig = BaseConfigOptions & {
+  condition: boolean;
+};
 
-  return <Component {...componentProps}>{children}</Component>;
+type ElseConfig = BaseConfigOptions;
+
+type Configs = IfConfig[] | [...ifConfigs: IfConfig[], elseConfig: ElseConfig];
+
+export type ConditionalWrapperProps = Children & {
+  conditions: Configs;
+} & Record<string, any>;
+
+const getTruthyConfig = (configs: Configs) => {
+  const lastConfig = configs[configs.length - 1];
+
+  // If the last config is an "if" config, use its condition
+  // Otherwise, just condition is true
+  const lastConfigAsIfConfig = { ...lastConfig, condition: (lastConfig as IfConfig).condition ?? true };
+
+  const unifiedConfigs = [...(configs.slice(0, configs.length - 1) as IfConfig[]), lastConfigAsIfConfig];
+
+  for (const config of unifiedConfigs) {
+    const { component, condition } = config;
+
+    if (condition) return component;
+  }
+
+  // eslint-disable-next-line react/display-name
+  return ({ children }: Children) => <>{children}</>;
+};
+
+export const ConditionalWrapper = ({ conditions, ...restProps }: ConditionalWrapperProps) => {
+  const Component = getTruthyConfig(conditions);
+
+  return <Component {...restProps} />;
 };
