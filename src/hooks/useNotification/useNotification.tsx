@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as UUID } from 'uuid';
 import { AssertUtils } from 'utils';
-import { useGlobalState } from 'hooks';
+import { useWindowState } from 'hooks';
 import { NotificationList } from './NotificationList';
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -46,12 +46,12 @@ export const useNotification = (props?: Props) => {
     offsetX = '1rem',
     offsetY = '1rem',
   } = props || {};
-  const [allNotifications, setAllNotifications] = useGlobalState<Record<string, OpenOptions>>(
+  const [allNotifications, setAllNotifications] = useWindowState<Record<string, OpenOptions>>(
     `allNotifications_${placement}`,
     {}
   );
   const ownNotificationIdsRef = React.useRef<string[]>([]);
-  const [openingNotifications, setOpeningNotifications] = useGlobalState<string[]>(
+  const [openingNotifications, setOpeningNotifications] = useWindowState<string[]>(
     `openingNotifications_${placement}`,
     []
   );
