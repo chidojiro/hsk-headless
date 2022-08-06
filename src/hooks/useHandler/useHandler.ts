@@ -6,9 +6,6 @@ export type HandlerOptions<T = unknown> = {
   onSuccess?: (data: T) => void;
 };
 
-type HandlerOptionsKeys = keyof HandlerOptions;
-const HandlerOptionsKeys: HandlerOptionsKeys[] = ['onSuccess', 'onError'];
-
 export const useHandler = <T = void>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   callback: (...args: any[]) => Promise<T>,

@@ -2,7 +2,10 @@ import { AssertUtils } from 'utils';
 import React from 'react';
 import { isEqual } from 'lodash-es';
 
-export const useWindowState = <T = any>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] => {
+export const useWindowState = <T = unknown>(
+  key: string,
+  defaultValue: T
+): [T, React.Dispatch<React.SetStateAction<T>>] => {
   const [state, _setState] = React.useState<T>(((window as any)[key] ?? defaultValue) as T);
 
   const eventKey = `useWindowState-${key}`;

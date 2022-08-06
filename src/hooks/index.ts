@@ -7,7 +7,6 @@ export * from './useHandler';
 export * from './useInfiniteLoader';
 export * from './useIntersection';
 export * from './useIsoMorphicEffect';
-export * from './useNotification';
 export * from './useOnEventOutside';
 export * from './usePagination';
 export * from './useQuery';
