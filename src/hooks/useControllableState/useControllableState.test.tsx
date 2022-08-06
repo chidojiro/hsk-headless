@@ -45,3 +45,41 @@ it('should accept default value', () => {
   expect(result.current[0]).toBe(newValue);
   expect(mockOnChange).toBeCalledWith(newValue);
 });
+
+it('should be able to set callback state when uncontrolled', () => {
+  const { result } = renderHook(() => useControllableState({ value: undefined, defaultValue, onChange: mockOnChange }));
+
+  expect(result.current[0]).toBe(defaultValue);
+
+  const newValue = 'world';
+
+  act(() =>
+    result.current[1]('hello', prev => {
+      expect(prev).toBe(defaultValue);
+      return newValue;
+    })
+  );
+
+  expect(result.current[0]).toBe(newValue);
+  expect(mockOnChange).toBeCalledWith(newValue);
+});
+
+it('should ignore set callback state when controlled', () => {
+  const controlledValue = 'controlledValue';
+
+  const { result } = renderHook(() =>
+    useControllableState({ value: controlledValue, defaultValue, onChange: mockOnChange })
+  );
+
+  const mockSetStateCallback = jest.fn();
+
+  expect(result.current[0]).toBe(controlledValue);
+
+  const newValue = 'hello';
+
+  act(() => result.current[1](newValue, mockSetStateCallback));
+
+  expect(mockSetStateCallback).not.toBeCalled();
+  expect(result.current[0]).toBe(controlledValue);
+  expect(mockOnChange).toBeCalledWith(newValue);
+});

@@ -60,7 +60,7 @@ export function useControllableState<TValue, TOnChangeValueOrEvent extends TValu
         : (state as React.ChangeEvent<any>).target?.value ?? state;
 
       setInternalState(newState);
-      onChange?.(state);
+      onChange?.(newState);
 
       prevValueRef.current = newState;
     },
