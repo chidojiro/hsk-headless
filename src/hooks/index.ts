@@ -9,7 +9,6 @@ export * from './useIntersection';
 export * from './useIsoMorphicEffect';
 export * from './useNotification';
 export * from './useOnEventOutside';
-export * from './useOverlayingLoader';
 export * from './usePagination';
 export * from './useQuery';
 export * from './useScrollbarDetector';
