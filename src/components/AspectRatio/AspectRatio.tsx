@@ -1,25 +1,41 @@
 import classNames from 'classnames';
 import React from 'react';
+import { WithAsProps } from 'types';
 
-export type Props = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+type AspectRatioBaseProps = {
   children?: React.ReactNode;
-  ratio: `${number}-${number}`;
+  ratio: `${number}/${number}`;
   className?: string;
 };
 
-export const AspectRatio = ({ ratio, children, className, ...restProps }: Props) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+export type AspectRatioProps<TAsElement extends keyof JSX.IntrinsicElements> = WithAsProps<
+  AspectRatioBaseProps,
+  'div',
+  TAsElement
+>;
 
-  const [x, y] = (ratio?.split('-') || []).map(v => +v);
+export const AspectRatio = <TAsElement extends keyof JSX.IntrinsicElements>({
+  ratio,
+  children,
+  className,
+  style,
+  ...restProps
+}: AspectRatioProps<TAsElement>) => {
+  const [x, y] = (ratio?.split('/') || []).map(v => +v);
 
-  if (!/^\d+-\d+$/.test(ratio) || y <= 0) throw new Error('Invalid ratio!');
+  if (!/^\d+\/\d+$/.test(ratio) || y <= 0) throw new Error('Invalid ratio!');
 
-  return ratio === null ? (
-    <>{children}</>
-  ) : (
-    <div className={classNames('aspect-ratio', 'relative w-full h-fit', className)} {...restProps}>
-      <div style={{ paddingTop: (y / x) * 100 + '%' }} ref={ref} data-testid='space-holder'></div>
-      <div className='absolute top-0 left-0'>{children}</div>
-    </div>
+  let As: keyof JSX.IntrinsicElements = 'div';
+
+  if ('as' in restProps) {
+    As = restProps.as;
+  }
+
+  return (
+    <As
+      className={classNames('aspect-ratio', className)}
+      {...(restProps as any)}
+      style={{ ...style, aspectRatio: ratio }}
+    />
   );
 };

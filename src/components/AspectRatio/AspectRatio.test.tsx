@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { AspectRatio } from '..';
 
 it('should render correct padding', () => {
-  render(<AspectRatio ratio='16-9'>Hello World</AspectRatio>);
+  render(<AspectRatio ratio='16/9'>Hello World</AspectRatio>);
 
   expect(screen.getByTestId('space-holder')).toHaveStyle({ paddingTop: (9 * 100) / 16 + '%' });
 });

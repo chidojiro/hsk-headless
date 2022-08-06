@@ -1,14 +1,15 @@
+import React from 'react';
+
 export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-
-export type HTMLInputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-
-export type HTMLTextAreaProps = React.DetailedHTMLProps<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  HTMLTextAreaElement
->;
-
-export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
 export type HTMLElementOrHTMLElementRef = HTMLElement | React.RefObject<HTMLElement>;
 
 export type ElementOrHTMLElementRef = Element | React.RefObject<Element>;
+
+export type WithAsProps<
+  TProps,
+  TDefaultElement extends keyof JSX.IntrinsicElements,
+  TCustomElement extends keyof JSX.IntrinsicElements
+> =
+  | (TProps & JSX.IntrinsicElements[TDefaultElement])
+  | (TProps & { as: TCustomElement } & JSX.IntrinsicElements[TCustomElement]);
