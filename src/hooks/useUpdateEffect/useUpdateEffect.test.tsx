@@ -1,6 +1,6 @@
 import { render, act } from '@testing-library/react';
 import React from 'react';
-import { useUpdateEffect } from '..';
+import { useUpdateEffect } from './useUpdateEffect';
 
 const mockListener = jest.fn();
 

@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useControllable } from '..';
+import { useControllable } from './useControllable';
 
 const mockOnChange = jest.fn();
 const defaultValue = 'defaultValue';

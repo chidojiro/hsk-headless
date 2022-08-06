@@ -1,27 +1,27 @@
-import { usePagination, UsePaginationProps } from '..';
+import { usePagination, UsePaginationProps } from './usePagination';
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
-import { PaginationItem, UsePaginationReturn, ShowingPaginationRange } from '..';
+import { UsePaginationItem, UsePaginationReturn, UsePaginationShowingRange } from './usePagination';
 
 const getItemPrevious = (result: RenderResult<UsePaginationReturn>) =>
-  result.current.items[0] as Required<PaginationItem>;
+  result.current.items[0] as Required<UsePaginationItem>;
 
 const getItemNext = (result: RenderResult<UsePaginationReturn>) =>
-  result.current.items[result.current.items.length - 1] as Required<PaginationItem>;
+  result.current.items[result.current.items.length - 1] as Required<UsePaginationItem>;
 
 const getItemPage = (result: RenderResult<UsePaginationReturn>, page: number) =>
-  result.current.items.find(item => page === item.page) as Required<PaginationItem>;
+  result.current.items.find(item => page === item.page) as Required<UsePaginationItem>;
 
 const getSelectedPage = (result: RenderResult<UsePaginationReturn>) =>
-  result.current.items.find(({ selected }) => selected) as Required<PaginationItem>;
+  result.current.items.find(({ selected }) => selected) as Required<UsePaginationItem>;
 
 const getItemFirstPage = (result: RenderResult<UsePaginationReturn>) =>
-  result.current.items[1] as Required<PaginationItem>;
+  result.current.items[1] as Required<UsePaginationItem>;
 
 const getItemLastPage = (result: RenderResult<UsePaginationReturn>) =>
-  result.current.items[result.current.items.length - 2] as Required<PaginationItem>;
+  result.current.items[result.current.items.length - 2] as Required<UsePaginationItem>;
 
 const getEllipsisItem = (result: RenderResult<UsePaginationReturn>) =>
-  result.current.items.find(({ type }) => type === 'ellipsis') as Required<PaginationItem>;
+  result.current.items.find(({ type }) => type === 'ellipsis') as Required<UsePaginationItem>;
 
 const defaultProps: UsePaginationProps = {
   totalRecord: 100,
@@ -185,13 +185,13 @@ it('should disable item next', () => {
 it('should return showing range', () => {
   const { result } = renderDefault({ page: 5 });
 
-  expect(result.current.showingRange).toEqual({ from: 41, to: 50, total: 100 } as ShowingPaginationRange);
+  expect(result.current.showingRange).toEqual({ from: 41, to: 50, total: 100 } as UsePaginationShowingRange);
 });
 
 it('should return showing range starting with 0', () => {
   const { result } = renderDefault({ totalRecord: 0 });
 
-  expect(result.current.showingRange).toEqual({ from: 0, to: 0, total: 0 } as ShowingPaginationRange);
+  expect(result.current.showingRange).toEqual({ from: 0, to: 0, total: 0 } as UsePaginationShowingRange);
 });
 
 it('should throw invalid prop perPage', () => {
