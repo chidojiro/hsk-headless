@@ -10,3 +10,5 @@ export type HTMLTextAreaProps = React.DetailedHTMLProps<
 export type HTMLButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
 export type HTMLElementOrHTMLElementRef = HTMLElement | React.RefObject<HTMLElement>;
+
+export type ElementOrHTMLElementRef = Element | React.RefObject<Element>;

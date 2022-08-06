@@ -8,7 +8,7 @@ export * from './useInfiniteLoader';
 export * from './useIntersection';
 export * from './useIsoMorphicEffect';
 export * from './useNotification';
-export * from './useOnClickOutside';
+export * from './useOnEventOutside';
 export * from './useOverlayingLoader';
 export * from './usePagination';
 export * from './useQuery';

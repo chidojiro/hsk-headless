@@ -1,0 +1,1 @@
+export { useOnEventOutside } from './useOnEventOutside';

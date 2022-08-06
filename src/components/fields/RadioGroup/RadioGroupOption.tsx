@@ -13,10 +13,7 @@ export type RadioGroupOptionProps = {
   children?: (state: CheckboxGroupOptionRenderPropState) => React.ReactNode;
 };
 
-export const RadioGroupOption = (
-  { value, shouldChange: shouldChangeProp, children }: RadioGroupOptionProps,
-  ref: React.ForwardedRef<HTMLInputElement>
-) => {
+export const RadioGroupOption = ({ value, shouldChange: shouldChangeProp, children }: RadioGroupOptionProps) => {
   const groupProviderValue = useRadioGroupContext();
 
   const isChecked = groupProviderValue.value === value;

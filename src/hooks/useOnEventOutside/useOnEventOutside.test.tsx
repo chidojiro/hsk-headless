@@ -1,7 +1,7 @@
 import { render, screen, act } from '@testing-library/react';
 import React from 'react';
-import { Mounter } from '../../../tests';
-import { useOnClickOutside } from '..';
+import { Mounter } from 'tests';
+import { useOnEventOutside } from './useOnEventOutside';
 import userEvent from '@testing-library/user-event';
 
 const mockListener = jest.fn();
@@ -9,7 +9,7 @@ const mockListener = jest.fn();
 const HookHost = () => {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  useOnClickOutside([ref], mockListener);
+  useOnEventOutside('click', [ref], mockListener);
 
   return <div ref={ref} data-testid='test-trigger'></div>;
 };
