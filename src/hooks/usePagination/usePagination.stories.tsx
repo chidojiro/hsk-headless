@@ -8,8 +8,6 @@ export default {
 };
 
 const Template: ComponentStory<any> = (props: UsePaginationProps) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-
   const { items } = usePagination(props);
 
   return (

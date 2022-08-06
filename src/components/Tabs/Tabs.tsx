@@ -1,4 +1,4 @@
-import { useControllable } from 'hooks';
+import { useControllableState } from 'hooks';
 import React from 'react';
 import { Children } from 'types';
 import { TabValue } from './Tab';
@@ -10,7 +10,7 @@ export type TabsProps = Children & {
 };
 
 export const Tabs = ({ value: valueProp, onChange, children }: TabsProps) => {
-  const [value, setValue] = useControllable({ value: valueProp, onChange, defaultValue: 0 });
+  const [value, setValue] = useControllableState({ value: valueProp, onChange, defaultValue: 0 });
   const [content, setContent] = React.useState<React.ReactNode>();
   const tabsCountRef = React.useRef(-1);
 

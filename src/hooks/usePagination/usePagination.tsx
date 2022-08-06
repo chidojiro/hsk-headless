@@ -1,4 +1,4 @@
-import { useControllable } from '../useControllable';
+import { useControllableState } from '../useControllableState';
 import React from 'react';
 
 export type UsePaginationItem = {
@@ -45,7 +45,7 @@ export const usePagination = ({
 
   const totalPage = Math.ceil(totalRecord / perPage) || 1;
 
-  const [page, setPage] = useControllable({ value: pageProp, onChange, defaultValue: 1 });
+  const [page, setPage] = useControllableState({ value: pageProp, onChange, defaultValue: 1 });
 
   const validatePage = React.useCallback(() => {
     if (page < 0) setPage(0);
@@ -56,7 +56,7 @@ export const usePagination = ({
     validatePage();
   }, [validatePage]);
 
-  const resolveShowingRange = () => {
+  const resolveShowingPages = () => {
     const numberToRange = (num: number, offset = 0) => {
       return new Array(num).fill(null).map((_, idx) => idx + 1 + offset);
     };
@@ -73,23 +73,23 @@ export const usePagination = ({
     return numberToRange(totalPage);
   };
 
-  const showingRange = resolveShowingRange();
+  const showingPages = resolveShowingPages();
 
   const isNextDisabled = page >= totalPage;
 
   const next = React.useCallback(() => {
     if (isNextDisabled) return;
 
-    setPage((p: number) => Math.min(p + 1, totalPage));
-  }, [isNextDisabled, setPage, totalPage]);
+    setPage(page + 1, (p: number) => Math.min(p + 1, totalPage));
+  }, [isNextDisabled, page, setPage, totalPage]);
 
   const isPrevDisabled = page === 1;
 
   const prev = React.useCallback(() => {
     if (isPrevDisabled) return;
 
-    setPage((p: number) => Math.max(p - 1, 1));
-  }, [isPrevDisabled, setPage]);
+    setPage(page + 1, (p: number) => Math.max(p - 1, 1));
+  }, [isPrevDisabled, page, setPage]);
 
   const clickPage = React.useCallback(
     (page: number) => {
@@ -149,49 +149,47 @@ export const usePagination = ({
     [clickPage, totalPage]
   );
 
-  const showingRangeItems = React.useMemo<UsePaginationItem[]>(
+  const showingPageItems = React.useMemo<UsePaginationItem[]>(
     () =>
-      showingRange.map(showingPage => ({
+      showingPages.map(showingPage => ({
         type: 'page',
         page: showingPage,
         selected: showingPage === page,
         onClick: () => clickPage(showingPage),
         disabled: false,
       })),
-    [clickPage, page, showingRange]
+    [clickPage, page, showingPages]
   );
 
-  const returnValue = React.useMemo(
+  const items = React.useMemo(
     () =>
-      ({
-        items: [
-          prevItem,
-          showingRange[0] > 1 && firstPageItem,
-          showingRange[0] > 2 && ellipsisItem,
-          ...showingRangeItems,
-          showingRange[showingRange.length - 1] < totalPage - 1 && ellipsisItem,
-          showingRange[showingRange.length - 1] < totalPage && lastPageItem,
-          nextItem,
-        ].filter((item): item is UsePaginationItem => !!item),
-        showingRange: {
-          from: totalRecord === 0 ? 0 : (page - 1) * perPage + 1,
-          to: Math.min(totalRecord, page * perPage),
-          total: totalRecord,
-        },
-      } as UsePaginationReturn),
-    [
-      ellipsisItem,
-      firstPageItem,
-      lastPageItem,
-      nextItem,
-      page,
-      perPage,
-      prevItem,
+      [
+        prevItem,
+        showingPages[0] > 1 && firstPageItem,
+        showingPages[0] > 2 && ellipsisItem,
+        ...showingPageItems,
+        showingPages[showingPages.length - 1] < totalPage - 1 && ellipsisItem,
+        showingPages[showingPages.length - 1] < totalPage && lastPageItem,
+        nextItem,
+      ].filter((item): item is UsePaginationItem => !!item),
+    [ellipsisItem, firstPageItem, lastPageItem, nextItem, prevItem, showingPages, showingPageItems, totalPage]
+  );
+
+  const showingRange = React.useMemo(
+    () => ({
+      from: totalRecord === 0 ? 0 : (page - 1) * perPage + 1,
+      to: Math.min(totalRecord, page * perPage),
+      total: totalRecord,
+    }),
+    [page, perPage, totalRecord]
+  );
+
+  const returnValue = React.useMemo<UsePaginationReturn>(
+    () => ({
+      items,
       showingRange,
-      showingRangeItems,
-      totalPage,
-      totalRecord,
-    ]
+    }),
+    [items, showingRange]
   );
 
   return returnValue;

@@ -1,5 +1,5 @@
 export * from './useClipboard';
-export * from './useControllable';
+export * from './useControllableState';
 export * from './useDisclosure';
 export * from './useFetcher';
 export * from './useWindowState';

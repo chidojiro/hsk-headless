@@ -1,12 +1,14 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useControllable } from './useControllable';
+import { useControllableState } from './useControllableState';
 
 const mockOnChange = jest.fn();
 const defaultValue = 'defaultValue';
 const value = 'value';
 
 it('should be uncontrolled', () => {
-  const { result } = renderHook(() => useControllable({ value: undefined, onChange: mockOnChange }));
+  const { result } = renderHook(() =>
+    useControllableState<string, string>({ value: undefined, onChange: mockOnChange })
+  );
 
   expect(result.current[0]).toBeUndefined();
 
@@ -19,7 +21,7 @@ it('should be uncontrolled', () => {
 });
 
 it('should be controlled', () => {
-  const { result } = renderHook(() => useControllable({ value, defaultValue, onChange: mockOnChange }));
+  const { result } = renderHook(() => useControllableState({ value, defaultValue, onChange: mockOnChange }));
 
   expect(result.current[0]).toBe(value);
 
@@ -32,7 +34,7 @@ it('should be controlled', () => {
 });
 
 it('should accept default value', () => {
-  const { result } = renderHook(() => useControllable({ value: undefined, defaultValue, onChange: mockOnChange }));
+  const { result } = renderHook(() => useControllableState({ value: undefined, defaultValue, onChange: mockOnChange }));
 
   expect(result.current[0]).toBe(defaultValue);
 
