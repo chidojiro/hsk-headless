@@ -1,28 +1,28 @@
 import { useState, useCallback, useEffect } from 'react';
 import copy from 'copy-to-clipboard';
 
-export interface UseClipboardOptions {
+export type UseClipboardOptions = {
   timeout?: number;
   format?: string;
-}
+};
 
 export const useClipboard = (text: string, optionsOrTimeout: number | UseClipboardOptions = {}) => {
-  const [hasCopied, setHasCopied] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const { timeout = 1500, ...copyOptions } =
     typeof optionsOrTimeout === 'number' ? { timeout: optionsOrTimeout } : optionsOrTimeout;
 
   const onCopy = useCallback(() => {
     const didCopy = copy(text, copyOptions);
-    setHasCopied(didCopy);
+    setIsCopied(didCopy);
   }, [text, copyOptions]);
 
   useEffect(() => {
     let timeoutId: number | null = null;
 
-    if (hasCopied) {
+    if (isCopied) {
       timeoutId = window.setTimeout(() => {
-        setHasCopied(false);
+        setIsCopied(false);
       }, timeout);
     }
 
@@ -31,7 +31,7 @@ export const useClipboard = (text: string, optionsOrTimeout: number | UseClipboa
         window.clearTimeout(timeoutId);
       }
     };
-  }, [timeout, hasCopied]);
+  }, [timeout, isCopied]);
 
-  return { value: text, onCopy, hasCopied };
+  return { value: text, onCopy, isCopied: isCopied };
 };

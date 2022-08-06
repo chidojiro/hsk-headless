@@ -1,7 +1,9 @@
-import ldIsFunction from 'lodash/isFunction';
-import ldIsArray from 'lodash/isArray';
-import ldIsNull from 'lodash/isNull';
-import ldIsUndefined from 'lodash/isUndefined';
+import {
+  isArray as ldIsArray,
+  isFunction as ldIsFunction,
+  isNull as ldIsNull,
+  isUndefined as ldIsUndefined,
+} from 'lodash-es';
 import React from 'react';
 
 const isRef = <T = Element>(target: unknown): target is React.RefObject<T> =>

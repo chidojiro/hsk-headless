@@ -4,7 +4,7 @@ import { v4 as UUID } from 'uuid';
 import { AssertUtils } from 'utils';
 import { useWindowState } from 'hooks';
 import { NotificationList } from './NotificationList';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash-es';
 
 type VerticalAlignment = 'top' | 'bottom';
 type HorizontalAlignment = 'left' | 'right' | 'center';
