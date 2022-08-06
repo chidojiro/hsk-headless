@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFetcher } from '../useFetcher';
 import { useIntersection } from '../useIntersection';
-import { useVisibilityControl } from '../useVisibilityControl';
+import { useDisclosure } from '../useDisclosure';
 
 const WAIT_FOR_NEXT_LOAD_TIMEOUT = 500;
 
@@ -30,8 +30,8 @@ export const useInfiniteLoader = <T = unknown>({
 
   const isIntersected = useIntersection(anchor);
 
-  const exhaustedControl = useVisibilityControl();
-  const readyForNextLoadControl = useVisibilityControl({ defaultVisible: true });
+  const exhaustedControl = useDisclosure();
+  const readyForNextLoadControl = useDisclosure({ defaultOpen: true });
 
   const handleLoad: typeof onLoad = page => {
     readyForNextLoadControl.close();
@@ -57,17 +57,17 @@ export const useInfiniteLoader = <T = unknown>({
   });
 
   const increasePageOnIntersection = React.useCallback(() => {
-    if (isIntersected && readyForNextLoadControl.visible) {
+    if (isIntersected && readyForNextLoadControl.isOpen) {
       setPage(prev => prev + 1);
     }
-  }, [isIntersected, readyForNextLoadControl.visible]);
+  }, [isIntersected, readyForNextLoadControl.isOpen]);
 
   React.useEffect(() => {
     increasePageOnIntersection();
   }, [increasePageOnIntersection]);
 
   return React.useMemo(
-    () => ({ isLoading, isExhausted: exhaustedControl.visible }),
-    [exhaustedControl.visible, isLoading]
+    () => ({ isLoading, isExhausted: exhaustedControl.isOpen }),
+    [exhaustedControl.isOpen, isLoading]
   );
 };

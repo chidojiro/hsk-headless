@@ -1,36 +1,36 @@
 import React from 'react';
 import { Fn } from 'types';
 
-export type VisibilityControl = {
+export type Disclosure = {
   set: React.Dispatch<React.SetStateAction<boolean>>;
   open: () => void;
   close: () => void;
   toggle: () => void;
-  visible: boolean;
+  isOpen: boolean;
 };
 
-type Props = {
-  defaultVisible?: boolean;
+export type UseDisclosureProps = {
+  defaultOpen?: boolean;
   onOpen?: Fn;
   onClose?: Fn;
 };
 
-export const useVisibilityControl = (props?: Props) => {
-  const { defaultVisible, onOpen, onClose } = props ?? {};
-  const [visible, setVisible] = React.useState(!!defaultVisible);
+export const useDisclosure = (props?: UseDisclosureProps) => {
+  const { defaultOpen, onOpen, onClose } = props ?? {};
+  const [isOpen, setIsOpen] = React.useState(!!defaultOpen);
 
   const open = React.useCallback(() => {
-    setVisible(true);
+    setIsOpen(true);
     onOpen?.();
   }, [onOpen]);
 
   const close = React.useCallback(() => {
-    setVisible(false);
+    setIsOpen(false);
     onClose?.();
   }, [onClose]);
 
   const toggle = React.useCallback(() => {
-    setVisible(prev => {
+    setIsOpen(prev => {
       if (prev) {
         onClose?.();
       } else {
@@ -41,8 +41,8 @@ export const useVisibilityControl = (props?: Props) => {
     });
   }, [onClose, onOpen]);
 
-  return React.useMemo<VisibilityControl>(
-    () => ({ open, close, visible: visible, toggle, set: setVisible }),
-    [open, close, visible, toggle]
+  return React.useMemo<Disclosure>(
+    () => ({ open, close, isOpen, toggle, set: setIsOpen }),
+    [open, close, isOpen, toggle]
   );
 };
