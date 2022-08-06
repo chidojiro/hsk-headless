@@ -9404,7 +9404,6 @@ __metadata:
     eslint-plugin-storybook: ^0.5.5
     eslint-plugin-testing-library: ^5.0.1
     jest: ^27.4.4
-    lodash: ^4.17.21
     lodash-es: ^4.17.21
     postcss: ^8.4.5
     prettier: ^2.5.0

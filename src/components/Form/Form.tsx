@@ -3,7 +3,7 @@ import { FieldValues, FormProvider, SubmitHandler, UseFormReturn } from 'react-h
 
 import { useStateToggle } from 'hooks';
 
-export type Props<T = any> = Omit<
+export type FormProps<T = any> = Omit<
   React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
   'onSubmit'
 > & {
@@ -19,7 +19,7 @@ export const Form = <TFieldValues extends FieldValues>({
   onSubmit,
   methods,
   ...props
-}: Props<TFieldValues>) => {
+}: FormProps<TFieldValues>) => {
   const [, toggleState] = useStateToggle();
 
   const value = React.useCallback(toggleState, [toggleState]);

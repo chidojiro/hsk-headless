@@ -5,7 +5,7 @@
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -27,5 +27,6 @@
     },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["node_modules"]
 }

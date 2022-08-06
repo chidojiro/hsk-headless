@@ -1,4 +1,4 @@
-import { noop } from 'lodash';
+import { noop } from 'lodash-es';
 import React from 'react';
 import { useControllable } from 'hooks';
 import { Children } from 'types';

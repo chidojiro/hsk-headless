@@ -1,13 +1,13 @@
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { useFormContext } from 'react-hook-form';
 import React from 'react';
 
-export type Props = {
+export type ErrorMessageProps = {
   name: string | string[];
   className?: string;
 };
 
-export const ErrorMessage = ({ name }: Props) => {
+export const ErrorMessage = ({ name }: ErrorMessageProps) => {
   const {
     formState: { errors },
   } = useFormContext();
