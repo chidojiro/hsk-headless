@@ -1,28 +1,15 @@
 import { useControllable } from 'hooks';
-import { noop } from 'lodash-es';
 import React from 'react';
 import { Children } from 'types';
-import { Option } from './Option';
+import { ChangeHandler, CheckboxGroupProvider } from './CheckboxGroupProvider';
 
-export type Props = Children & {
+export type CheckboxGroupProps = Children & {
   onChange?: (value: string[]) => void;
   value?: string[];
   defaultValue?: string[];
 };
 
-type ChangeHandler = (value: string, isChecked: boolean) => void;
-
-export type CheckboxGroupProvider = {
-  value: string[];
-  handleChange: ChangeHandler;
-};
-
-export const CheckboxGroupContext = React.createContext<CheckboxGroupProvider>({
-  value: [],
-  handleChange: noop,
-});
-
-export const CheckboxGroup = (props: Props) => {
+export const CheckboxGroup = (props: CheckboxGroupProps) => {
   const { onChange: onChangeProp, defaultValue = [], value: valueProp, children } = props;
 
   const [value, setValue] = useControllable({
@@ -48,7 +35,5 @@ export const CheckboxGroup = (props: Props) => {
 
   const providerValue = React.useMemo(() => ({ handleChange, value }), [handleChange, value]);
 
-  return <CheckboxGroupContext.Provider value={providerValue}>{children}</CheckboxGroupContext.Provider>;
+  return <CheckboxGroupProvider value={providerValue}>{children}</CheckboxGroupProvider>;
 };
-
-CheckboxGroup.Option = Option;

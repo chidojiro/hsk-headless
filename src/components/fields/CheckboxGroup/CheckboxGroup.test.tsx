@@ -1,37 +1,37 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
-
-import { CheckboxGroup, CheckboxGroupProps } from '..';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { CheckboxGroup, CheckboxGroupProps } from './CheckboxGroup';
+import { CheckboxGroupOption } from './CheckboxGroupOption';
 
 const renderCheckboxGroup = (props?: Partial<CheckboxGroupProps>) =>
   render(
     <CheckboxGroup {...props}>
       <div className='flex flex-col'>
-        <CheckboxGroup.Option value='1'>
+        <CheckboxGroupOption value='1'>
           {({ handleChange, isChecked, value }) => (
             <label>
               <input data-testid='option 1' type='checkbox' value={value} checked={isChecked} onChange={handleChange} />
               Option 1
             </label>
           )}
-        </CheckboxGroup.Option>
-        <CheckboxGroup.Option value='2'>
+        </CheckboxGroupOption>
+        <CheckboxGroupOption value='2'>
           {({ handleChange, isChecked, value }) => (
             <label>
               <input data-testid='option 2' type='checkbox' checked={isChecked} value={value} onChange={handleChange} />
               Option 2
             </label>
           )}
-        </CheckboxGroup.Option>
-        <CheckboxGroup.Option value='3'>
+        </CheckboxGroupOption>
+        <CheckboxGroupOption value='3'>
           {({ handleChange, isChecked, value }) => (
             <label>
               <input data-testid='option 3' type='checkbox' checked={isChecked} value={value} onChange={handleChange} />
               Option 3
             </label>
           )}
-        </CheckboxGroup.Option>
+        </CheckboxGroupOption>
       </div>
     </CheckboxGroup>
   );

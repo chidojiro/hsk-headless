@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { CheckboxGroupContext, CheckboxGroupProvider } from '../CheckboxGroup';
+import { useCheckboxGroupContext } from './CheckboxGroupProvider';
 
 type RenderPropState = {
   value: string;
@@ -7,17 +7,17 @@ type RenderPropState = {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-export type Props = {
+export type CheckboxGroupProps = {
   value: string;
   shouldChange?: (e: ChangeEvent<HTMLInputElement>, checkboxGroupValue: string[]) => boolean | Promise<boolean>;
   children?: (state: RenderPropState) => React.ReactNode;
 };
 
-export const Option = (
-  { value, shouldChange: shouldChangeProp, children }: Props,
+export const CheckboxGroupOption = (
+  { value, shouldChange: shouldChangeProp, children }: CheckboxGroupProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
-  const groupProviderValue = React.useContext<CheckboxGroupProvider>(CheckboxGroupContext);
+  const groupProviderValue = useCheckboxGroupContext();
 
   const isChecked = groupProviderValue.value.includes(value);
 
