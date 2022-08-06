@@ -1,33 +1,34 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-
-import { Tabs, TabsProps } from '..';
+import { Tabs, TabsProps } from './Tabs';
+import { Tab } from './Tab';
+import { TabContent } from './TabContent';
 
 const renderDefault = (props?: Partial<TabsProps>) => {
   return render(
     <Tabs {...props}>
-      <Tabs.Item content='Tab 1 Content'>
+      <Tab content='Tab 1 Content'>
         {({ isActive, onClick }) => (
           <div data-active={isActive} onClick={onClick}>
             Tab 1
           </div>
         )}
-      </Tabs.Item>
-      <Tabs.Item content='Tab 2 Content'>
+      </Tab>
+      <Tab content='Tab 2 Content'>
         {({ isActive, onClick }) => (
           <div data-active={isActive} onClick={onClick}>
             Tab 2
           </div>
         )}
-      </Tabs.Item>
-      <Tabs.Item content='Tab 3 Content'>
+      </Tab>
+      <Tab content='Tab 3 Content'>
         {({ isActive, onClick }) => (
           <div data-active={isActive} onClick={onClick}>
             Tab 3
           </div>
         )}
-      </Tabs.Item>
-      <Tabs.Content />
+      </Tab>
+      <TabContent />
     </Tabs>
   );
 };
