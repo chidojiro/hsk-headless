@@ -1,26 +1,15 @@
-import { noop } from 'lodash-es';
 import React from 'react';
 import { useControllable } from 'hooks';
 import { Children } from 'types';
-import { Option } from './Option';
+import { RadioGroupProvider } from './RadioGroupProvider';
 
-export type Props = Children & {
+export type RadioGroupProps = Children & {
   onChange?: (value: string) => void;
   value?: string;
   defaultValue?: string;
 };
 
-export type RadioGroupProvider = {
-  value?: string;
-  handleChange: (value: string) => void;
-};
-
-export const RadioGroupContext = React.createContext<RadioGroupProvider>({
-  value: undefined,
-  handleChange: noop,
-});
-
-export const RadioGroup = (props: Props) => {
+export const RadioGroup = (props: RadioGroupProps) => {
   const { value: valueProp, onChange: onChangeProp, defaultValue, children } = props;
   const [value, setValue] = useControllable({ value: valueProp, onChange: onChangeProp, defaultValue });
 
@@ -34,7 +23,5 @@ export const RadioGroup = (props: Props) => {
 
   const providerValue = React.useMemo(() => ({ handleChange, value, groupProps: props }), [handleChange, props, value]);
 
-  return <RadioGroupContext.Provider value={providerValue}>{children}</RadioGroupContext.Provider>;
+  return <RadioGroupProvider value={providerValue}>{children}</RadioGroupProvider>;
 };
-
-RadioGroup.Option = Option;

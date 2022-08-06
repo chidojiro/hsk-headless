@@ -1,23 +1,23 @@
 import React, { ChangeEvent } from 'react';
-import { RadioGroupContext, RadioGroupProvider } from '../RadioGroup';
+import { useRadioGroupContext } from './RadioGroupProvider';
 
-type RenderPropState = {
+export type CheckboxGroupOptionRenderPropState = {
   value: string;
   isChecked: boolean;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-export type Props = {
+export type RadioGroupOptionProps = {
   value: string;
   shouldChange?: (e: ChangeEvent<HTMLInputElement>, checkboxGroupValue?: string) => boolean | Promise<boolean>;
-  children?: (state: RenderPropState) => React.ReactNode;
+  children?: (state: CheckboxGroupOptionRenderPropState) => React.ReactNode;
 };
 
-export const Option = (
-  { value, shouldChange: shouldChangeProp, children }: Props,
+export const RadioGroupOption = (
+  { value, shouldChange: shouldChangeProp, children }: RadioGroupOptionProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
-  const groupProviderValue = React.useContext<RadioGroupProvider>(RadioGroupContext);
+  const groupProviderValue = useRadioGroupContext();
 
   const isChecked = groupProviderValue.value === value;
 

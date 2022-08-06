@@ -7,14 +7,14 @@ type RenderPropState = {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-export type CheckboxGroupProps = {
+export type CheckboxGroupOptionProps = {
   value: string;
   shouldChange?: (e: ChangeEvent<HTMLInputElement>, checkboxGroupValue: string[]) => boolean | Promise<boolean>;
   children?: (state: RenderPropState) => React.ReactNode;
 };
 
 export const CheckboxGroupOption = (
-  { value, shouldChange: shouldChangeProp, children }: CheckboxGroupProps,
+  { value, shouldChange: shouldChangeProp, children }: CheckboxGroupOptionProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
   const groupProviderValue = useCheckboxGroupContext();

@@ -1,2 +1,5 @@
 export { RadioGroup } from './RadioGroup';
-export type { Props as RadioGroupProps } from './RadioGroup';
+export type { RadioGroupProps } from './RadioGroup';
+
+export { RadioGroupOption } from './RadioGroupOption';
+export type { RadioGroupOptionProps } from './RadioGroupOption';
