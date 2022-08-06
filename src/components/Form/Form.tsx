@@ -1,7 +1,6 @@
+import { useDisclosure } from 'hooks';
 import React from 'react';
 import { FieldValues, FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
-
-import { useStateToggle } from 'hooks';
 
 export type FormProps<T = any> = Omit<
   React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
@@ -20,9 +19,9 @@ export const Form = <TFieldValues extends FieldValues>({
   methods,
   ...props
 }: FormProps<TFieldValues>) => {
-  const [, toggleState] = useStateToggle();
+  const disclosure = useDisclosure();
 
-  const value = React.useCallback(toggleState, [toggleState]);
+  const value = disclosure.toggle;
 
   return (
     <FormForceRerendererContext.Provider value={value as any}>

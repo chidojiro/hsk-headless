@@ -14,6 +14,5 @@ export * from './useQuery';
 export * from './useScrollbarDetector';
 export * from './useScrollDisable';
 export * from './useScrollToTop';
-export * from './useStateToggle';
 export * from './useUpdateEffect';
 export * from './useUrlState';
