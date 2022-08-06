@@ -1,1 +1,0 @@
-export { useGlobalState } from './useGlobalState';

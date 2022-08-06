@@ -2,7 +2,7 @@ export * from './useClipboard';
 export * from './useControllable';
 export * from './useDisclosure';
 export * from './useFetcher';
-export * from './useGlobalState';
+export * from './useWindowState';
 export * from './useHandler';
 export * from './useInfiniteLoader';
 export * from './useIntersection';
