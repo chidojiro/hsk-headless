@@ -83,3 +83,17 @@ it('should ignore set callback state when controlled', () => {
   expect(result.current[0]).toBe(controlledValue);
   expect(mockOnChange).toBeCalledWith(newValue);
 });
+
+it('should be able to set change event', () => {
+  const { result } = renderHook(() => useControllableState({ defaultValue, onChange: mockOnChange }));
+
+  expect(result.current[0]).toBe(defaultValue);
+
+  const newValue = 'hello';
+  const event = { target: { value: 'hello' } };
+
+  act(() => result.current[1](event));
+
+  expect(result.current[0]).toBe(newValue);
+  expect(mockOnChange).toBeCalledWith(event);
+});

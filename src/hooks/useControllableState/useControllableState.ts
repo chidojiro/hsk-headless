@@ -1,5 +1,4 @@
 import { AssertUtils } from 'utils';
-import { isFunction } from 'lodash-es';
 import React from 'react';
 
 type UseControllablePropsWithoutDefaultValue<TValue, TOnChangeValueOrEvent> = {
@@ -57,10 +56,12 @@ export function useControllableState<TValue, TOnChangeValueOrEvent extends TValu
 
       const newState = callback
         ? callback?.(prevValueRef.current!)
-        : (state as React.ChangeEvent<any>).target?.value ?? state;
+        : AssertUtils.isChangeEvent(state)
+        ? state.target.value
+        : state;
 
       setInternalState(newState);
-      onChange?.(newState);
+      onChange?.(AssertUtils.isChangeEvent(state) ? state : newState);
 
       prevValueRef.current = newState;
     },

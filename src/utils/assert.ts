@@ -22,7 +22,7 @@ const isObject = (data: unknown) => {
 };
 
 const isChangeEvent = <T = any>(data: any): data is React.ChangeEvent<T> => {
-  return Object.prototype.hasOwnProperty.call(data?.target, 'value');
+  return data?.target && Object.prototype.hasOwnProperty.call(data?.target, 'value');
 };
 
 export const AssertUtils = {
