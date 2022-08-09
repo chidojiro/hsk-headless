@@ -23,7 +23,8 @@ const getTruthyConfig = (configs: Configs) => {
   const lastConfig = configs[configs.length - 1];
 
   // If the last config is an "if" config, use its condition
-  // Otherwise, just condition is true
+  // If it's an "else" make the condition always true
+  // So that "else" can always be found as the last option
   const lastConfigAsIfConfig = { ...lastConfig, condition: (lastConfig as IfConfig).condition ?? true };
 
   const unifiedConfigs = [...(configs.slice(0, configs.length - 1) as IfConfig[]), lastConfigAsIfConfig];

@@ -107,20 +107,23 @@ describe('ON_DEMAND', () => {
   });
 
   it('Should render loading and exhaust indicators', async () => {
-    jest.spyOn(mockUseIntersection, 'useIntersection').mockReturnValue(true);
     const mockOnLoad = jest.fn().mockImplementation(async () => {
       await PromiseUtils.sleep(500);
       return [];
     });
-    const { queryByText } = renderComponent({ mode: 'ON_SIGHT', onLoad: mockOnLoad, until: () => true });
+    const { queryByText, getByText } = renderComponent({ mode: 'ON_DEMAND', onLoad: mockOnLoad, until: () => true });
 
-    expect(mockOnLoad).toBeCalled();
+    expect(queryByText('loading')).not.toBeInTheDocument();
+    expect(queryByText('exhausted')).not.toBeInTheDocument();
+
+    act(() => {
+      userEvent.click(getByText('load more'));
+    });
+
     expect(queryByText('loading')).toBeInTheDocument();
     expect(queryByText('exhausted')).not.toBeInTheDocument();
-    act(() => {
-      jest.runAllTimers();
-      jest.advanceTimersByTime(500);
-    });
+
+    jest.runAllTimers();
 
     await waitFor(() => {
       expect(queryByText('loading')).not.toBeInTheDocument();
