@@ -4,7 +4,7 @@ import React from 'react';
 type UseControllableProps<TValue, TOnChangeValue> = {
   value?: TValue;
   defaultValue: TValue;
-  onChange?: (valueOrEvent: TOnChangeValue) => void;
+  onChange?: (value: TOnChangeValue) => void;
 };
 
 type SetControllableStateParams<TInternalValue, TOnChangeValue> = {

@@ -1,3 +1,4 @@
+import { SWRConfig } from 'swr';
 import '../src/globals.css';
 
 export const parameters = {
@@ -9,3 +10,11 @@ export const parameters = {
     },
   },
 };
+
+export const decorators = [
+  Story => (
+    <SWRConfig>
+      <Story />
+    </SWRConfig>
+  ),
+];

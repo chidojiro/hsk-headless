@@ -1,73 +1,67 @@
 import React from 'react';
-import { useFetcher } from '../useFetcher';
-import { useIntersection } from '../useIntersection';
 import { useDisclosure } from '../useDisclosure';
+import {
+  useOnDemandInfiniteLoader,
+  UseOnDemandInfiniteLoaderProps as BaseUseOnDemandInfiniteLoaderProps,
+  UseOnDemandInfiniteLoaderReturn as BaseUseOnDemandInfiniteLoaderReturn,
+} from './useOnDemandInfiniteLoader';
+import {
+  useOnSightInfiniteLoader,
+  UseOnSightInfiniteLoaderProps as BaseUseOnSightInfiniteLoaderProps,
+  UseOnSightInfiniteLoaderReturn as BaseUseOnSightInfiniteLoaderReturn,
+} from './useOnSightInfiniteLoader';
 
-const WAIT_FOR_NEXT_LOAD_TIMEOUT = 500;
-
-export type UseInfiniteLoaderProps<T = unknown> = {
-  onLoad: (page: number) => Promise<T>;
-  until: (data: T) => boolean;
-  onSuccess?: (data: T) => void;
-  onError?: (error: any) => void;
+type BaseUseInfiniteLoaderProps<T> = { until: (data: T) => boolean };
+type UseOnSightInfiniteLoaderProps<T> = {
+  mode: 'ON_SIGHT';
   anchor: React.RefObject<HTMLElement> | HTMLElement | null;
-};
+} & BaseUseInfiniteLoaderProps<T> &
+  Omit<BaseUseOnSightInfiniteLoaderProps<T>, 'enabled'>;
+type UseOnDemandInfiniteLoaderProps<T> = { mode: 'ON_DEMAND' } & BaseUseInfiniteLoaderProps<T> &
+  BaseUseOnDemandInfiniteLoaderProps<T>;
+export type UseInfiniteLoaderProps<T> = UseOnDemandInfiniteLoaderProps<T> | UseOnSightInfiniteLoaderProps<T>;
 
-export type UseInfiniteLoaderReturn = {
-  isExhausted: boolean;
-  isLoading: boolean;
-};
+type BaseUseInfiniteLoaderReturn = { isExhausted: boolean };
+type UseOnDemandInfiniteLoaderReturn = BaseUseInfiniteLoaderReturn & BaseUseOnDemandInfiniteLoaderReturn;
+type UseOnSightInfiniteLoaderReturn = BaseUseInfiniteLoaderReturn & BaseUseOnSightInfiniteLoaderReturn;
+export type UseInfiniteLoaderReturn = UseOnDemandInfiniteLoaderReturn & UseOnSightInfiniteLoaderReturn;
 
-export const useInfiniteLoader = <T = unknown>({
-  onLoad,
-  until,
-  onError,
-  onSuccess,
-  anchor,
-}: UseInfiniteLoaderProps<T>): UseInfiniteLoaderReturn => {
-  const [page, setPage] = React.useState(1);
-  const readyForNextLoadTimeout = React.useRef<NodeJS.Timeout>();
+export function useInfiniteLoader<TData>(props: UseInfiniteLoaderProps<TData>): UseInfiniteLoaderReturn {
+  const { onLoad, until, onError, mode = 'ON_SIGHT', defaultPage } = props;
 
-  const isIntersected = useIntersection(anchor);
+  const exhaustedDisclosure = useDisclosure();
 
-  const exhaustedControl = useDisclosure();
-  const readyForNextLoadControl = useDisclosure({ defaultOpen: true });
+  const handleLoad: typeof onLoad = async page => {
+    const data = await onLoad(page);
 
-  const handleLoad: typeof onLoad = page => {
-    readyForNextLoadControl.close();
+    if (until(data)) {
+      exhaustedDisclosure.open();
+    } else {
+      exhaustedDisclosure.close();
+    }
 
-    return onLoad(page);
+    return data;
   };
 
-  const { isInitializing: isLoading } = useFetcher(['infiniteLoader', page], () => handleLoad(page), {
-    onSuccess: data => {
-      onSuccess?.(data);
+  const commonConfig = { onLoad: handleLoad, defaultPage, onError };
 
-      if (until(data)) {
-        exhaustedControl.open();
-      } else {
-        exhaustedControl.close();
-      }
-
-      readyForNextLoadTimeout.current = setTimeout(() => {
-        readyForNextLoadControl.open();
-      }, WAIT_FOR_NEXT_LOAD_TIMEOUT);
-    },
-    onError,
+  const { isLoading: isLoadingOnSight } = useOnSightInfiniteLoader({
+    anchor: (props as UseOnSightInfiniteLoaderProps<TData>).anchor,
+    enabled: mode === 'ON_SIGHT' && !exhaustedDisclosure.isOpen,
+    ...commonConfig,
   });
 
-  const increasePageOnIntersection = React.useCallback(() => {
-    if (isIntersected && readyForNextLoadControl.isOpen) {
-      setPage(prev => prev + 1);
-    }
-  }, [isIntersected, readyForNextLoadControl.isOpen]);
-
-  React.useEffect(() => {
-    increasePageOnIntersection();
-  }, [increasePageOnIntersection]);
+  const { isLoading: isLoadingOnDemand, loadMore } = useOnDemandInfiniteLoader({
+    ...commonConfig,
+    enabled: mode === 'ON_DEMAND' && !exhaustedDisclosure.isOpen,
+  });
 
   return React.useMemo(
-    () => ({ isLoading, isExhausted: exhaustedControl.isOpen }),
-    [exhaustedControl.isOpen, isLoading]
+    () => ({
+      isLoading: isLoadingOnSight || isLoadingOnDemand,
+      isExhausted: exhaustedDisclosure.isOpen,
+      loadMore,
+    }),
+    [isLoadingOnSight, isLoadingOnDemand, exhaustedDisclosure.isOpen, loadMore]
   );
-};
+}

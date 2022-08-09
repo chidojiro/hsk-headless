@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { AssertUtils } from 'utils';
+import { useDisclosure } from 'hooks';
+import React from 'react';
 import { HTMLElementOrHTMLElementRef } from 'types';
+import { AssertUtils } from 'utils';
 
 export const useIntersection = (
   elementOrElementRef?: HTMLElementOrHTMLElementRef | null,
@@ -10,12 +11,12 @@ export const useIntersection = (
     ? elementOrElementRef.current
     : elementOrElementRef;
 
-  const [isVisible, setState] = useState(false);
+  const intersectedDisclosure = useDisclosure();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setState(entry.isIntersecting);
+        intersectedDisclosure.set(entry.isIntersecting);
       },
       { rootMargin }
     );
@@ -29,7 +30,7 @@ export const useIntersection = (
         observer.unobserve(element);
       }
     };
-  }, [element, rootMargin]);
+  }, [element, intersectedDisclosure, rootMargin]);
 
-  return isVisible;
+  return intersectedDisclosure.isOpen;
 };

@@ -1,8 +1,8 @@
-import { render, screen, act } from '@testing-library/react';
-import React from 'react';
-import { Mounter } from 'tests';
-import { useOnEventOutside } from './useOnEventOutside';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { withUmountAfter } from 'hocs';
+import React from 'react';
+import { useOnEventOutside } from './useOnEventOutside';
 
 const mockListener = jest.fn();
 
@@ -17,11 +17,9 @@ const HookHost = () => {
 const UNMOUNT_AFTER = 1000;
 
 const renderComponent = (unmountAfter?: number) => {
-  return render(
-    <Mounter unmountAfter={unmountAfter}>
-      <HookHost />
-    </Mounter>
-  );
+  const Component = withUmountAfter(UNMOUNT_AFTER)(HookHost);
+
+  return render(<Component />);
 };
 
 it('should call listener', () => {
