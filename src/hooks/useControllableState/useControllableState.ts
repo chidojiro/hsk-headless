@@ -1,42 +1,34 @@
 import { AssertUtils } from 'utils';
 import React from 'react';
 
-type UseControllablePropsWithoutDefaultValue<TValue, TOnChangeValueOrEvent> = {
-  value?: TValue;
-  onChange?: (valueOrEvent: TOnChangeValueOrEvent) => void;
-};
-type UseControllablePropsWithDefaultValue<TValue, TOnChangeValueOrEvent> = {
+type UseControllableProps<TValue, TOnChangeValue> = {
   value?: TValue;
   defaultValue: TValue;
-  onChange?: (valueOrEvent: TOnChangeValueOrEvent) => void;
+  onChange?: (valueOrEvent: TOnChangeValue) => void;
 };
-export type UseControllableProps<TValue, TOnChangeValueOrEvent> =
-  | UseControllablePropsWithoutDefaultValue<TValue, TOnChangeValueOrEvent>
-  | UseControllablePropsWithDefaultValue<TValue, TOnChangeValueOrEvent>;
 
-type SetCallbackState<TValue, TOnChangeValueOrEvent> = (
-  onChangeValueOrEvent: TOnChangeValueOrEvent,
-  callback?: (state: TValue) => TValue
+type SetControllableStateParams<TInternalValue, TOnChangeValue> = {
+  internal: TInternalValue | ((value: TInternalValue) => TInternalValue);
+  external: TOnChangeValue;
+};
+
+export type SetControllableState<TValue, TOnChangeValue = TValue> = (
+  value:
+    | (TValue & TOnChangeValue)
+    | ((value: TValue) => TValue & TOnChangeValue)
+    | SetControllableStateParams<TValue, TOnChangeValue>
 ) => void;
-type SetNormalState<TValue, TOnChangeValueOrEvent> = (state: TValue | TOnChangeValueOrEvent) => void;
-type SetState<TValue, TOnChangeValueOrEvent> =
-  | SetCallbackState<TValue, TOnChangeValueOrEvent>
-  | SetNormalState<TValue, TOnChangeValueOrEvent>;
 
-export function useControllableState<TValue, TOnChangeValueOrEvent extends TValue | React.ChangeEvent<any>>(
-  props: UseControllablePropsWithoutDefaultValue<TValue, TOnChangeValueOrEvent>
-): [TValue | undefined, SetState<TValue, TOnChangeValueOrEvent>];
-export function useControllableState<TValue, TOnChangeValueOrEvent extends TValue | React.ChangeEvent<any>>(
-  props: UseControllablePropsWithDefaultValue<TValue, TOnChangeValueOrEvent>
-): [TValue, SetState<TValue, TOnChangeValueOrEvent>];
-export function useControllableState<TValue, TOnChangeValueOrEvent extends TValue | React.ChangeEvent<any>>(
-  props: UseControllableProps<TValue, TOnChangeValueOrEvent>
-) {
-  const {
-    value: valueProp,
-    onChange,
-    defaultValue,
-  } = props as UseControllablePropsWithDefaultValue<TValue, TOnChangeValueOrEvent>;
+const isCustomParams = <TValue, TOnChangeValue>(
+  params: any
+): params is SetControllableStateParams<TValue, TOnChangeValue> =>
+  Object.prototype.hasOwnProperty.call(params, 'internal') && Object.prototype.hasOwnProperty.call(params, 'external');
+
+export const useControllableState = <TValue, TOnChangeValue = TValue>({
+  value: valueProp,
+  onChange,
+  defaultValue,
+}: UseControllableProps<TValue, TOnChangeValue>): [TValue, SetControllableState<TValue, TOnChangeValue>] => {
   const isControlled = !AssertUtils.isNullOrUndefined(valueProp);
   const prevValueRef = React.useRef(defaultValue);
 
@@ -47,26 +39,30 @@ export function useControllableState<TValue, TOnChangeValueOrEvent extends TValu
     [internalState, isControlled, valueProp]
   );
 
-  const setState = React.useCallback<SetState<TValue, TOnChangeValueOrEvent>>(
-    (state, callback) => {
-      if (isControlled) {
-        onChange?.(state);
-        return;
+  const setState: SetControllableState<TValue, TOnChangeValue> = React.useCallback(
+    newState => {
+      let computedInternal: TValue;
+      let computedExternal: TOnChangeValue;
+
+      if (isCustomParams<TValue, TOnChangeValue>(newState)) {
+        const { external, internal } = newState;
+        computedInternal = AssertUtils.isFunction(internal) ? internal(prevValueRef.current) : internal;
+        computedExternal = external;
+      } else {
+        const computedState = AssertUtils.isFunction(newState) ? newState(prevValueRef.current) : newState;
+        computedExternal = computedState;
+        computedInternal = computedState;
       }
 
-      const newState = callback
-        ? callback?.(prevValueRef.current!)
-        : AssertUtils.isChangeEvent(state)
-        ? state.target.value
-        : state;
+      if (!isControlled) {
+        setInternalState(computedInternal);
+      }
+      onChange?.(computedExternal);
 
-      setInternalState(newState);
-      onChange?.(AssertUtils.isChangeEvent(state) ? state : newState);
-
-      prevValueRef.current = newState;
+      prevValueRef.current = internalState;
     },
-    [isControlled, onChange]
+    [internalState, isControlled, onChange]
   );
 
-  return React.useMemo(() => [state, setState] as [typeof state, typeof setState], [state, setState]);
-}
+  return React.useMemo(() => [state, setState], [state, setState]);
+};

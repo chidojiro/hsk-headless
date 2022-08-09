@@ -7,7 +7,7 @@ const value = 'value';
 
 it('should be uncontrolled', () => {
   const { result } = renderHook(() =>
-    useControllableState<string, string>({ value: undefined, onChange: mockOnChange })
+    useControllableState<string, string>({ value: undefined, onChange: mockOnChange, defaultValue: '' })
   );
 
   expect(result.current[0]).toBeUndefined();
@@ -47,14 +47,16 @@ it('should accept default value', () => {
 });
 
 it('should be able to set callback state when uncontrolled', () => {
-  const { result } = renderHook(() => useControllableState({ value: undefined, defaultValue, onChange: mockOnChange }));
+  const { result } = renderHook(() =>
+    useControllableState<string>({ value: undefined, defaultValue, onChange: mockOnChange })
+  );
 
   expect(result.current[0]).toBe(defaultValue);
 
   const newValue = 'world';
 
   act(() =>
-    result.current[1]('hello', prev => {
+    result.current[1](prev => {
       expect(prev).toBe(defaultValue);
       return newValue;
     })
@@ -77,7 +79,7 @@ it('should ignore set callback state when controlled', () => {
 
   const newValue = 'hello';
 
-  act(() => result.current[1](newValue, mockSetStateCallback));
+  act(() => result.current[1](mockSetStateCallback));
 
   expect(mockSetStateCallback).not.toBeCalled();
   expect(result.current[0]).toBe(controlledValue);
