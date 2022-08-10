@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import React from 'react';
 
-export const useScrollToTop = (deps: undefined[]) => {
+export const useScrollToTop = (deps: unknown[]) => {
   const { pathname } = useLocation();
 
   React.useLayoutEffect(() => {
