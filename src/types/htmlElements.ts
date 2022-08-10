@@ -4,8 +4,6 @@ export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivE
 
 export type HTMLElementOrHTMLElementRef = HTMLElement | React.RefObject<HTMLElement>;
 
-export type ElementOrHTMLElementRef = Element | React.RefObject<Element>;
-
 export type WithAsProps<
   TProps,
   TDefaultElement extends keyof JSX.IntrinsicElements,

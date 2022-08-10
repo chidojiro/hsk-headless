@@ -9,3 +9,11 @@ export type Children = {
 };
 
 export type Fn = (...args: any[]) => any;
+
+export type OpenClose = {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onClose?: () => void;
+};
+
+export type NullOrUndefined = null | undefined;
