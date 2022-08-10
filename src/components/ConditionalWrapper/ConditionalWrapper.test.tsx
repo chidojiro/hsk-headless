@@ -59,3 +59,13 @@ it('should render else condition', () => {
   expect(screen.queryByTestId('second-component')).not.toBeInTheDocument();
   expect(screen.queryByTestId('else-component')).toBeInTheDocument();
 });
+
+it('should render children when there is no conditions', () => {
+  const { getByText } = render(
+    <ConditionalWrapper conditions={[]}>
+      <div>Hello World</div>
+    </ConditionalWrapper>
+  );
+
+  expect(getByText('Hello World')).toBeInTheDocument();
+});

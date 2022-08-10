@@ -1,7 +1,7 @@
 import React from 'react';
 import { Children } from 'types';
 
-type Component = (props: any) => JSX.Element;
+type Component = (props: any) => JSX.Element | null;
 
 type BaseConfigOptions = {
   component: Component;
@@ -15,11 +15,15 @@ type ElseConfig = BaseConfigOptions;
 
 type Configs = IfConfig[] | [...ifConfigs: IfConfig[], elseConfig: ElseConfig];
 
+const FallbackComponent = ({ children }: Children) => <>{children}</>;
+
 export type ConditionalWrapperProps = Children & {
   conditions: Configs;
 } & Record<string, any>;
 
 const getTruthyConfig = (configs: Configs) => {
+  if (!configs.length) return FallbackComponent;
+
   const lastConfig = configs[configs.length - 1];
 
   // If the last config is an "if" config, use its condition
@@ -35,8 +39,7 @@ const getTruthyConfig = (configs: Configs) => {
     if (condition) return component;
   }
 
-  // eslint-disable-next-line react/display-name
-  return ({ children }: Children) => <>{children}</>;
+  return FallbackComponent;
 };
 
 export const ConditionalWrapper = ({ conditions, ...restProps }: ConditionalWrapperProps) => {
