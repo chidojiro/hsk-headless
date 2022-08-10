@@ -1,13 +1,13 @@
 import { AssertUtils } from 'utils';
 import React from 'react';
 
-type UseControllableProps<TValue, TOnChangeValue> = {
+export type UseControllableStateProps<TValue, TOnChangeValue> = {
   value?: TValue;
   defaultValue: TValue;
   onChange?: (value: TOnChangeValue) => void;
 };
 
-type SetControllableStateVerboseParams<TInternalValue, TOnChangeValue> = {
+export type SetControllableStateVerboseParams<TInternalValue, TOnChangeValue> = {
   internal: TInternalValue | ((value: TInternalValue) => TInternalValue);
   external: TOnChangeValue;
 };
@@ -28,7 +28,7 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
   value: valueProp,
   onChange,
   defaultValue,
-}: UseControllableProps<TValue, TOnChangeValue>): [TValue, SetControllableState<TValue, TOnChangeValue>] => {
+}: UseControllableStateProps<TValue, TOnChangeValue>): [TValue, SetControllableState<TValue, TOnChangeValue>] => {
   const isControlled = !AssertUtils.isNullOrUndefined(valueProp);
   const prevValueRef = React.useRef(valueProp ?? defaultValue);
 
