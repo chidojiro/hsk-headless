@@ -6,20 +6,27 @@ import { useOnEventOutside } from './useOnEventOutside';
 
 const mockListener = jest.fn();
 
-const HookHost = () => {
+type HookHostProps = {
+  emptyElement?: boolean;
+  emptyHandler?: boolean;
+};
+
+const HookHost = ({ emptyElement, emptyHandler }: HookHostProps) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  useOnEventOutside('click', [ref], mockListener);
+  useOnEventOutside('click', !emptyElement && [ref], !emptyHandler ? mockListener : undefined);
 
   return <div ref={ref} data-testid='test-trigger'></div>;
 };
 
 const UNMOUNT_AFTER = 1000;
 
-const renderComponent = (unmountAfter?: number) => {
+const renderComponent = (props?: HookHostProps & { unmountAfter?: number }) => {
+  const { unmountAfter, ...restProps } = props ?? {};
+
   const Component = withUmountAfter(UNMOUNT_AFTER)(HookHost);
 
-  return render(<Component />);
+  return render(<Component {...restProps} />);
 };
 
 it('should call listener', () => {
@@ -39,7 +46,7 @@ it('should not call listener', () => {
 });
 
 it('should unregister listener', () => {
-  renderComponent(UNMOUNT_AFTER);
+  renderComponent({ unmountAfter: UNMOUNT_AFTER });
 
   act(() => {
     jest.advanceTimersByTime(UNMOUNT_AFTER);
@@ -48,4 +55,34 @@ it('should unregister listener', () => {
   userEvent.click(document.querySelector('body')!);
 
   expect(mockListener).not.toBeCalled();
+});
+
+it('should register listeners when both elements and event handler are passed', () => {
+  jest.spyOn(document, 'addEventListener');
+
+  renderComponent();
+
+  userEvent.click(screen.getByTestId('test-trigger'));
+
+  expect(document.addEventListener).toBeCalledWith('click', expect.anything());
+});
+
+it('should not register listeners when no event handler is passed', () => {
+  jest.spyOn(document, 'addEventListener');
+
+  renderComponent({ emptyHandler: true });
+
+  userEvent.click(screen.getByTestId('test-trigger'));
+
+  expect(document.addEventListener).not.toBeCalled();
+});
+
+it('should not register listeners when elements or refs are falsy', () => {
+  jest.spyOn(document, 'addEventListener');
+
+  renderComponent({ emptyElement: true });
+
+  userEvent.click(screen.getByTestId('test-trigger'));
+
+  expect(document.addEventListener).not.toBeCalled();
 });
