@@ -1,7 +1,7 @@
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
 import { usePagination, UsePaginationProps } from '.';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export default {
   title: 'Hooks/usePagination',
@@ -17,7 +17,7 @@ const Template: ComponentStory<any> = (props: UsePaginationProps) => {
           key={_idx}
           onClick={onClick}
           disabled={disabled}
-          className={classNames('px-2', { 'border border-blue-500 border-solid': selected, 'opacity-50': disabled })}>
+          className={clsx('px-2', { 'border border-blue-500 border-solid': selected, 'opacity-50': disabled })}>
           {(() => {
             switch (type) {
               case 'ellipsis':

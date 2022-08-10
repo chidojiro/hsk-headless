@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import { WithAsProps } from 'types';
 
@@ -32,10 +32,6 @@ export const AspectRatio = <TAsElement extends keyof JSX.IntrinsicElements>({
   }
 
   return (
-    <As
-      className={classNames('aspect-ratio', className)}
-      {...(restProps as any)}
-      style={{ ...style, aspectRatio: ratio }}
-    />
+    <As className={clsx('aspect-ratio', className)} {...(restProps as any)} style={{ ...style, aspectRatio: ratio }} />
   );
 };
