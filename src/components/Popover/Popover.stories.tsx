@@ -11,6 +11,11 @@ export default {
         disable: true,
       },
     },
+    open: {
+      control: {
+        disable: true,
+      },
+    },
   },
 } as ComponentMeta<typeof Popover>;
 

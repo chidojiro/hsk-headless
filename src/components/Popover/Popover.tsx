@@ -9,7 +9,7 @@ import { Portal } from '../Portal';
 export type PopoverPlacement = PopperProps<any>['placement'];
 
 export type PopoverProps = Children &
-  OpenClose & {
+  Omit<OpenClose, 'defaultOpen'> & {
     placement?: PopoverPlacement;
     usePortal?: boolean;
     trigger: React.ReactElement | HTMLElement;
@@ -29,7 +29,7 @@ export const Popover = ({
   const popoverRef = React.useRef(null);
 
   // Workaround to resolve misalignment on initial render
-  const [actuallyOpen, setActuallyOpen] = useDelayableState({ delayBy: 0, defaultState: false });
+  const [delayedOpen, setDelayedOpen] = useDelayableState({ delayBy: 0, defaultState: false });
 
   const { styles, attributes, forceUpdate } = usePopper(
     AssertUtils.isHTMLElement(trigger) ? (trigger as any) : triggerElement,
@@ -68,10 +68,10 @@ export const Popover = ({
   }, [trigger]);
 
   React.useEffect(() => {
-    setActuallyOpen({ state: !!open, shouldDelay: true });
+    setDelayedOpen({ state: !!open, shouldDelay: true });
     forceUpdate?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger, open, setActuallyOpen, (trigger as HTMLElement)?.innerHTML]);
+  }, [trigger, open, setDelayedOpen, (trigger as HTMLElement)?.innerHTML]);
 
   useOnEventOutside('click', [popoverRef, triggerElement as any], onClose);
 
@@ -79,8 +79,11 @@ export const Popover = ({
     <>
       {clonedTrigger}
       <ConditionalWrapper conditions={[{ condition: usePortal, component: Portal as any }]}>
-        <div ref={popoverRef} style={{ ...styles.popper, zIndex: 999 }} {...attributes.popper}>
-          <div style={{ display: actuallyOpen ? 'block' : 'none' }}>{children}</div>
+        <div
+          ref={popoverRef}
+          style={{ ...styles.popper, zIndex: 999, display: delayedOpen ? 'block' : 'none' }}
+          {...attributes.popper}>
+          {children}
         </div>
       </ConditionalWrapper>
     </>
