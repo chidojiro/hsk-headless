@@ -1,3 +1,4 @@
+import { useMountEffect } from 'hooks';
 import { get } from 'lodash-es';
 import React from 'react';
 import { RegisterOptions, useController, useFormContext } from 'react-hook-form';
@@ -43,12 +44,11 @@ const ForwardedField = <TComponentProps, TValue>(
     field: { onChange, onBlur, value, ref: fieldRef, ...restField },
   } = useController({ name, rules });
 
-  React.useEffect(() => {
+  useMountEffect(() => {
     if (emptyValue && !value) {
       setValue(name, emptyValue, { shouldDirty: false });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   const error = get(errors, name);
 

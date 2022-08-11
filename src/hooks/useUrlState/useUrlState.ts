@@ -1,21 +1,20 @@
+import { useMountEffect } from 'hooks';
 import React from 'react';
 import { Fn } from 'types';
 import { useQuery } from '../useQuery';
 
 export const useUrlState = <T>(paramKey: string, defaultValue?: T) => {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const [param, _setParam] = React.useState(defaultValue);
 
   const query = useQuery();
 
-  React.useEffect(() => {
+  useMountEffect(() => {
     const paramValue = query.get(paramKey);
 
     if (paramKey?.length) {
       _setParam(paramValue);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   const setParam: typeof _setParam = React.useCallback(
     valueOrCallback => {

@@ -1,5 +1,6 @@
-import { render, act } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import React from 'react';
+import { useMountEffect } from '../useMountEffect';
 import { useUpdateEffect } from './useUpdateEffect';
 
 const mockListener = jest.fn();
@@ -9,14 +10,13 @@ const UPDATE_AFTER = 1000;
 const HookHost = ({ updateAfter }: any) => {
   const [state, setState] = React.useState(false);
 
-  React.useEffect(() => {
+  useMountEffect(() => {
     if (updateAfter) {
       setTimeout(() => {
         setState(p => !p);
       }, updateAfter);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   useUpdateEffect(() => {
     mockListener();
