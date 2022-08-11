@@ -1,2 +1,2 @@
 export { useFetcher } from './useFetcher';
-export type { UseFetcherOptions } from './useFetcher';
+export type { UseFetcherConfiguration } from './useFetcher';

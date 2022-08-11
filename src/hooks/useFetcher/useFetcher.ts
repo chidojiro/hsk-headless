@@ -1,20 +1,34 @@
 import React from 'react';
 import useSwr, { SWRConfiguration } from 'swr';
 
-export type UseFetcherOptions<T> = SWRConfiguration<T>;
+export type UseFetcherConfiguration<T> = SWRConfiguration<T> & {
+  laggy?: boolean;
+};
 
 export const useFetcher = <T = unknown>(
   key: string | unknown[] | null | undefined | false,
   callback: (...args: unknown[]) => Promise<T>,
-  options?: UseFetcherOptions<T>
+  config?: UseFetcherConfiguration<T>
 ) => {
-  const swrReturn = useSwr<T>(key, callback, options);
+  const { laggy, ...restConfig } = config ?? {};
+  const laggyDataRef = React.useRef<T>();
+  const swrReturn = useSwr<T>(
+    key,
+    async () => {
+      const data = await callback();
+      laggyDataRef.current = data;
+      return data;
+    },
+    restConfig
+  );
 
   return React.useMemo(
     () => ({
       ...swrReturn,
+      data: swrReturn.data ?? (laggy ? laggyDataRef.current : undefined),
+      isLagging: swrReturn.data === undefined && laggyDataRef.current !== undefined,
       isInitializing: !swrReturn.error && !swrReturn.data && swrReturn.isValidating,
     }),
-    [swrReturn]
+    [laggy, swrReturn]
   );
 };
