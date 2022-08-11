@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { ConditionalWrapper } from '.';
+import { ConditionalWrapper } from './ConditionalWrapper';
 
 export default {
   title: 'Components/ConditionalWrapper',
