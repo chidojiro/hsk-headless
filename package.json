@@ -6,6 +6,7 @@
     "dev": "tsc --watch",
     "build": "ttsc",
     "test": "jest --maxWorkers=1",
+    "typecheck": "yarn tsc --noEmit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
