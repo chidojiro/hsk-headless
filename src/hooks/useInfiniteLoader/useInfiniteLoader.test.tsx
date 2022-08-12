@@ -41,22 +41,25 @@ describe('ON_SIGHT', () => {
   });
 
   it('Should load when intersected', async () => {
-    renderComponent({ mode: 'ON_SIGHT' });
+    const { queryByText } = renderComponent({ mode: 'ON_SIGHT' });
 
     expect(mockOnLoad).toBeCalledWith(1);
+    await waitFor(() => expect(queryByText('loading')).not.toBeInTheDocument());
   });
 
   it('Should load with default page when intersected', async () => {
-    renderComponent({ mode: 'ON_SIGHT', defaultPage: 2 });
+    const { queryByText } = renderComponent({ mode: 'ON_SIGHT', defaultPage: 2 });
 
     expect(mockOnLoad).toBeCalledWith(2);
+    await waitFor(() => expect(queryByText('loading')).not.toBeInTheDocument());
   });
 
   it('Should not load when not intersected', async () => {
     jest.spyOn(mockUseIntersection, 'useIntersection').mockReturnValue(false);
-    renderComponent({ mode: 'ON_SIGHT' });
+    const { queryByText } = renderComponent({ mode: 'ON_SIGHT' });
 
     expect(mockOnLoad).not.toBeCalled();
+    await waitFor(() => expect(queryByText('loading')).not.toBeInTheDocument());
   });
 
   it('Should render loading and exhaust indicators', async () => {
@@ -81,23 +84,25 @@ describe('ON_SIGHT', () => {
 describe('ON_DEMAND', () => {
   it('Should load when click on load more button', async () => {
     jest.spyOn(mockUseIntersection, 'useIntersection').mockReturnValue(true);
-    const { getByText } = renderComponent({ mode: 'ON_DEMAND' });
+    const { getByText, queryByText } = renderComponent({ mode: 'ON_DEMAND' });
 
     act(() => {
       userEvent.click(getByText('load more'));
     });
 
     expect(mockOnLoad).toBeCalledWith(1);
+    await waitFor(() => expect(queryByText('loading')).not.toBeInTheDocument());
   });
 
   it('Should load with default page when click on load more button', async () => {
-    const { getByText } = renderComponent({ mode: 'ON_DEMAND', defaultPage: 2 });
+    const { getByText, queryByText } = renderComponent({ mode: 'ON_DEMAND', defaultPage: 2 });
 
     act(() => {
       userEvent.click(getByText('load more'));
     });
 
     expect(mockOnLoad).toBeCalledWith(2);
+    await waitFor(() => expect(queryByText('loading')).not.toBeInTheDocument());
   });
 
   it('Should not load when not click on load more button', async () => {
@@ -123,7 +128,9 @@ describe('ON_DEMAND', () => {
     expect(queryByText('loading')).toBeInTheDocument();
     expect(queryByText('exhausted')).not.toBeInTheDocument();
 
-    jest.runAllTimers();
+    act(() => {
+      jest.runAllTimers();
+    });
 
     await waitFor(() => {
       expect(queryByText('loading')).not.toBeInTheDocument();

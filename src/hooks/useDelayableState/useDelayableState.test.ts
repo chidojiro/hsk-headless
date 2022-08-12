@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { useDelayableState } from './useDelayableState';
 
@@ -13,7 +14,9 @@ it('should accept default state', () => {
 it('should set state as normal setState', () => {
   const { result } = renderHook(() => useDelayableState({ defaultState, delayBy: 0 }));
 
-  result.current[1]({ state: newState, shouldDelay: false });
+  act(() => {
+    result.current[1]({ state: newState, shouldDelay: false });
+  });
 
   expect(result.current[0]).toBe(newState);
 });
@@ -21,19 +24,27 @@ it('should set state as normal setState', () => {
 it('should set state after 500ms', () => {
   const { result } = renderHook(() => useDelayableState({ defaultState, delayBy: 500 }));
 
-  result.current[1]({ state: newState, shouldDelay: true });
+  act(() => {
+    result.current[1]({ state: newState, shouldDelay: true });
+  });
 
   expect(result.current[0]).toBe(defaultState);
-  jest.advanceTimersByTime(499);
+  act(() => {
+    jest.advanceTimersByTime(499);
+  });
   expect(result.current[0]).toBe(defaultState);
-  jest.advanceTimersByTime(1);
+  act(() => {
+    jest.advanceTimersByTime(1);
+  });
   expect(result.current[0]).toBe(newState);
 });
 
 it('should set state without delay', () => {
   const { result } = renderHook(() => useDelayableState({ defaultState, delayBy: 500 }));
 
-  result.current[1]({ state: newState, shouldDelay: false });
+  act(() => {
+    result.current[1]({ state: newState, shouldDelay: false });
+  });
 
   expect(result.current[0]).toBe(newState);
 });
