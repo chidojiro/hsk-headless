@@ -16,3 +16,4 @@ dist-ssr
 *.local
 yarn-error.log
 storybook-static
+coverage

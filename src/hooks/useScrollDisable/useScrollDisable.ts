@@ -16,7 +16,7 @@ export const useScrollDisable = (disable: boolean) => {
     }
   }, [disable]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     return () => {
       document.documentElement.style.removeProperty('overflow');
       document.documentElement.style.removeProperty('padding-right');
