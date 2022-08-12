@@ -18,7 +18,7 @@ const renderComponent = () => {
   return render(<Component />);
 };
 
-it('should call mount callback after 1000ms', () => {
+it('should call remount effect after clicking on remount', () => {
   const { getByText } = renderComponent();
 
   expect(mountEffect).toBeCalledTimes(1);

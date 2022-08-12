@@ -21,15 +21,13 @@ const HookHost = ({ emptyElement, emptyHandler }: HookHostProps) => {
 
 const UNMOUNT_AFTER = 1000;
 
-const renderComponent = (props?: HookHostProps & { unmountAfter?: number }) => {
-  const { unmountAfter, ...restProps } = props ?? {};
-
+const renderComponent = (props?: HookHostProps) => {
   const Component = withUmountAfter(UNMOUNT_AFTER)(HookHost);
 
-  return render(<Component {...restProps} />);
+  return render(<Component {...props} />);
 };
 
-it('should call listener', () => {
+it('should call listener when clicking on body', () => {
   renderComponent();
 
   userEvent.click(document.querySelector('body')!);
@@ -46,7 +44,7 @@ it('should not call listener', () => {
 });
 
 it('should unregister listener', () => {
-  renderComponent({ unmountAfter: UNMOUNT_AFTER });
+  renderComponent();
 
   act(() => {
     jest.advanceTimersByTime(UNMOUNT_AFTER);
