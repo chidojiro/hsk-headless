@@ -3,12 +3,12 @@ import { render, act } from '@testing-library/react';
 
 import { withMountAfter } from './withMountAfter';
 
-const UnmountEffectHost = () => {
+const WrappedComponent = () => {
   return <div>hello world</div>;
 };
 
 const renderComponent = (mountAfter: number) => {
-  const Component = withMountAfter(mountAfter)(UnmountEffectHost);
+  const Component = withMountAfter(mountAfter)(WrappedComponent);
 
   return render(<Component />);
 };
