@@ -19,3 +19,4 @@ export * from './useScrollToTop';
 export * from './useUpdateEffect';
 export * from './useUrlState';
 export * from './useWindowState';
+export * from './useSessionStorageState';
