@@ -1,9 +1,10 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { useWindowState } from './useWindowState';
+import { getUseEventBasedStateEventKey } from '../useEventBasedState';
+import { NAME, useWindowState } from './useWindowState';
 
 const key = 'key';
-const eventKey = `useWindowState-${key}`;
+const eventKey = getUseEventBasedStateEventKey(NAME, key);
 const defaultState = 'defaultState';
 const windowState = 'windowState';
 const newState = 'newState';
@@ -43,7 +44,7 @@ it('should set internal state, save to window and dispatch new state when call s
 
   expect(result.current[0]).toBe(newState);
   expect(getWindowState()).toBe(newState);
-  expect(window.dispatchEvent).toBeCalledWith(expect.objectContaining({ type: `useWindowState-${key}` }));
+  expect(window.dispatchEvent).toBeCalledWith(expect.objectContaining({ type: eventKey }));
 });
 
 it('should set internal state, save to window and dispatch new state when call setState with a callback returning newState', () => {
@@ -78,7 +79,7 @@ it('should unregister event listener after unmount', () => {
   unmount();
 
   act(() => {
-    originalDispatchEvent(new CustomEvent(`useWindowState-${key}`, { detail: { state: newState, source: 123 } }));
+    originalDispatchEvent(new CustomEvent(eventKey, { detail: { state: newState, source: 123 } }));
   });
 
   expect(result.current[0]).toBe(defaultState);
