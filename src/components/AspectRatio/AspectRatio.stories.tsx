@@ -1,7 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import { AspectRatio } from '.';
+import { AspectRatio } from './AspectRatio';
 
 export default {
   title: 'Components/AspectRatio',

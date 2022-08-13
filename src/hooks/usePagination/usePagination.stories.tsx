@@ -1,6 +1,6 @@
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
-import { usePagination, UsePaginationProps } from '.';
+import { usePagination, UsePaginationProps } from './usePagination';
 import clsx from 'clsx';
 
 export default {

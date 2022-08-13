@@ -1,4 +1,4 @@
-import { AssertUtils } from '.';
+import { AssertUtils } from './assert';
 
 const withDefaultValue =
   <T = any>(defaultValues: T) =>

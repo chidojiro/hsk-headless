@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { RadioGroup, RadioGroupProps } from '.';
+import { RadioGroup, RadioGroupProps } from './RadioGroup';
 import { RadioGroupOption } from './RadioGroupOption';
 
 export default {
