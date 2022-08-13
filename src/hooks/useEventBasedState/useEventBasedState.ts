@@ -7,22 +7,28 @@ export type UseEventBasedStateStorage<TValue> = {
   set: (key: string, value: TValue) => void;
 };
 
-export type UseEventBasedStateProps<T> = {
-  key: string;
-  defaultState: T;
-  storage: UseEventBasedStateStorage<T>;
+export type UseEventBasedStateProps<TState, TStorage> = {
+  name: string;
+  storageKey: string;
+  defaultState: TState;
+  storage: TStorage;
 };
 
-export const useEventBasedState = <T>({
-  key,
+export const getUseEventBasedStateEventKey = (name: string, storageKey: string) => `${name}_${storageKey}`;
+
+export const useEventBasedState = <
+  TState,
+  TStorage extends UseEventBasedStateStorage<TState> = UseEventBasedStateStorage<TState>
+>({
+  name,
+  storageKey,
   defaultState,
   storage,
-}: UseEventBasedStateProps<T>): [T, React.Dispatch<React.SetStateAction<T>>] => {
+}: UseEventBasedStateProps<TState, TStorage>): [TState, React.Dispatch<React.SetStateAction<TState>>] => {
   const idRef = React.useRef(Math.random());
-  const [state, _setState] = React.useState(storage.get(key) ?? defaultState);
+  const [state, _setState] = React.useState(storage.get(storageKey) ?? defaultState);
 
-  const eventKey = `useEventBasedState_${key}`;
-
+  const eventKey = getUseEventBasedStateEventKey(name, storageKey);
   React.useEffect(() => {
     const eventListener = (event: Event) => {
       const { state: newState, source } = (event as any).detail ?? {};
@@ -39,14 +45,14 @@ export const useEventBasedState = <T>({
     return () => {
       window.removeEventListener(eventKey, eventListener);
     };
-  }, [eventKey, key]);
+  }, [eventKey]);
 
   const dispatchState = React.useCallback(
-    (state: T) => {
-      storage.set(key, state);
+    (state: TState) => {
+      storage.set(storageKey, state);
       window.dispatchEvent(new CustomEvent(eventKey, { detail: { state, source: idRef.current } }));
     },
-    [eventKey, key, storage]
+    [storage, storageKey, eventKey]
   );
 
   const setState = React.useCallback(
