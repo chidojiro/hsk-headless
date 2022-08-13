@@ -10,7 +10,7 @@ export const useWindowState = <TValue>(
   const windowStorage = React.useMemo(
     () => ({
       get: (key: string) => (window as any)[key],
-      set: (key: string, value: TValue) => (console.log(key, value) as any) || ((window as any)[key] = value),
+      set: (key: string, value: TValue) => ((window as any)[key] = value),
     }),
     []
   );
