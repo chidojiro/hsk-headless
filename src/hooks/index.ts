@@ -2,6 +2,7 @@ export * from './useClipboard';
 export * from './useControllableState';
 export * from './useDelayableState';
 export * from './useDisclosure';
+export * from './useEventBasedState';
 export * from './useFetcher';
 export * from './useHandler';
 export * from './useInfiniteLoader';
