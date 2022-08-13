@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { SessionStorageUtils } from 'utils';
+import { SessionStorageUtils } from '@/utils';
 import { getUseEventBasedStateEventKey } from '../useEventBasedState';
 import { NAME, useSessionStorageState } from './useSessionStorageState';
 

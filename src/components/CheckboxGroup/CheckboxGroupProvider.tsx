@@ -1,4 +1,4 @@
-import { ReactUtils } from 'utils';
+import { ReactUtils } from '@/utils';
 
 export type ChangeHandler = (value: string, isChecked: boolean) => void;
 

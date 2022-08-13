@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { withOnRemountRequest, WithOnRemountRequestProps } from './withOnRemountRequest';
-import { useMountEffect } from 'hooks';
+import { useMountEffect } from '@/hooks';
 
 const mountEffect = jest.fn();
 

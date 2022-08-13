@@ -1,5 +1,5 @@
 import React from 'react';
-import { LocalStorageUtils } from 'utils';
+import { LocalStorageUtils } from '@/utils';
 import { useEventBasedState } from '../useEventBasedState';
 
 export const NAME = 'useLocalStorageState';

@@ -1,4 +1,4 @@
-import { useDisclosure } from 'hooks';
+import { useDisclosure } from '@/hooks';
 import React from 'react';
 import { FieldValues, FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 

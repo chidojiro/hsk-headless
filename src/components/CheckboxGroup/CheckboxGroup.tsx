@@ -1,6 +1,6 @@
-import { useControllableState } from 'hooks';
+import { useControllableState } from '@/hooks';
 import React from 'react';
-import { Children } from 'types';
+import { Children } from '@/types';
 import { ChangeHandler, CheckboxGroupProvider } from './CheckboxGroupProvider';
 
 export type CheckboxGroupProps = Children & {

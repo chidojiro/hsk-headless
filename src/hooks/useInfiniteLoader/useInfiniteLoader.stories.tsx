@@ -1,6 +1,6 @@
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
-import { PromiseUtils } from 'utils';
+import { PromiseUtils } from '@/utils';
 import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
 
 export default {

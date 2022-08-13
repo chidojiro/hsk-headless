@@ -1,4 +1,4 @@
-import { useMountEffect } from 'hooks';
+import { useMountEffect } from '@/hooks';
 import { get } from 'lodash-es';
 import React from 'react';
 import { RegisterOptions, useController, useFormContext } from 'react-hook-form';

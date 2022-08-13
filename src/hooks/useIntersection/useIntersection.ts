@@ -1,7 +1,7 @@
-import { useDisclosure } from 'hooks';
+import { useDisclosure } from '@/hooks';
 import React from 'react';
-import { HTMLElementOrHTMLElementRef } from 'types';
-import { AssertUtils } from 'utils';
+import { HTMLElementOrHTMLElementRef } from '@/types';
+import { AssertUtils } from '@/utils';
 
 export const useIntersection = (
   elementOrElementRef?: HTMLElementOrHTMLElementRef | null,

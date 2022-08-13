@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { LocalStorageUtils } from 'utils';
+import { LocalStorageUtils } from '@/utils';
 import { getUseEventBasedStateEventKey } from '../useEventBasedState';
 import { NAME, useLocalStorageState } from './useLocalStorageState';
 

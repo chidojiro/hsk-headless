@@ -1,5 +1,5 @@
 import React from 'react';
-import { SessionStorageUtils } from 'utils';
+import { SessionStorageUtils } from '@/utils';
 import { useEventBasedState } from '../useEventBasedState';
 
 export const NAME = 'useSessionStorageState';

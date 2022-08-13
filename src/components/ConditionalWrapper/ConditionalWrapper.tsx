@@ -1,5 +1,5 @@
 import React from 'react';
-import { Children } from 'types';
+import { Children } from '@/types';
 
 type Component = (props: any) => JSX.Element | null;
 

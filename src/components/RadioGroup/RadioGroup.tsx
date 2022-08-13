@@ -1,6 +1,6 @@
 import React from 'react';
-import { useControllableState } from 'hooks';
-import { Children } from 'types';
+import { useControllableState } from '@/hooks';
+import { Children } from '@/types';
 import { RadioGroupProvider } from './RadioGroupProvider';
 
 export type RadioGroupProps = Children & {

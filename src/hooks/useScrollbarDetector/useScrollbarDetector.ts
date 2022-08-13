@@ -1,6 +1,6 @@
 import React from 'react';
-import { HTMLElementOrHTMLElementRef } from 'types';
-import { AssertUtils } from 'utils';
+import { HTMLElementOrHTMLElementRef } from '@/types';
+import { AssertUtils } from '@/utils';
 
 export const useScrollbarDetector = (elementOrElementRef: HTMLElementOrHTMLElementRef, deps: unknown[]) => {
   const [scrollbarWidth, setScrollbarWidth] = React.useState(0);

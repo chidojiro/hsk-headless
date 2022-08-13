@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fn } from 'types';
+import { Fn } from '@/types';
 
 export type Disclosure = {
   set: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,8 +1,8 @@
-import { useDelayableState, useOnEventOutside } from 'hooks';
+import { useDelayableState, useOnEventOutside } from '@/hooks';
 import React, { useState } from 'react';
 import { PopperProps, usePopper } from 'react-popper';
-import { Children, OpenClose } from 'types';
-import { AssertUtils } from 'utils';
+import { Children, OpenClose } from '@/types';
+import { AssertUtils } from '@/utils';
 import { ConditionalWrapper } from '../ConditionalWrapper';
 import { Portal } from '../Portal';
 

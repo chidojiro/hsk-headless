@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssertUtils } from 'utils';
+import { AssertUtils } from '@/utils';
 
 type ElementOrRef = HTMLElement | React.RefObject<HTMLElement>;
 

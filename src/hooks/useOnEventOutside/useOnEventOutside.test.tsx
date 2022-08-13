@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { withUmountAfter } from 'hocs';
+import { withUmountAfter } from '@/hocs';
 import React from 'react';
 import { useOnEventOutside } from './useOnEventOutside';
 

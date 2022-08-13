@@ -1,6 +1,6 @@
-import { useDisclosure, useOnEventOutside } from 'hooks';
+import { useDisclosure, useOnEventOutside } from '@/hooks';
 import React from 'react';
-import { Children, OpenClose } from 'types';
+import { Children, OpenClose } from '@/types';
 import { Popover } from '../Popover';
 import { PopoverProps } from '../Popover/Popover';
 

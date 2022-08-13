@@ -1,6 +1,6 @@
-import { useControllableState } from 'hooks';
+import { useControllableState } from '@/hooks';
 import React from 'react';
-import { Children } from 'types';
+import { Children } from '@/types';
 import { TabValue } from './Tab';
 import { TabsProvider, TabsProviderValue } from './TabsProvider';
 

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { WithAsProps } from 'types';
+import { WithAsProps } from '@/types';
 
 type AspectRatioBaseProps = {
   ratio: `${number}/${number}`;

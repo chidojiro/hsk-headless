@@ -1,6 +1,6 @@
 import React from 'react';
 import DOMpurify from 'dompurify';
-import { WithAsProps } from 'types';
+import { WithAsProps } from '@/types';
 
 type BaseSanitizedHtmlContentProps = {
   children?: string;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDelayableState } from 'hooks';
-import { OpenClose } from 'types';
+import { useDelayableState } from '@/hooks';
+import { OpenClose } from '@/types';
 
 type OpenProps = OpenClose;
 

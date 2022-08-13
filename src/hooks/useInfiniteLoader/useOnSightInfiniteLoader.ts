@@ -1,4 +1,4 @@
-import { useDisclosure, useMountEffect } from 'hooks';
+import { useDisclosure, useMountEffect } from '@/hooks';
 import React from 'react';
 import { useFetcher } from '../useFetcher';
 import { useIntersection } from '../useIntersection';

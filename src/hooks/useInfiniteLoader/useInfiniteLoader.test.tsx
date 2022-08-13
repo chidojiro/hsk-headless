@@ -3,7 +3,7 @@ import React from 'react';
 import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
 import * as mockUseIntersection from '../useIntersection';
 import userEvent from '@testing-library/user-event';
-import { PromiseUtils } from 'utils';
+import { PromiseUtils } from '@/utils';
 
 const mockOnLoad = jest.fn().mockReturnValue([]);
 

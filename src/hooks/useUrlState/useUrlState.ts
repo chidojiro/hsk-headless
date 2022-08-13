@@ -1,6 +1,6 @@
-import { useMountEffect } from 'hooks';
+import { useMountEffect } from '@/hooks';
 import React from 'react';
-import { Fn } from 'types';
+import { Fn } from '@/types';
 import { useQuery } from '../useQuery';
 
 export const useUrlState = <T>(paramKey: string, defaultValue?: T) => {

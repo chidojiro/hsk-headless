@@ -1,4 +1,4 @@
-import { ReactUtils } from 'utils';
+import { ReactUtils } from '@/utils';
 import { TabValue } from './Tab';
 
 export type TabsProviderValue = {

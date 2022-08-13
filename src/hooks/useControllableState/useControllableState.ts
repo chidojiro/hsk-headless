@@ -1,4 +1,4 @@
-import { AssertUtils } from 'utils';
+import { AssertUtils } from '@/utils';
 import React from 'react';
 
 export type UseControllableStateProps<TValue, TOnChangeValue> = {
