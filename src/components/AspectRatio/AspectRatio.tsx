@@ -3,24 +3,12 @@ import React from 'react';
 import { WithAsProps } from 'types';
 
 type AspectRatioBaseProps = {
-  children?: React.ReactNode;
   ratio: `${number}/${number}`;
-  className?: string;
 };
 
-export type AspectRatioProps<TAsElement extends keyof JSX.IntrinsicElements> = WithAsProps<
-  AspectRatioBaseProps,
-  'div',
-  TAsElement
->;
+export type AspectRatioProps = WithAsProps<AspectRatioBaseProps, 'div'>;
 
-export const AspectRatio = <TAsElement extends keyof JSX.IntrinsicElements>({
-  ratio,
-  children,
-  className,
-  style,
-  ...restProps
-}: AspectRatioProps<TAsElement>) => {
+export const AspectRatio = ({ ratio, className, style, ...restProps }: AspectRatioProps) => {
   const [x, y] = (ratio?.split('/') || []).map(v => +v);
 
   if (!/^\d+\/\d+$/.test(ratio) || y <= 0) throw new Error('Invalid ratio!');

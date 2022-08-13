@@ -7,7 +7,7 @@ export type HTMLElementOrHTMLElementRef = HTMLElement | React.RefObject<HTMLElem
 export type WithAsProps<
   TProps,
   TDefaultElement extends keyof JSX.IntrinsicElements,
-  TCustomElement extends keyof JSX.IntrinsicElements
+  TCustomElement extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements
 > =
-  | (TProps & JSX.IntrinsicElements[TDefaultElement])
-  | (TProps & { as: TCustomElement } & JSX.IntrinsicElements[TCustomElement]);
+  | (TProps & { as: TCustomElement } & JSX.IntrinsicElements[TCustomElement])
+  | (TProps & JSX.IntrinsicElements[TDefaultElement]);
