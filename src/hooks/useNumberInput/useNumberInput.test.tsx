@@ -304,6 +304,10 @@ describe('Allow Negative', () => {
 
     expect(getInput()).toHaveValue('12345.6789');
     expect(mockOnChange).toBeCalledWith(getExpectEventValue('12345.6789'));
+
+    userEvent.type(getInput(), '-');
+    expect(getInput()).toHaveValue('12345.6789');
+    expect(mockOnChange).toBeCalledWith(getExpectEventValue('12345.6789'));
   });
 
   it('should call onChange with min value when value prop is less than min', () => {
