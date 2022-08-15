@@ -18,7 +18,7 @@ Uncontrolled.args = {
   separateThousands: true,
   allowNegative: true,
   pad: 0,
-  defaultValue: 'abcd',
+  defaultValue: '',
   max: 9999,
   min: -9999,
 };
