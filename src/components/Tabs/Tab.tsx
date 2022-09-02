@@ -33,5 +33,5 @@ export const Tab = ({ children, content, value }: TabProps) => {
     }
   }, [content, isActive, setContent, index]);
 
-  return <div>{children({ onClick, isActive })}</div>;
+  return <>{children({ onClick, isActive })}</>;
 };
