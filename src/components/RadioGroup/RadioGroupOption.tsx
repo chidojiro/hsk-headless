@@ -4,6 +4,7 @@ import { useRadioGroupContext } from './RadioGroupProvider';
 export type CheckboxGroupOptionRenderPropState = {
   value: string;
   isChecked: boolean;
+  error?: boolean;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -28,5 +29,5 @@ export const RadioGroupOption = ({ value, shouldChange: shouldChangeProp, childr
     }
   };
 
-  return <>{children?.({ value, isChecked, handleChange })}</>;
+  return <>{children?.({ value, isChecked, handleChange, error: groupProviderValue.groupProps?.error })}</>;
 };
