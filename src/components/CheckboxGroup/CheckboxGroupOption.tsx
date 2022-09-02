@@ -4,19 +4,18 @@ import { useCheckboxGroupContext } from './CheckboxGroupProvider';
 type RenderPropState = {
   value: string;
   isChecked: boolean;
+  error?: boolean;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 export type CheckboxGroupOptionProps = {
   value: string;
+  error?: boolean;
   shouldChange?: (e: ChangeEvent<HTMLInputElement>, checkboxGroupValue: string[]) => boolean | Promise<boolean>;
   children?: (state: RenderPropState) => React.ReactNode;
 };
 
-export const CheckboxGroupOption = (
-  { value, shouldChange: shouldChangeProp, children }: CheckboxGroupOptionProps,
-  ref: React.ForwardedRef<HTMLInputElement>
-) => {
+export const CheckboxGroupOption = ({ value, shouldChange: shouldChangeProp, children }: CheckboxGroupOptionProps) => {
   const groupProviderValue = useCheckboxGroupContext();
 
   const isChecked = groupProviderValue.value.includes(value);
@@ -32,5 +31,5 @@ export const CheckboxGroupOption = (
     }
   };
 
-  return <>{children?.({ value, isChecked, handleChange })}</>;
+  return <>{children?.({ value, isChecked, handleChange, error: groupProviderValue.groupProps.error })}</>;
 };
