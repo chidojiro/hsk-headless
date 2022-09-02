@@ -6,7 +6,7 @@ const testId = 'wrapper';
 
 it('should render conditional component', () => {
   render(
-    <ConditionalWrapper conditions={[{ condition: true, component: props => <div {...props} /> }]} data-testid={testId}>
+    <ConditionalWrapper conditions={[{ if: true, component: props => <div {...props} /> }]} data-testid={testId}>
       <div>Hello World</div>
     </ConditionalWrapper>
   );
@@ -17,7 +17,7 @@ it('should render conditional component', () => {
 it('should not render conditional component', () => {
   render(
     <ConditionalWrapper
-      conditions={[{ condition: false, component: props => <div {...props} /> }]}
+      conditions={[{ if: false, component: props => <div {...props} /> }]}
       data-testid={testId}>
       <div>Hello World</div>
     </ConditionalWrapper>
@@ -30,8 +30,8 @@ it('should render second condition', () => {
   render(
     <ConditionalWrapper
       conditions={[
-        { condition: false, component: props => <div {...props} data-testid='first-component' /> },
-        { condition: true, component: props => <div {...props} data-testid='second-component' /> },
+        { if: false, component: props => <div {...props} data-testid='first-component' /> },
+        { if: true, component: props => <div {...props} data-testid='second-component' /> },
         { component: props => <div {...props} data-testid='else-component' /> },
       ]}>
       <div>Hello World</div>
@@ -47,8 +47,8 @@ it('should render else condition', () => {
   render(
     <ConditionalWrapper
       conditions={[
-        { condition: false, component: props => <div {...props} data-testid='first-component' /> },
-        { condition: false, component: props => <div {...props} data-testid='second-component' /> },
+        { if: false, component: props => <div {...props} data-testid='first-component' /> },
+        { if: false, component: props => <div {...props} data-testid='second-component' /> },
         { component: props => <div {...props} data-testid='else-component' /> },
       ]}>
       <div>Hello World</div>

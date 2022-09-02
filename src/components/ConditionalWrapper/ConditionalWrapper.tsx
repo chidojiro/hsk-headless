@@ -8,7 +8,7 @@ type BaseConfigOptions = {
 };
 
 type IfConfig = BaseConfigOptions & {
-  condition: boolean;
+  if: boolean;
 };
 
 type ElseConfig = BaseConfigOptions;
@@ -29,14 +29,14 @@ const getTruthyConfig = (configs: Configs) => {
   // If the last config is an "if" config, use its condition
   // If it's an "else" make the condition always true
   // So that "else" can always be found as the last option
-  const lastConfigAsIfConfig = { ...lastConfig, condition: (lastConfig as IfConfig).condition ?? true };
+  const lastConfigAsIfConfig = { ...lastConfig, if: (lastConfig as IfConfig).if ?? true };
 
   const unifiedConfigs = [...(configs.slice(0, configs.length - 1) as IfConfig[]), lastConfigAsIfConfig];
 
   for (const config of unifiedConfigs) {
-    const { component, condition } = config;
+    const { component, if: _if } = config;
 
-    if (condition) return component;
+    if (_if) return component;
   }
 
   return FallbackComponent;
