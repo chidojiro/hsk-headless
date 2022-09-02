@@ -1,7 +1,7 @@
 import { useControllableState } from '@/hooks';
 import React from 'react';
 import { Children } from '@/types';
-import { ChangeHandler, CheckboxGroupProvider, CheckboxGroupProviderValue } from './CheckboxGroupProvider';
+import { CheckboxGroupChangeHandler, CheckboxGroupProvider, CheckboxGroupProviderValue } from './CheckboxGroupProvider';
 
 export type CheckboxGroupProps = Children & {
   onChange?: (value: string[]) => void;
@@ -19,13 +19,13 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     onChange: onChangeProp,
   });
 
-  const handleChange: ChangeHandler = React.useCallback(
+  const handleChange: CheckboxGroupChangeHandler = React.useCallback(
     (targetValue, isChecked) => {
-      let newValue;
+      let newValue: string[];
       if (isChecked) {
         newValue = [...value, targetValue];
       } else {
-        newValue = value.filter((value: any) => value !== targetValue);
+        newValue = value.filter(value => value !== targetValue);
       }
 
       onChangeProp?.(newValue);
