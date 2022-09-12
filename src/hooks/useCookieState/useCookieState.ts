@@ -1,4 +1,4 @@
-import { CookiesUtils } from '@/common/utils';
+import { CookiesUtils } from '@/utils';
 import React from 'react';
 import { useEventBasedState } from '../useEventBasedState';
 

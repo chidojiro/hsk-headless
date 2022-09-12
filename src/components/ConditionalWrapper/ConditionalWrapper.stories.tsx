@@ -18,7 +18,7 @@ const Template: ComponentStory<typeof ConditionalWrapper> = args => <Conditional
 
 export const AsDiv = Template.bind({});
 AsDiv.args = {
-  conditions: [{ condition: true, component: props => <div {...props} /> }],
+  conditions: [{ if: true, component: props => <div {...props} /> }],
   style: { padding: '20px', backgroundColor: 'aliceblue' },
   children: (
     <div className='border border-border'>
