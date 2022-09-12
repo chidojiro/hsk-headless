@@ -12,8 +12,8 @@ const set = <T = unknown>(key: string, data: T) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
-const clear = localStorage.clear;
+const clear = () => localStorage.clear();
 
-const remove = localStorage.removeItem;
+const remove = (key: string) => localStorage.removeItem(key);
 
 export const LocalStorageUtils = { get, set, clear, remove };
