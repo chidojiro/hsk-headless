@@ -1,9 +1,9 @@
 {
   "name": "hsk-headless",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "dist",
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "ttsc --watch",
     "build": "ttsc",
     "test": "jest --maxWorkers=1",
     "typecheck": "yarn tsc --noEmit",
