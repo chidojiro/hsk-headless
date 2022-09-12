@@ -10,7 +10,7 @@ export type UseEventBasedStateStorage<TValue> = {
 export type UseEventBasedStateProps<TState, TStorage> = {
   name: string;
   storageKey: string;
-  defaultState: TState;
+  defaultState: TState | ((value: TState | undefined) => TState);
   storage: TStorage;
 };
 
@@ -26,7 +26,11 @@ export const useEventBasedState = <
   storage,
 }: UseEventBasedStateProps<TState, TStorage>): [TState, React.Dispatch<React.SetStateAction<TState>>] => {
   const idRef = React.useRef(Math.random());
-  const [state, _setState] = React.useState(storage.get(storageKey) ?? defaultState);
+  const [state, _setState] = React.useState(
+    AssertUtils.isFunction(defaultState)
+      ? defaultState(storage.get(storageKey))
+      : storage.get(storageKey) ?? defaultState
+  );
 
   const eventKey = getUseEventBasedStateEventKey(name, storageKey);
   React.useEffect(() => {
@@ -55,7 +59,7 @@ export const useEventBasedState = <
     [storage, storageKey, eventKey]
   );
 
-  const setState = React.useCallback(
+  const setState = React.useCallback<React.Dispatch<React.SetStateAction<TState>>>(
     stateOrCallback => {
       if (AssertUtils.isFunction(stateOrCallback)) {
         const callback = stateOrCallback;

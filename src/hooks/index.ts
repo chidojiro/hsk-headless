@@ -22,3 +22,4 @@ export * from './useSessionStorageState';
 export * from './useUpdateEffect';
 export * from './useUrlState';
 export * from './useWindowState';
+export * from './useCookieState';
