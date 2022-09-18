@@ -1,3 +1,4 @@
+import { useMountEffect } from '@/hooks';
 import React, { ChangeEvent } from 'react';
 import { useCheckboxGroupContext } from './CheckboxGroupProvider';
 
@@ -30,6 +31,12 @@ export const CheckboxGroupOption = ({ value, shouldChange: shouldChangeProp, chi
       groupProviderValue?.handleChange(value, isChecked);
     }
   };
+
+  useMountEffect(() => {
+    groupProviderValue.registerValue(value);
+
+    return () => groupProviderValue.unregisterValue(value);
+  });
 
   return <>{children?.({ value, isChecked, handleChange, error: groupProviderValue.groupProps.error })}</>;
 };

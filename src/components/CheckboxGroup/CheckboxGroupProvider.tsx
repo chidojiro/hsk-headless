@@ -7,6 +7,8 @@ export type CheckboxGroupProviderValue = {
   value: string[];
   handleChange: CheckboxGroupChangeHandler;
   groupProps: CheckboxGroupProps;
+  registerValue: (value: string) => void;
+  unregisterValue: (value: string) => void;
 };
 
 export const [CheckboxGroupProvider, useCheckboxGroupContext] = ReactUtils.createContext<CheckboxGroupProviderValue>();

@@ -53,8 +53,8 @@ const ForwardedField = <TComponentProps, TValue>(
   const error = get(errors, name);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    const _value = (e.target?.value as any) ?? (e as any) ?? emptyValue;
-    onChange(changeAs(_value));
+    const _value = changeAs ? changeAs(e) : e ?? emptyValue;
+    onChange(_value);
     onChangeProp?.(e);
   };
 
@@ -65,9 +65,13 @@ const ForwardedField = <TComponentProps, TValue>(
 
   const resolveValue = React.useCallback(
     () => {
-      if ([null, undefined].includes(value)) return emptyValue;
+      if ([null, undefined].includes(value)) {
+        return emptyValue;
+      }
 
-      if (valueAs) return valueAs(value);
+      if (valueAs) {
+        return valueAs(value);
+      }
 
       return value;
     },
