@@ -1,7 +1,7 @@
 {
   "name": "hsk-headless",
-  "version": "2.2.0",
-  "main": "dist",
+  "version": "2.2.1",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "ttsc --watch",
     "build": "ttsc",
