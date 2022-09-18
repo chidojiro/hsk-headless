@@ -5,3 +5,4 @@ export * from './Form';
 export * from './Portal';
 export * from './RadioGroup';
 export * from './Tabs';
+export * from './Drawer';
