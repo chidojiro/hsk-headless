@@ -1,39 +1,35 @@
-import { useDelayableState, useOnEventOutside } from '@/hooks';
+import { useOnEventOutside } from '@/hooks';
+import { OpenClose } from '@/types';
+import { AssertUtils } from '@/utils';
 import React, { useState } from 'react';
 import { PopperProps as ReactPopperProps, usePopper } from 'react-popper';
-import { Children, OpenClose } from '@/types';
-import { AssertUtils } from '@/utils';
-import { ConditionalWrapper } from '../ConditionalWrapper';
 import { Portal } from '../Portal';
 
 export type PopperPlacement = ReactPopperProps<any>['placement'];
 
-export type PopperProps = Children &
-  Omit<OpenClose, 'defaultOpen'> & {
-    placement?: PopperPlacement;
-    usePortal?: boolean;
-    trigger: React.ReactElement | HTMLElement;
-    offset?: [number, number];
-  };
+const originalError = console.error;
+
+export type PopperProps = Omit<OpenClose, 'defaultOpen'> & {
+  placement?: PopperPlacement;
+  trigger: React.ReactElement | HTMLElement;
+  offset?: [number, number];
+  children?: React.ReactNode | ((props: { triggerElement: Element | undefined }) => React.ReactNode);
+};
 
 export const Popper = ({
   children,
-  usePortal = true,
   trigger,
   placement = 'bottom-start',
-  offset = [0, 8],
+  offset = [0, 4],
   open,
   onClose,
 }: PopperProps) => {
-  const [triggerElement, setTriggerElement] = useState<React.ReactElement>();
-  const popperRef = React.useRef(null);
-
-  // Workaround to resolve misalignment on initial render
-  const [delayedOpen, setDelayedOpen] = useDelayableState({ delayBy: 0, defaultState: false });
+  const [triggerElement, setTriggerElement] = useState<Element>();
+  const PopperRef = React.useRef(null);
 
   const { styles, attributes, forceUpdate } = usePopper(
     AssertUtils.isHTMLElement(trigger) ? (trigger as any) : triggerElement,
-    popperRef.current,
+    PopperRef.current,
     {
       placement,
       modifiers: [
@@ -47,12 +43,24 @@ export const Popper = ({
     }
   );
 
+  React.useLayoutEffect(() => {
+    console.error = e => {
+      if (e.toString().includes('flushSync')) return '';
+
+      return e;
+    };
+
+    return () => {
+      console.error = originalError;
+    };
+  }, []);
+
   const clonedTrigger = React.useMemo(() => {
     if (!trigger || AssertUtils.isHTMLElement(trigger)) return null;
 
     return React.Children.map(trigger, child =>
       React.cloneElement(child, {
-        ref: (node: React.ReactElement) => {
+        ref: (node: Element) => {
           setTriggerElement(node);
 
           // Call the original ref, if any
@@ -68,24 +76,27 @@ export const Popper = ({
   }, [trigger]);
 
   React.useEffect(() => {
-    setDelayedOpen({ state: !!open, shouldDelay: true });
     forceUpdate?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger, open, setDelayedOpen, (trigger as HTMLElement)?.innerHTML]);
+  }, [trigger, open, (trigger as HTMLElement)?.innerHTML]);
 
-  useOnEventOutside('click', [popperRef, triggerElement as any], onClose);
+  useOnEventOutside('click', [PopperRef, triggerElement as any], onClose);
 
   return (
     <>
       {clonedTrigger}
-      <ConditionalWrapper conditions={[{ if: usePortal, component: Portal as any }]}>
+      <Portal>
         <div
-          ref={popperRef}
-          style={{ ...styles.popper, zIndex: 999, display: delayedOpen ? 'block' : 'none' }}
+          ref={PopperRef}
+          style={{
+            ...styles.popper,
+            zIndex: 999,
+            display: open ? 'block' : 'none',
+          }}
           {...attributes.popper}>
-          {children}
+          {typeof children === 'function' ? children({ triggerElement }) : children}
         </div>
-      </ConditionalWrapper>
+      </Portal>
     </>
   );
 };
