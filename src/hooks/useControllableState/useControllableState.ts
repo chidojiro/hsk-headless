@@ -1,10 +1,10 @@
-import { AssertUtils } from '@/utils';
 import React from 'react';
+import { AssertUtils } from '@/utils';
 
 export type UseControllableStateProps<TValue, TOnChangeValue> = {
   value?: TValue;
   defaultValue: TValue;
-  onChange?: (value: TOnChangeValue) => void;
+  onChange?: (value: TOnChangeValue | TValue) => void;
 };
 
 export type SetControllableStateVerboseParams<TInternalValue, TOnChangeValue> = {
@@ -13,16 +13,15 @@ export type SetControllableStateVerboseParams<TInternalValue, TOnChangeValue> = 
 };
 
 export type SetControllableState<TValue, TOnChangeValue = TValue> = (
-  value:
-    | (TValue & TOnChangeValue)
-    | ((value: TValue) => TValue & TOnChangeValue)
-    | SetControllableStateVerboseParams<TValue, TOnChangeValue>
+  value: TValue | ((value: TValue) => TValue) | SetControllableStateVerboseParams<TValue, TOnChangeValue>
 ) => void;
 
 const isVerboseParams = <TValue, TOnChangeValue>(
   params: any
 ): params is SetControllableStateVerboseParams<TValue, TOnChangeValue> =>
-  Object.prototype.hasOwnProperty.call(params, 'internal') && Object.prototype.hasOwnProperty.call(params, 'external');
+  !AssertUtils.isNullOrUndefined(params) &&
+  Object.prototype.hasOwnProperty.call(params, 'internal') &&
+  Object.prototype.hasOwnProperty.call(params, 'external');
 
 export const useControllableState = <TValue, TOnChangeValue = TValue>({
   value: valueProp,
@@ -42,7 +41,7 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
   const setState: SetControllableState<TValue, TOnChangeValue> = React.useCallback(
     newState => {
       if (isControlled) {
-        let computedExternal: TOnChangeValue;
+        let computedExternal: TOnChangeValue | TValue;
 
         if (isVerboseParams<TValue, TOnChangeValue>(newState)) {
           const { external } = newState;
@@ -54,7 +53,7 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
         onChange?.(computedExternal);
       } else {
         let computedInternal: TValue;
-        let computedExternal: TOnChangeValue;
+        let computedExternal: TOnChangeValue | TValue;
 
         if (isVerboseParams<TValue, TOnChangeValue>(newState)) {
           const { internal, external } = newState;

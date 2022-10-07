@@ -2,7 +2,7 @@ import React from 'react';
 
 export const withMountAfter =
   (mountAfter: number) =>
-  <TProps,>(Component: (props: TProps) => JSX.Element | null) =>
+  <TProps extends Record<string, unknown>>(Component: (props: TProps) => JSX.Element | null) =>
   // eslint-disable-next-line react/display-name
   (props: TProps) => {
     const timeoutRef = React.useRef<NodeJS.Timeout>();

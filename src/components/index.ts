@@ -6,3 +6,4 @@ export * from './Portal';
 export * from './RadioGroup';
 export * from './Tabs';
 export * from './Drawer';
+export * from './Popper';

@@ -2,7 +2,7 @@ import { useDisclosure } from '@/hooks';
 import React from 'react';
 import { FieldValues, FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 
-export type FormProps<T = any> = Omit<
+export type FormProps<T extends FieldValues> = Omit<
   React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
   'onSubmit'
 > & {

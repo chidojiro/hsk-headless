@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["clsx", "delayabe", "Delayable", "dompurify", "hocs", "laggy", "typecheck"]
+  "cSpell.words": ["clsx", "delayabe", "Delayable", "dompurify", "hocs", "laggy", "typecheck"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

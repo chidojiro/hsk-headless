@@ -11,7 +11,7 @@ export type RadioGroupProps = Children & {
 };
 
 export const RadioGroup = (props: RadioGroupProps) => {
-  const { value: valueProp, onChange: onChangeProp, defaultValue, children } = props;
+  const { value: valueProp, onChange: onChangeProp, defaultValue = '', children } = props;
   const [value, setValue] = useControllableState({ value: valueProp, onChange: onChangeProp, defaultValue });
 
   const handleChange = React.useCallback(

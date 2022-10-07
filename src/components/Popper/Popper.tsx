@@ -1,22 +1,22 @@
 import { useDelayableState, useOnEventOutside } from '@/hooks';
 import React, { useState } from 'react';
-import { PopperProps, usePopper } from 'react-popper';
+import { PopperProps as ReactPopperProps, usePopper } from 'react-popper';
 import { Children, OpenClose } from '@/types';
 import { AssertUtils } from '@/utils';
 import { ConditionalWrapper } from '../ConditionalWrapper';
 import { Portal } from '../Portal';
 
-export type PopoverPlacement = PopperProps<any>['placement'];
+export type PopperPlacement = ReactPopperProps<any>['placement'];
 
-export type PopoverProps = Children &
+export type PopperProps = Children &
   Omit<OpenClose, 'defaultOpen'> & {
-    placement?: PopoverPlacement;
+    placement?: PopperPlacement;
     usePortal?: boolean;
     trigger: React.ReactElement | HTMLElement;
     offset?: [number, number];
   };
 
-export const Popover = ({
+export const Popper = ({
   children,
   usePortal = true,
   trigger,
@@ -24,16 +24,16 @@ export const Popover = ({
   offset = [0, 8],
   open,
   onClose,
-}: PopoverProps) => {
+}: PopperProps) => {
   const [triggerElement, setTriggerElement] = useState<React.ReactElement>();
-  const popoverRef = React.useRef(null);
+  const popperRef = React.useRef(null);
 
   // Workaround to resolve misalignment on initial render
   const [delayedOpen, setDelayedOpen] = useDelayableState({ delayBy: 0, defaultState: false });
 
   const { styles, attributes, forceUpdate } = usePopper(
     AssertUtils.isHTMLElement(trigger) ? (trigger as any) : triggerElement,
-    popoverRef.current,
+    popperRef.current,
     {
       placement,
       modifiers: [
@@ -73,14 +73,14 @@ export const Popover = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trigger, open, setDelayedOpen, (trigger as HTMLElement)?.innerHTML]);
 
-  useOnEventOutside('click', [popoverRef, triggerElement as any], onClose);
+  useOnEventOutside('click', [popperRef, triggerElement as any], onClose);
 
   return (
     <>
       {clonedTrigger}
       <ConditionalWrapper conditions={[{ if: usePortal, component: Portal as any }]}>
         <div
-          ref={popoverRef}
+          ref={popperRef}
           style={{ ...styles.popper, zIndex: 999, display: delayedOpen ? 'block' : 'none' }}
           {...attributes.popper}>
           {children}

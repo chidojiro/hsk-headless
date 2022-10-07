@@ -1,10 +1,9 @@
 import { useDisclosure, useOnEventOutside } from '@/hooks';
-import React from 'react';
 import { Children, OpenClose } from '@/types';
-import { Popover } from '../Popover';
-import { PopoverProps } from '../Popover/Popover';
+import React from 'react';
+import { Popper, PopperProps } from '../Popper';
 
-export type TooltipProps = Omit<PopoverProps, 'trigger' | keyof OpenClose> &
+export type TooltipProps = Omit<PopperProps, 'trigger' | keyof OpenClose> &
   Children & {
     content: React.ReactNode;
   };
@@ -41,13 +40,13 @@ export const Tooltip = ({ children, placement = 'top', content, ...restProps }: 
   if (!disclosure.isOpen) return <>{clonedTrigger}</>;
 
   return (
-    <Popover
+    <Popper
       open={disclosure.isOpen}
       trigger={clonedTrigger as any}
       placement={placement}
       offset={[0, 8]}
       {...restProps}>
       {content}
-    </Popover>
+    </Popper>
   );
 };

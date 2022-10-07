@@ -1,10 +1,10 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Popover } from './Popover';
+import { Popper } from './Popper';
 
 export default {
-  title: 'Components/Popover',
-  component: Popover,
+  title: 'Components/Popper',
+  component: Popper,
   argTypes: {
     trigger: {
       control: {
@@ -17,15 +17,15 @@ export default {
       },
     },
   },
-} as ComponentMeta<typeof Popover>;
+} as ComponentMeta<typeof Popper>;
 
-const Template: ComponentStory<typeof Popover> = args => (
+const Template: ComponentStory<typeof Popper> = args => (
   <div className='w-screen h-screen flex items-center justify-center'>
-    <Popover {...args} trigger={<button>trigger</button>}>
+    <Popper {...args} trigger={<button>trigger</button>}>
       <div className='w-30 h-40 border border-black'>{args.children}</div>
-    </Popover>
+    </Popper>
   </div>
 );
 
 export const Basic = Template.bind({});
-Basic.args = { open: true, children: 'Popover content', offset: [0, 8] };
+Basic.args = { open: true, children: 'Popper content', offset: [0, 8] };
