@@ -1,6 +1,6 @@
 {
   "name": "hsk-headless",
-  "version": "2.2.3",
+  "version": "2.2.5",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ttsc --watch",
@@ -9,7 +9,7 @@
     "typecheck": "yarn tsc --noEmit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "publish": "yarn build && npm publish --access public"
+    "pub": "yarn build && yarn publish"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
