@@ -1,35 +1,56 @@
-import { useOnEventOutside } from '@/hooks';
+import { useDisclosure, useOnEventOutside } from '@/hooks';
 import { OpenClose } from '@/types';
 import { isHTMLElement } from '@/utils';
-import React, { useState } from 'react';
-import { PopperProps as ReactPopperProps, usePopper } from 'react-popper';
+import React, { useCallback, useState } from 'react';
+import { PopperProps as RPPopperProps, usePopper } from 'react-popper';
 import { Portal } from '../Portal';
 
-export type PopperPlacement = ReactPopperProps<any>['placement'];
-
-const originalError = console.error;
+export type PopperPlacement = RPPopperProps<any>['placement'];
 
 export type PopperProps = Omit<OpenClose, 'defaultOpen'> & {
   placement?: PopperPlacement;
-  trigger: React.ReactElement | HTMLElement;
+  trigger: React.ReactElement;
   offset?: [number, number];
   children?: React.ReactNode | ((props: { triggerElement: Element | undefined }) => React.ReactNode);
+  usePortal?: boolean;
+  closeOnClickOutside?: boolean;
+  onToggle?: () => void;
 };
 
 export const Popper = ({
   children,
+  /**
+   * trigger if is a react component must forward ref to an html node
+   */
   trigger,
   placement = 'bottom-start',
   offset = [0, 4],
-  open,
+  open: openProp,
   onClose,
+  usePortal = true,
+  closeOnClickOutside = true,
+  onToggle,
 }: PopperProps) => {
-  const [triggerElement, setTriggerElement] = useState<Element>();
-  const PopperRef = React.useRef(null);
+  const isControlled = openProp !== undefined;
 
-  const { styles, attributes, forceUpdate } = usePopper(
+  const [triggerElement, setTriggerElement] = useState<HTMLElement>();
+  const [mainContentElement, setMainContentElement] = useState<HTMLDivElement | null>(null);
+
+  const isOpenDisclosure = useDisclosure();
+
+  const isOpen = openProp ?? isOpenDisclosure.isOpen;
+
+  const handleClose = useCallback(() => {
+    if (isControlled) {
+      onClose?.();
+    } else {
+      isOpenDisclosure.close();
+    }
+  }, [isControlled, isOpenDisclosure, onClose]);
+
+  const { styles, attributes } = usePopper(
     isHTMLElement(trigger) ? (trigger as any) : triggerElement,
-    PopperRef.current,
+    mainContentElement,
     {
       placement,
       modifiers: [
@@ -43,24 +64,31 @@ export const Popper = ({
     }
   );
 
+  console.error = e => {
+    if (e.toString().includes('flushSync')) return '';
+
+    return e;
+  };
+
   React.useLayoutEffect(() => {
-    console.error = e => {
-      if (e.toString().includes('flushSync')) return '';
-
-      return e;
+    const handleClick = () => {
+      if (!isControlled) {
+        isOpenDisclosure.toggle();
+      } else {
+        onToggle?.();
+      }
     };
 
-    return () => {
-      console.error = originalError;
-    };
-  }, []);
+    triggerElement?.addEventListener('click', handleClick);
 
+    return () => triggerElement?.removeEventListener('click', handleClick);
+  }, [isControlled, isOpenDisclosure, onToggle, triggerElement]);
+
+  // React.Children.map is used here to get the dom element from children which is a react node
   const clonedTrigger = React.useMemo(() => {
-    if (!trigger || isHTMLElement(trigger)) return null;
-
     return React.Children.map(trigger, child =>
       React.cloneElement(child, {
-        ref: (node: Element) => {
+        ref: (node: HTMLElement) => {
           setTriggerElement(node);
 
           // Call the original ref, if any
@@ -75,28 +103,41 @@ export const Popper = ({
     );
   }, [trigger]);
 
-  React.useEffect(() => {
-    forceUpdate?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger, open, (trigger as HTMLElement)?.innerHTML]);
+  useOnEventOutside('click', closeOnClickOutside && isOpen && [mainContentElement, triggerElement as any], handleClose);
 
-  useOnEventOutside('click', [PopperRef, triggerElement as any], onClose);
+  React.useLayoutEffect(() => {
+    const handleCloseOnEsc = (e: KeyboardEvent) => {
+      if (e.code === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+
+    window.addEventListener('keyup', handleCloseOnEsc);
+
+    return () => window.removeEventListener('keyup', handleCloseOnEsc);
+  }, [handleClose, isOpen]);
+
+  const renderChildren = () => {
+    if (!isOpen) return null;
+
+    return typeof children === 'function' ? children({ triggerElement }) : children;
+  };
+
+  const mainContent = (
+    <div
+      ref={element => setMainContentElement(element)}
+      style={{
+        ...styles.popper,
+      }}
+      {...attributes.popper}>
+      {renderChildren()}
+    </div>
+  );
 
   return (
     <>
       {clonedTrigger}
-      <Portal>
-        <div
-          ref={PopperRef}
-          style={{
-            ...styles.popper,
-            zIndex: 999,
-            display: open ? 'block' : 'none',
-          }}
-          {...attributes.popper}>
-          {typeof children === 'function' ? children({ triggerElement }) : children}
-        </div>
-      </Portal>
+      {usePortal ? <Portal>{mainContent}</Portal> : mainContent}
     </>
   );
 };
