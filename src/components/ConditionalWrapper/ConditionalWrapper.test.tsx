@@ -6,7 +6,7 @@ const testId = 'wrapper';
 
 it('should render conditional component', () => {
   render(
-    <ConditionalWrapper conditions={[{ if: true, component: props => <div {...props} /> }]} data-testid={testId}>
+    <ConditionalWrapper conditions={[{ if: true, component: 'div' }]} data-testid={testId}>
       <div>Hello World</div>
     </ConditionalWrapper>
   );
@@ -16,9 +16,7 @@ it('should render conditional component', () => {
 
 it('should not render conditional component', () => {
   render(
-    <ConditionalWrapper
-      conditions={[{ if: false, component: props => <div {...props} /> }]}
-      data-testid={testId}>
+    <ConditionalWrapper conditions={[{ if: false, component: 'div' }]} data-testid={testId}>
       <div>Hello World</div>
     </ConditionalWrapper>
   );
@@ -30,9 +28,9 @@ it('should render second condition', () => {
   render(
     <ConditionalWrapper
       conditions={[
-        { if: false, component: props => <div {...props} data-testid='first-component' /> },
-        { if: true, component: props => <div {...props} data-testid='second-component' /> },
-        { component: props => <div {...props} data-testid='else-component' /> },
+        { if: false, component: 'div', props: { 'data-testid': 'first-component' } },
+        { if: true, component: 'div', props: { 'data-testid': 'second-component' } },
+        { component: 'div', props: { 'data-testid': 'else-component' } },
       ]}>
       <div>Hello World</div>
     </ConditionalWrapper>
@@ -47,9 +45,9 @@ it('should render else condition', () => {
   render(
     <ConditionalWrapper
       conditions={[
-        { if: false, component: props => <div {...props} data-testid='first-component' /> },
-        { if: false, component: props => <div {...props} data-testid='second-component' /> },
-        { component: props => <div {...props} data-testid='else-component' /> },
+        { if: false, component: 'div', props: { 'data-testid': 'first-component' } },
+        { if: false, component: 'div', props: { 'data-testid': 'second-component' } },
+        { component: 'div', props: { 'data-testid': 'else-component' } },
       ]}>
       <div>Hello World</div>
     </ConditionalWrapper>
