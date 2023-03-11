@@ -1,5 +1,5 @@
+import { isRef } from '@/utils';
 import React from 'react';
-import { AssertUtils } from '@/utils';
 
 type ElementOrRef = HTMLElement | React.RefObject<HTMLElement>;
 
@@ -14,7 +14,7 @@ export const useOnEventOutside = <TEvent extends keyof GlobalEventHandlersEventM
       if (!isEnabled) return;
 
       const isEveryOutside = [refsOrElements].flat().every(eleOrRef => {
-        if (AssertUtils.isRef(eleOrRef)) {
+        if (isRef(eleOrRef)) {
           return !eleOrRef?.current?.contains(event.target as Node);
         }
 

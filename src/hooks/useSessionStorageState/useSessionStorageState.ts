@@ -1,5 +1,5 @@
 import React from 'react';
-import { SessionStorageUtils } from '@/utils';
+import { SessionStorage } from '@/utils';
 import { useEventBasedState } from '../useEventBasedState';
 
 export const NAME = 'useSessionStorageState';
@@ -10,8 +10,8 @@ export const useSessionStorageState = <TValue>(
 ): [TValue, React.Dispatch<React.SetStateAction<TValue>>] => {
   const localStorage = React.useMemo(
     () => ({
-      get: (key: string) => SessionStorageUtils.get<TValue>(key, defaultState)!,
-      set: (key: string, value: TValue) => SessionStorageUtils.set(key, value),
+      get: (key: string) => SessionStorage.get<TValue>(key, defaultState)!,
+      set: (key: string, value: TValue) => SessionStorage.set(key, value),
     }),
     [defaultState]
   );

@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { LocalStorageUtils } from '@/utils';
+import { LocalStorage } from '@/utils';
 import { getUseEventBasedStateEventKey } from '../useEventBasedState';
 import { NAME, useLocalStorageState } from './useLocalStorageState';
 
@@ -10,7 +10,7 @@ const defaultState = 'defaultState';
 const localStorageState = 'localStorageState';
 const newState = 'newState';
 
-const getLocalStorageState = () => LocalStorageUtils.get(key);
+const getLocalStorageState = () => LocalStorage.get(key);
 
 const originalDispatchEvent = window.dispatchEvent;
 
@@ -19,7 +19,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  LocalStorageUtils.set(key, undefined);
+  LocalStorage.set(key, undefined);
 });
 
 it('should accept default state', () => {
@@ -29,7 +29,7 @@ it('should accept default state', () => {
 });
 
 it('should take corresponding window value as default state', () => {
-  LocalStorageUtils.set(key, localStorageState);
+  LocalStorage.set(key, localStorageState);
 
   const { result } = renderHook(() => useLocalStorageState(key, defaultState));
 

@@ -1,15 +1,15 @@
-import Cookies, { CookieAttributes } from 'js-cookie';
+import JsCookies, { CookieAttributes } from 'js-cookie';
 
 const set = (key: string, value: string, options: CookieAttributes = {}) => {
-  Cookies.set(key, value, options);
+  JsCookies.set(key, value, options);
 };
 
 const get = (key: string, defaultValue = '') => {
-  return Cookies.get(key) ?? defaultValue;
+  return JsCookies.get(key) ?? defaultValue;
 };
 
 const remove = (key: string, options: CookieAttributes = {}) => {
-  Cookies.remove(key, options);
+  JsCookies.remove(key, options);
 };
 
 const parse = (cookie: string) =>
@@ -21,7 +21,7 @@ const parse = (cookie: string) =>
       return acc;
     }, {} as Record<string, string>) ?? {};
 
-export const CookiesUtils = {
+export const Cookies = {
   set,
   get,
   parse,

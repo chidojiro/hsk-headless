@@ -1,5 +1,6 @@
 import { useControllableState, useMountEffect } from '@/hooks';
-import { AssertUtils, NumberUtils } from '@/utils';
+import { isNullOrUndefined, trimZeroes } from '@/utils';
+import { padStart } from 'lodash';
 import React from 'react';
 import { UseControllableStateProps } from '../useControllableState';
 
@@ -35,7 +36,7 @@ export const useNumberInput = ({
   // So that we have '-0' instead of just '-'
   const pad = _value.startsWith('-') && padProp === 0 ? 1 : padProp;
 
-  const paddedValue = NumberUtils.pad(NumberUtils.trimZeroes(_value), pad);
+  const paddedValue = padStart(trimZeroes(_value).toString(), pad, '0');
 
   const guardInvalid = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(e => {
     const value = e.target.value;
@@ -73,7 +74,7 @@ export const useNumberInput = ({
   const guardLeadingZeroes = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     e => {
       const value = e.target.value;
-      const zerosTrimmedEvenValue = NumberUtils.pad(value, pad);
+      const zerosTrimmedEvenValue = padStart(value, pad, '0');
       e.target.value = zerosTrimmedEvenValue;
     },
     [pad]
@@ -83,17 +84,17 @@ export const useNumberInput = ({
     e => {
       const value = e.target.value;
 
-      const zerosTrimmedValue = NumberUtils.pad(value, pad);
+      const zerosTrimmedValue = padStart(value, pad, '0');
       const separatorTrimmedValue = zerosTrimmedValue.replace(/,/g, '');
 
-      if (!AssertUtils.isNullOrUndefined(min) && +separatorTrimmedValue < min) {
+      if (!isNullOrUndefined(min) && +separatorTrimmedValue < min) {
         const guardedValue = min?.toString() ?? '';
         e.target.value = guardedValue;
         setValue({ internal: guardedValue, external: e });
         throw new Error();
       }
 
-      if (!AssertUtils.isNullOrUndefined(max) && +separatorTrimmedValue > max) {
+      if (!isNullOrUndefined(max) && +separatorTrimmedValue > max) {
         const guardedValue = max?.toString() ?? '';
         e.target.value = guardedValue;
         setValue({ internal: guardedValue, external: e });
@@ -148,8 +149,8 @@ export const useNumberInput = ({
   const value = React.useMemo(() => {
     if (separateThousands) {
       const [whole, decimal] = paddedValue.split('.');
-      const valueWithSeparator = [whole && NumberUtils.pad((+whole).toLocaleString(), pad), decimal]
-        .filter(num => !AssertUtils.isNullOrUndefined(num))
+      const valueWithSeparator = [whole && padStart((+whole).toLocaleString(), pad, '0'), decimal]
+        .filter(num => !isNullOrUndefined(num))
         .join('.');
       return valueWithSeparator;
     }

@@ -16,4 +16,4 @@ const clear = () => sessionStorage.clear();
 
 const remove = (key: string) => sessionStorage.removeItem(key);
 
-export const SessionStorageUtils = { get, set, clear, remove };
+export const SessionStorage = { get, set, clear, remove };

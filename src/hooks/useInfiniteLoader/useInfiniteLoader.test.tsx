@@ -3,7 +3,7 @@ import React from 'react';
 import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
 import * as mockUseIntersection from '../useIntersection';
 import userEvent from '@testing-library/user-event';
-import { PromiseUtils } from '@/utils';
+import { sleep } from '@/utils';
 
 const mockOnLoad = jest.fn().mockReturnValue([]);
 
@@ -65,7 +65,7 @@ describe('ON_SIGHT', () => {
   it('Should render loading and exhaust indicators', async () => {
     jest.spyOn(mockUseIntersection, 'useIntersection').mockReturnValue(true);
     const mockOnLoad = jest.fn().mockImplementation(async () => {
-      await PromiseUtils.sleep(500);
+      await sleep(500);
       return [];
     });
     const { queryByText } = renderComponent({ mode: 'ON_SIGHT', onLoad: mockOnLoad, until: () => true });
@@ -113,7 +113,7 @@ describe('ON_DEMAND', () => {
 
   it('Should render loading and exhaust indicators', async () => {
     const mockOnLoad = jest.fn().mockImplementation(async () => {
-      await PromiseUtils.sleep(500);
+      await sleep(500);
       return [];
     });
     const { queryByText, getByText } = renderComponent({ mode: 'ON_DEMAND', onLoad: mockOnLoad, until: () => true });

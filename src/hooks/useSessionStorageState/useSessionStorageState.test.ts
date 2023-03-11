@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { SessionStorageUtils } from '@/utils';
+import { SessionStorage } from '@/utils';
 import { getUseEventBasedStateEventKey } from '../useEventBasedState';
 import { NAME, useSessionStorageState } from './useSessionStorageState';
 
@@ -10,7 +10,7 @@ const defaultState = 'defaultState';
 const sessionStorageState = 'sessionStorageState';
 const newState = 'newState';
 
-const getSessionStorageState = () => SessionStorageUtils.get(key);
+const getSessionStorageState = () => SessionStorage.get(key);
 
 const originalDispatchEvent = window.dispatchEvent;
 
@@ -19,7 +19,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  SessionStorageUtils.set(key, undefined);
+  SessionStorage.set(key, undefined);
 });
 
 it('should accept default state', () => {
@@ -29,7 +29,7 @@ it('should accept default state', () => {
 });
 
 it('should take corresponding window value as default state', () => {
-  SessionStorageUtils.set(key, sessionStorageState);
+  SessionStorage.set(key, sessionStorageState);
 
   const { result } = renderHook(() => useSessionStorageState(key, defaultState));
 

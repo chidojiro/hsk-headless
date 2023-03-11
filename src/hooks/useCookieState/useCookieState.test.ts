@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { CookiesUtils } from '@/utils';
+import { Cookies } from '@/utils';
 import { getUseEventBasedStateEventKey } from '../useEventBasedState';
 import { NAME, useCookieState } from './useCookieState';
 
@@ -10,7 +10,7 @@ const defaultState = 'defaultState';
 const localStorageState = 'localStorageState';
 const newState = 'newState';
 
-const getLocalStorageState = () => CookiesUtils.get(key);
+const getLocalStorageState = () => Cookies.get(key);
 
 const originalDispatchEvent = window.dispatchEvent;
 
@@ -19,7 +19,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  CookiesUtils.set(key, '');
+  Cookies.set(key, '');
 });
 
 it('should accept default state', () => {
@@ -29,7 +29,7 @@ it('should accept default state', () => {
 });
 
 it('should take corresponding window value as default state', () => {
-  CookiesUtils.set(key, localStorageState);
+  Cookies.set(key, localStorageState);
 
   const { result } = renderHook(() => useCookieState(key, defaultState));
 

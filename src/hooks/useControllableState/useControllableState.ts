@@ -1,5 +1,6 @@
+import { isNullOrUndefined } from '@/utils';
+import { isFunction } from 'lodash';
 import React from 'react';
-import { AssertUtils } from '@/utils';
 
 export type UseControllableStateProps<TValue, TOnChangeValue> = {
   value?: TValue;
@@ -19,7 +20,7 @@ export type SetControllableState<TValue, TOnChangeValue = TValue> = (
 const isVerboseParams = <TValue, TOnChangeValue>(
   params: any
 ): params is SetControllableStateVerboseParams<TValue, TOnChangeValue> =>
-  !AssertUtils.isNullOrUndefined(params) &&
+  !isNullOrUndefined(params) &&
   Object.prototype.hasOwnProperty.call(params, 'internal') &&
   Object.prototype.hasOwnProperty.call(params, 'external');
 
@@ -28,7 +29,7 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
   onChange,
   defaultValue,
 }: UseControllableStateProps<TValue, TOnChangeValue>): [TValue, SetControllableState<TValue, TOnChangeValue>] => {
-  const isControlled = !AssertUtils.isNullOrUndefined(valueProp);
+  const isControlled = !isNullOrUndefined(valueProp);
   const prevValueRef = React.useRef(valueProp ?? defaultValue);
 
   const [internalState, setInternalState] = React.useState(defaultValue);
@@ -47,7 +48,7 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
           const { external } = newState;
           computedExternal = external;
         } else {
-          computedExternal = AssertUtils.isFunction(newState) ? newState(valueProp) : newState;
+          computedExternal = isFunction(newState) ? newState(valueProp) : newState;
         }
 
         onChange?.(computedExternal);
@@ -57,12 +58,10 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
 
         if (isVerboseParams<TValue, TOnChangeValue>(newState)) {
           const { internal, external } = newState;
-          computedInternal = AssertUtils.isFunction(internal) ? internal(prevValueRef.current) : internal;
+          computedInternal = isFunction(internal) ? internal(prevValueRef.current) : internal;
           computedExternal = external;
         } else {
-          computedInternal = computedExternal = AssertUtils.isFunction(newState)
-            ? newState(prevValueRef.current)
-            : newState;
+          computedInternal = computedExternal = isFunction(newState) ? newState(prevValueRef.current) : newState;
         }
 
         prevValueRef.current = computedInternal;

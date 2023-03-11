@@ -1,6 +1,6 @@
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
-import { PromiseUtils } from '@/utils';
+import { sleep } from '@/utils';
 import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
 
 export default {
@@ -9,7 +9,7 @@ export default {
 
 const Template: ComponentStory<any> = ({ mode }: Pick<UseInfiniteLoaderProps<any>, 'mode'>) => {
   const handleLoad = async () => {
-    await PromiseUtils.sleep(500);
+    await sleep(500);
     const data = new Array(10).fill(null).map(() => ({ id: Math.random(), name: Math.random() }));
     setLoadedData(prev => [...prev, ...data] as any);
     return data;

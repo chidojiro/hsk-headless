@@ -9,7 +9,8 @@
     "typecheck": "yarn tsc --noEmit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "pub": "yarn build && yarn publish"
+    "pub": "yarn build && yarn publish",
+    "index": "node scripts/generate-barrel-files.cjs && prettier --write src/**/index.ts"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",

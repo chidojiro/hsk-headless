@@ -1,4 +1,4 @@
-const pad = (num: string | number, size = 2) => {
+export const pad = (num: string | number, size = 2) => {
   const numAsString = num.toString();
 
   if (size <= 0) return numAsString;
@@ -14,13 +14,8 @@ const pad = (num: string | number, size = 2) => {
   return isNegative ? '-' + _toBePaddedNumber : _toBePaddedNumber;
 };
 
-const trimZeroes = (number: string | number) => {
+export const trimZeroes = (number: string | number) => {
   if (typeof number === 'number') return +number;
 
   return number.replace(/^0+/g, '').replace(/(?<=^-)0+/g, '');
-};
-
-export const NumberUtils = {
-  pad,
-  trimZeroes,
 };

@@ -1,15 +1,13 @@
 import { useDisclosure } from '@/hooks';
 import React from 'react';
 import { HTMLElementOrHTMLElementRef } from '@/types';
-import { AssertUtils } from '@/utils';
+import { isRef } from '@/utils';
 
 export const useIntersection = (
   elementOrElementRef?: HTMLElementOrHTMLElementRef | null,
   rootMargin?: string
 ): boolean => {
-  const element = AssertUtils.isRef<HTMLElement>(elementOrElementRef)
-    ? elementOrElementRef.current
-    : elementOrElementRef;
+  const element = isRef<HTMLElement>(elementOrElementRef) ? elementOrElementRef.current : elementOrElementRef;
 
   const intersectedDisclosure = useDisclosure();
 

@@ -1,6 +1,5 @@
-import { AssertUtils } from '@/utils';
 import React from 'react';
-import { isEqual } from 'lodash-es';
+import { isEqual, isFunction } from 'lodash-es';
 
 export type UseEventBasedStateStorage<TValue> = {
   get: (key: string) => TValue;
@@ -27,9 +26,7 @@ export const useEventBasedState = <
 }: UseEventBasedStateProps<TState, TStorage>): [TState, React.Dispatch<React.SetStateAction<TState>>] => {
   const idRef = React.useRef(Math.random());
   const [state, _setState] = React.useState(
-    AssertUtils.isFunction(defaultState)
-      ? defaultState(storage.get(storageKey))
-      : storage.get(storageKey) ?? defaultState
+    isFunction(defaultState) ? defaultState(storage.get(storageKey)) : storage.get(storageKey) ?? defaultState
   );
 
   const eventKey = getUseEventBasedStateEventKey(name, storageKey);
@@ -61,7 +58,7 @@ export const useEventBasedState = <
 
   const setState = React.useCallback<React.Dispatch<React.SetStateAction<TState>>>(
     stateOrCallback => {
-      if (AssertUtils.isFunction(stateOrCallback)) {
+      if (isFunction(stateOrCallback)) {
         const callback = stateOrCallback;
         _setState(prev => {
           const newState = callback(prev);

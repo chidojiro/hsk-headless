@@ -1,6 +1,6 @@
 import { useOnEventOutside } from '@/hooks';
 import { OpenClose } from '@/types';
-import { AssertUtils } from '@/utils';
+import { isHTMLElement } from '@/utils';
 import React, { useState } from 'react';
 import { PopperProps as ReactPopperProps, usePopper } from 'react-popper';
 import { Portal } from '../Portal';
@@ -28,7 +28,7 @@ export const Popper = ({
   const PopperRef = React.useRef(null);
 
   const { styles, attributes, forceUpdate } = usePopper(
-    AssertUtils.isHTMLElement(trigger) ? (trigger as any) : triggerElement,
+    isHTMLElement(trigger) ? (trigger as any) : triggerElement,
     PopperRef.current,
     {
       placement,
@@ -56,7 +56,7 @@ export const Popper = ({
   }, []);
 
   const clonedTrigger = React.useMemo(() => {
-    if (!trigger || AssertUtils.isHTMLElement(trigger)) return null;
+    if (!trigger || isHTMLElement(trigger)) return null;
 
     return React.Children.map(trigger, child =>
       React.cloneElement(child, {

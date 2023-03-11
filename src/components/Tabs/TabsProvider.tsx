@@ -1,4 +1,4 @@
-import { ReactUtils } from '@/utils';
+import { createContext } from '@/utils';
 import { TabValue } from './Tab';
 
 export type TabsProviderValue = {
@@ -10,4 +10,4 @@ export type TabsProviderValue = {
   increaseTabsCount: () => number;
 };
 
-export const [TabsProvider, useTabsContext] = ReactUtils.createContext<TabsProviderValue>();
+export const [TabsProvider, useTabsContext] = createContext<TabsProviderValue>();

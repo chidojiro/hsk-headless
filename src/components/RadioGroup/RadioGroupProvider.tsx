@@ -1,4 +1,4 @@
-import { ReactUtils } from '@/utils';
+import { createContext } from '@/utils';
 import { RadioGroupProps } from './RadioGroup';
 
 export type RadioGroupProviderValue = {
@@ -7,4 +7,4 @@ export type RadioGroupProviderValue = {
   groupProps?: RadioGroupProps;
 };
 
-export const [RadioGroupProvider, useRadioGroupContext] = ReactUtils.createContext<RadioGroupProviderValue>();
+export const [RadioGroupProvider, useRadioGroupContext] = createContext<RadioGroupProviderValue>();
