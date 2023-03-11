@@ -1,4 +1,3 @@
-export * from './AspectRatio';
 export * from './CheckboxGroup';
 export * from './ConditionalWrapper';
 export * from './Drawer';
