@@ -1,12 +1,11 @@
 import React from 'react';
-import { HTMLDivProps } from '@/types';
 import { useTabsContext } from './TabsProvider';
 
 type TabItemRenderProp = (props: { onClick: () => void; isActive: boolean }) => React.ReactNode;
 
 export type TabValue = number | string;
 
-export type TabProps = HTMLDivProps & {
+export type TabProps = JSX.IntrinsicElements['div'] & {
   children: TabItemRenderProp;
   content?: React.ReactNode;
   value?: TabValue;
