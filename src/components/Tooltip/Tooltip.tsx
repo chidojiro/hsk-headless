@@ -1,22 +1,22 @@
 import { useDisclosure, useOnEventOutside } from '@/hooks';
-import { Children, OpenClose } from '@/types';
-import React from 'react';
+import { OpenClose } from '@/types';
+import { Children, cloneElement, ReactNode, useMemo, useRef } from 'react';
 import { Popper, PopperProps } from '../Popper';
 
-export type TooltipProps = Omit<PopperProps, 'trigger' | keyof OpenClose> &
-  Children & {
-    content: React.ReactNode;
-  };
+export type TooltipProps = Omit<PopperProps, 'trigger' | keyof OpenClose> & {
+  content: ReactNode;
+  children?: ReactNode;
+};
 
 export const Tooltip = ({ children, placement = 'top', content, ...restProps }: TooltipProps) => {
   const disclosure = useDisclosure();
-  const triggerElementRef = React.useRef<any>();
+  const triggerElementRef = useRef<any>();
 
   useOnEventOutside('mouseover', triggerElementRef, disclosure.close);
 
-  const clonedTrigger = React.useMemo(() => {
-    return React.Children.map(children, child =>
-      React.cloneElement(child as any, {
+  const clonedTrigger = useMemo(() => {
+    return Children.map(children, child =>
+      cloneElement(child as any, {
         ref: (node: Element) => {
           triggerElementRef.current = node;
 

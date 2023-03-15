@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTabsContext } from './TabsProvider';
 
 // eslint-disable-next-line @typescript-eslint/ban-types

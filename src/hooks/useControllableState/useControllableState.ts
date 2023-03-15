@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from '@/utils';
 import { isFunction } from 'lodash';
-import React from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 export type UseControllableStateProps<TValue, TOnChangeValue> = {
   value?: TValue;
@@ -30,16 +30,13 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
   defaultValue,
 }: UseControllableStateProps<TValue, TOnChangeValue>): [TValue, SetControllableState<TValue, TOnChangeValue>] => {
   const isControlled = !isNullOrUndefined(valueProp);
-  const prevValueRef = React.useRef(valueProp ?? defaultValue);
+  const prevValueRef = useRef(valueProp ?? defaultValue);
 
-  const [internalState, setInternalState] = React.useState(defaultValue);
+  const [internalState, setInternalState] = useState(defaultValue);
 
-  const state = React.useMemo(
-    () => (isControlled ? valueProp : internalState),
-    [internalState, isControlled, valueProp]
-  );
+  const state = useMemo(() => (isControlled ? valueProp : internalState), [internalState, isControlled, valueProp]);
 
-  const setState: SetControllableState<TValue, TOnChangeValue> = React.useCallback(
+  const setState: SetControllableState<TValue, TOnChangeValue> = useCallback(
     newState => {
       if (isControlled) {
         let computedExternal: TOnChangeValue | TValue;
@@ -72,5 +69,5 @@ export const useControllableState = <TValue, TOnChangeValue = TValue>({
     [isControlled, onChange, valueProp]
   );
 
-  return React.useMemo(() => [state, setState], [state, setState]);
+  return useMemo(() => [state, setState], [state, setState]);
 };

@@ -1,11 +1,11 @@
 import { Cookies } from '@/utils';
-import React from 'react';
+import { useMemo } from 'react';
 import { useEventBasedState } from '../useEventBasedState';
 
 export const NAME = 'useCookieState';
 
 export const useCookieState = (key: string, defaultState: string) => {
-  const cookieStorage = React.useMemo(
+  const cookieStorage = useMemo(
     () => ({
       get: Cookies.get,
       set: Cookies.set,

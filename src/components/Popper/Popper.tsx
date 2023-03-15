@@ -1,7 +1,16 @@
 import { useDisclosure, useOnEventOutside } from '@/hooks';
 import { OpenClose } from '@/types';
 import { isHTMLElement } from '@/utils';
-import React, { useCallback, useState } from 'react';
+import {
+  Children,
+  cloneElement,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useState
+} from 'react';
 import { PopperProps as RPPopperProps, usePopper } from 'react-popper';
 import { Portal } from '../Portal';
 
@@ -9,9 +18,9 @@ export type PopperPlacement = RPPopperProps<any>['placement'];
 
 export type PopperProps = Omit<OpenClose, 'defaultOpen'> & {
   placement?: PopperPlacement;
-  trigger: React.ReactElement;
+  trigger: ReactElement;
   offset?: [number, number];
-  children?: React.ReactNode | ((props: { triggerElement: Element | undefined }) => React.ReactNode);
+  children?: ReactNode | ((props: { triggerElement: Element | undefined }) => ReactNode);
   usePortal?: boolean;
   closeOnClickOutside?: boolean;
   onToggle?: () => void;
@@ -70,7 +79,7 @@ export const Popper = ({
     return e;
   };
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const handleClick = () => {
       if (!isControlled) {
         isOpenDisclosure.toggle();
@@ -84,10 +93,10 @@ export const Popper = ({
     return () => triggerElement?.removeEventListener('click', handleClick);
   }, [isControlled, isOpenDisclosure, onToggle, triggerElement]);
 
-  // React.Children.map is used here to get the dom element from children which is a react node
-  const clonedTrigger = React.useMemo(() => {
-    return React.Children.map(trigger, child =>
-      React.cloneElement(child, {
+  // Children.map is used here to get the dom element from children which is a react node
+  const clonedTrigger = useMemo(() => {
+    return Children.map(trigger, child =>
+      cloneElement(child, {
         ref: (node: HTMLElement) => {
           setTriggerElement(node);
 
@@ -105,7 +114,7 @@ export const Popper = ({
 
   useOnEventOutside('click', closeOnClickOutside && isOpen && [mainContentElement, triggerElement as any], handleClose);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const handleCloseOnEsc = (e: KeyboardEvent) => {
       if (e.code === 'Escape' && isOpen) {
         handleClose();

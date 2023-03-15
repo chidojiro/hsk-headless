@@ -1,5 +1,5 @@
-import { useLocation, useHistory } from 'react-router-dom';
-import React from 'react';
+import { useCallback, useMemo } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import URI from 'urijs';
 
 type QueryValue = string | string[];
@@ -8,7 +8,7 @@ export const useQuery = () => {
   const history = useHistory();
   const { search, pathname } = useLocation();
 
-  const get = React.useCallback(
+  const get = useCallback(
     (key: string) => {
       const uri = new URI(search);
       return uri.query(true)[key];
@@ -16,7 +16,7 @@ export const useQuery = () => {
     [search]
   );
 
-  const add = React.useCallback(
+  const add = useCallback(
     (key: string, value: QueryValue) => {
       const uri = new URI(search);
 
@@ -27,7 +27,7 @@ export const useQuery = () => {
     [history, pathname, search]
   );
 
-  const set = React.useCallback(
+  const set = useCallback(
     (key: string, value: QueryValue) => {
       const uri = new URI(search);
 
@@ -38,7 +38,7 @@ export const useQuery = () => {
     [history, pathname, search]
   );
 
-  const remove = React.useCallback(
+  const remove = useCallback(
     (key: string, value: QueryValue) => {
       const uri = new URI(search);
 
@@ -53,5 +53,5 @@ export const useQuery = () => {
     [history, pathname, search]
   );
 
-  return React.useMemo(() => ({ get, add, set, remove }), [add, get, remove, set]);
+  return useMemo(() => ({ get, add, set, remove }), [add, get, remove, set]);
 };

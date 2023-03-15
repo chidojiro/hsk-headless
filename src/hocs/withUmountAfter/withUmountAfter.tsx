@@ -1,14 +1,14 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const withUmountAfter =
   (unmountAfter: number) =>
   <TProps extends Record<string, unknown>>(Component: (props: TProps) => JSX.Element | null) =>
   // eslint-disable-next-line react/display-name
   (props: TProps) => {
-    const timeoutRef = React.useRef<NodeJS.Timeout>();
-    const [shouldMount, setShouldMount] = React.useState(true);
+    const timeoutRef = useRef<NodeJS.Timeout>();
+    const [shouldMount, setShouldMount] = useState(true);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (unmountAfter) {
         timeoutRef.current = setTimeout(() => {
           setShouldMount(false);

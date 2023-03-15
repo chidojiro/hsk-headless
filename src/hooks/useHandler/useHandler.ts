@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import useSwr from 'swr';
 
 export type HandlerOptions<T = unknown> = {
@@ -11,12 +11,12 @@ export const useHandler = <T = void>(
   callback: (...args: any[]) => Promise<T>,
   options?: HandlerOptions<T>
 ) => {
-  const [refreshToken, setRefreshToken] = React.useState<number>();
-  const dataPromiseRef = React.useRef<Promise<T>>();
-  const dataResolveRef = React.useRef<(data: T) => void>();
-  const argsRef = React.useRef<unknown[]>();
+  const [refreshToken, setRefreshToken] = useState<number>();
+  const dataPromiseRef = useRef<Promise<T>>();
+  const dataResolveRef = useRef<(data: T) => void>();
+  const argsRef = useRef<unknown[]>();
 
-  const handle = React.useCallback((...params: unknown[]) => {
+  const handle = useCallback((...params: unknown[]) => {
     setRefreshToken(Math.random());
     argsRef.current = params;
 
@@ -41,5 +41,5 @@ export const useHandler = <T = void>(
     options
   );
 
-  return React.useMemo(() => ({ data, error, isLoading: isValidating, handle }), [data, error, isValidating, handle]);
+  return useMemo(() => ({ data, error, isLoading: isValidating, handle }), [data, error, isValidating, handle]);
 };

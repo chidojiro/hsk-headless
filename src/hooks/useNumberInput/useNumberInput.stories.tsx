@@ -1,5 +1,4 @@
 import { ComponentStory } from '@storybook/react';
-import React from 'react';
 import { useNumberInput, UseNumberInputProps } from './useNumberInput';
 
 export default {

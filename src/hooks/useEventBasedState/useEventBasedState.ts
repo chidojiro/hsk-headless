@@ -1,5 +1,5 @@
-import React from 'react';
 import { isEqual, isFunction } from 'lodash-es';
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type UseEventBasedStateStorage<TValue> = {
   get: (key: string) => TValue;
@@ -23,14 +23,14 @@ export const useEventBasedState = <
   storageKey,
   defaultState,
   storage,
-}: UseEventBasedStateProps<TState, TStorage>): [TState, React.Dispatch<React.SetStateAction<TState>>] => {
-  const idRef = React.useRef(Math.random());
-  const [state, _setState] = React.useState(
+}: UseEventBasedStateProps<TState, TStorage>): [TState, Dispatch<SetStateAction<TState>>] => {
+  const idRef = useRef(Math.random());
+  const [state, _setState] = useState(
     isFunction(defaultState) ? defaultState(storage.get(storageKey)) : storage.get(storageKey) ?? defaultState
   );
 
   const eventKey = getUseEventBasedStateEventKey(name, storageKey);
-  React.useEffect(() => {
+  useEffect(() => {
     const eventListener = (event: Event) => {
       const { state: newState, source } = (event as any).detail ?? {};
 
@@ -48,7 +48,7 @@ export const useEventBasedState = <
     };
   }, [eventKey]);
 
-  const dispatchState = React.useCallback(
+  const dispatchState = useCallback(
     (state: TState) => {
       storage.set(storageKey, state);
       window.dispatchEvent(new CustomEvent(eventKey, { detail: { state, source: idRef.current } }));
@@ -56,7 +56,7 @@ export const useEventBasedState = <
     [storage, storageKey, eventKey]
   );
 
-  const setState = React.useCallback<React.Dispatch<React.SetStateAction<TState>>>(
+  const setState = useCallback<Dispatch<SetStateAction<TState>>>(
     stateOrCallback => {
       if (isFunction(stateOrCallback)) {
         const callback = stateOrCallback;
@@ -77,5 +77,5 @@ export const useEventBasedState = <
     [dispatchState]
   );
 
-  return React.useMemo(() => [state, setState], [setState, state]);
+  return useMemo(() => [state, setState], [setState, state]);
 };

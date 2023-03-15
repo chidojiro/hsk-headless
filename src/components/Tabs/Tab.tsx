@@ -1,32 +1,32 @@
-import React from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useTabsContext } from './TabsProvider';
 
-type TabItemRenderProp = (props: { onClick: () => void; isActive: boolean }) => React.ReactNode;
+type TabItemRenderProp = (props: { onClick: () => void; isActive: boolean }) => ReactNode;
 
 export type TabValue = number | string;
 
 export type TabProps = JSX.IntrinsicElements['div'] & {
   children: TabItemRenderProp;
-  content?: React.ReactNode;
+  content?: ReactNode;
   value?: TabValue;
 };
 
 export const Tab = ({ children, content, value }: TabProps) => {
-  const [index, setIndex] = React.useState(-1);
+  const [index, setIndex] = useState(-1);
   const { value: selectedValue, handleChange, setContent, increaseTabsCount } = useTabsContext();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const index = increaseTabsCount();
     setIndex(index);
   }, [increaseTabsCount]);
 
-  const onClick = React.useCallback(() => {
+  const onClick = useCallback(() => {
     handleChange(value ?? index);
   }, [handleChange, index, value]);
 
   const isActive = index === selectedValue || value === selectedValue;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isActive) {
       setContent(content);
     }

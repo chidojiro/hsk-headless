@@ -1,7 +1,7 @@
+import { withUmountAfter } from '@/hocs';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { withUmountAfter } from '@/hocs';
-import React from 'react';
+import { useRef } from 'react';
 import { useOnEventOutside } from './useOnEventOutside';
 
 const mockListener = jest.fn();
@@ -12,7 +12,7 @@ type HookHostProps = {
 };
 
 const HookHost = ({ emptyElement, emptyHandler }: HookHostProps) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useOnEventOutside('click', !emptyElement && [ref], !emptyHandler ? mockListener : undefined);
 

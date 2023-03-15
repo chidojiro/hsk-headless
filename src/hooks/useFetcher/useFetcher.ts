@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo, useRef } from 'react';
 import useSwr, { SWRConfiguration } from 'swr';
 
 export type UseFetcherConfiguration<T> = SWRConfiguration<T> & {
@@ -11,7 +11,7 @@ export const useFetcher = <T = unknown>(
   config?: UseFetcherConfiguration<T>
 ) => {
   const { laggy, ...restConfig } = config ?? {};
-  const laggyDataRef = React.useRef<T>();
+  const laggyDataRef = useRef<T>();
   const swrReturn = useSwr<T>(
     key,
     async () => {
@@ -22,7 +22,7 @@ export const useFetcher = <T = unknown>(
     restConfig
   );
 
-  return React.useMemo(
+  return useMemo(
     () => ({
       ...swrReturn,
       data: swrReturn.data ?? (laggy ? laggyDataRef.current : undefined),

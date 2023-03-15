@@ -1,10 +1,10 @@
 import { useMountEffect } from '@/hooks';
-import React from 'react';
 import { Fn } from '@/types';
+import { useCallback, useMemo, useState } from 'react';
 import { useQuery } from '../useQuery';
 
 export const useUrlState = <T>(paramKey: string, defaultValue?: T) => {
-  const [param, _setParam] = React.useState(defaultValue);
+  const [param, _setParam] = useState(defaultValue);
 
   const query = useQuery();
 
@@ -16,7 +16,7 @@ export const useUrlState = <T>(paramKey: string, defaultValue?: T) => {
     }
   });
 
-  const setParam: typeof _setParam = React.useCallback(
+  const setParam: typeof _setParam = useCallback(
     valueOrCallback => {
       if (typeof valueOrCallback === 'function') {
         return _setParam(prev => {
@@ -35,5 +35,5 @@ export const useUrlState = <T>(paramKey: string, defaultValue?: T) => {
     [paramKey, query]
   );
 
-  return React.useMemo(() => [param, setParam], [param, setParam]);
+  return useMemo(() => [param, setParam], [param, setParam]);
 };

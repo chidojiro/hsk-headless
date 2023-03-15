@@ -1,4 +1,4 @@
-import React from 'react';
+import { RefObject, useMemo } from 'react';
 import { useDisclosure } from '../useDisclosure';
 import {
   useOnDemandInfiniteLoader,
@@ -14,7 +14,7 @@ import {
 type BaseUseInfiniteLoaderProps<T> = { until: (data: T) => boolean };
 type UseOnSightInfiniteLoaderProps<T> = {
   mode: 'ON_SIGHT';
-  anchor: React.RefObject<HTMLElement> | HTMLElement | null;
+  anchor: RefObject<HTMLElement> | HTMLElement | null;
 } & BaseUseInfiniteLoaderProps<T> &
   Omit<BaseUseOnSightInfiniteLoaderProps<T>, 'enabled'>;
 type UseOnDemandInfiniteLoaderProps<T> = { mode: 'ON_DEMAND' } & BaseUseInfiniteLoaderProps<T> &
@@ -56,7 +56,7 @@ export function useInfiniteLoader<TData>(props: UseInfiniteLoaderProps<TData>): 
     enabled: mode === 'ON_DEMAND' && !exhaustedDisclosure.isOpen,
   });
 
-  return React.useMemo(
+  return useMemo(
     () => ({
       isLoading: isLoadingOnSight || isLoadingOnDemand,
       isExhausted: exhaustedDisclosure.isOpen,

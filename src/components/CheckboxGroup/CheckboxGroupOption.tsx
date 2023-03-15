@@ -1,19 +1,19 @@
 import { useMountEffect } from '@/hooks';
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, ChangeEventHandler, ReactNode } from 'react';
 import { useCheckboxGroupContext } from './CheckboxGroupProvider';
 
 type RenderPropState = {
   value: string;
   isChecked: boolean;
   error?: boolean;
-  handleChange: React.ChangeEventHandler<HTMLInputElement>;
+  handleChange: ChangeEventHandler<HTMLInputElement>;
 };
 
 export type CheckboxGroupOptionProps = {
   value: string;
   error?: boolean;
   shouldChange?: (e: ChangeEvent<HTMLInputElement>, checkboxGroupValue: string[]) => boolean | Promise<boolean>;
-  children?: (state: RenderPropState) => React.ReactNode;
+  children?: (state: RenderPropState) => ReactNode;
 };
 
 export const CheckboxGroupOption = ({ value, shouldChange: shouldChangeProp, children }: CheckboxGroupOptionProps) => {
@@ -21,7 +21,7 @@ export const CheckboxGroupOption = ({ value, shouldChange: shouldChangeProp, chi
 
   const isChecked = groupProviderValue.value.includes(value);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = async e => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = async e => {
     const isChecked = e.target.checked;
     const value = e.target.value;
 

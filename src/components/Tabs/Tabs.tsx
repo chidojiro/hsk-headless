@@ -1,6 +1,6 @@
 import { useControllableState } from '@/hooks';
-import React from 'react';
 import { Children } from '@/types';
+import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 import { TabValue } from './Tab';
 import { TabsProvider, TabsProviderValue } from './TabsProvider';
 
@@ -11,16 +11,16 @@ export type TabsProps = Children & {
 
 export const Tabs = ({ value: valueProp, onChange, children }: TabsProps) => {
   const [value, setValue] = useControllableState({ value: valueProp, onChange, defaultValue: 0 });
-  const [content, setContent] = React.useState<React.ReactNode>();
-  const tabsCountRef = React.useRef(-1);
+  const [content, setContent] = useState<ReactNode>();
+  const tabsCountRef = useRef(-1);
 
-  const increaseTabsCount = React.useCallback(() => {
+  const increaseTabsCount = useCallback(() => {
     tabsCountRef.current = tabsCountRef.current + 1;
 
     return tabsCountRef.current;
   }, []);
 
-  const providerValue = React.useMemo<TabsProviderValue>(
+  const providerValue = useMemo<TabsProviderValue>(
     () => ({ value, handleChange: setValue, content, setContent, tabsCount: tabsCountRef.current, increaseTabsCount }),
     [content, increaseTabsCount, setValue, value]
   );

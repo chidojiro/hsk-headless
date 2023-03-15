@@ -1,8 +1,7 @@
-import React from 'react';
-import { render, act } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 
-import { withMountOnOpen } from './withMountOnOpen';
 import { OpenClose } from '@/types';
+import { withMountOnOpen } from './withMountOnOpen';
 
 const Component = ({ name }: Record<string, any>) => {
   return <div>{name ? `hello ${name}` : 'hello world'}</div>;

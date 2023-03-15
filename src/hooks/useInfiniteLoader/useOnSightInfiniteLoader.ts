@@ -1,5 +1,5 @@
 import { useDisclosure, useMountEffect } from '@/hooks';
-import React from 'react';
+import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFetcher } from '../useFetcher';
 import { useIntersection } from '../useIntersection';
 
@@ -9,7 +9,7 @@ export type UseOnSightInfiniteLoaderProps<T = unknown> = {
   onLoad: (page: number) => Promise<T>;
   onError?: (error: any) => void;
   defaultPage?: number;
-  anchor: React.RefObject<HTMLElement> | HTMLElement | null;
+  anchor: RefObject<HTMLElement> | HTMLElement | null;
   enabled: boolean;
 };
 
@@ -24,10 +24,10 @@ export const useOnSightInfiniteLoader = <T = unknown>({
   defaultPage,
   enabled,
 }: UseOnSightInfiniteLoaderProps<T>): UseOnSightInfiniteLoaderReturn => {
-  const randomKey = React.useRef(Math.random());
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const randomKey = useRef(Math.random());
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const [page, setPage] = React.useState(defaultPage ?? 1);
+  const [page, setPage] = useState(defaultPage ?? 1);
 
   const readyForNextLoadDisclosure = useDisclosure({ defaultOpen: true });
 
@@ -41,7 +41,7 @@ export const useOnSightInfiniteLoader = <T = unknown>({
     disclosure.toggle();
   });
 
-  const handleLoad: typeof onLoad = async (page) => {
+  const handleLoad: typeof onLoad = async page => {
     readyForNextLoadDisclosure.close();
 
     const data = await onLoad(page);
@@ -59,30 +59,30 @@ export const useOnSightInfiniteLoader = <T = unknown>({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    },
+    }
   );
 
-  const increasePage = React.useCallback(() => {
+  const increasePage = useCallback(() => {
     if (!readyForNextLoadDisclosure.isOpen) return;
-    setPage((prev) => prev + 1);
+    setPage(prev => prev + 1);
   }, [readyForNextLoadDisclosure.isOpen]);
 
-  const increasePageOnIntersection = React.useCallback(() => {
+  const increasePageOnIntersection = useCallback(() => {
     if (isIntersected && enabled && !isInitializing) {
       increasePage();
     }
   }, [enabled, increasePage, isInitializing, isIntersected]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (enabled) {
       increasePageOnIntersection();
     }
   }, [enabled, increasePageOnIntersection]);
 
-  return React.useMemo(
+  return useMemo(
     () => ({
       isLoading: isInitializing,
     }),
-    [isInitializing],
+    [isInitializing]
   );
 };

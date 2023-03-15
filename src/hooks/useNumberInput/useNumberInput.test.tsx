@@ -1,7 +1,6 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { useNumberInput, UseNumberInputProps } from './useNumberInput';
 import userEvent from '@testing-library/user-event';
+import { useNumberInput, UseNumberInputProps } from './useNumberInput';
 
 const mockOnChange = jest.fn();
 

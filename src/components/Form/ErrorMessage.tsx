@@ -1,6 +1,5 @@
 import { get } from 'lodash-es';
 import { useFormContext } from 'react-hook-form';
-import React from 'react';
 
 export type ErrorMessageProps = {
   name: string | string[];

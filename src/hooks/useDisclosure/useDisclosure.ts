@@ -1,8 +1,8 @@
-import React from 'react';
 import { Fn } from '@/types';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 
 export type Disclosure = {
-  set: React.Dispatch<React.SetStateAction<boolean>>;
+  set: Dispatch<SetStateAction<boolean>>;
   open: () => void;
   close: () => void;
   toggle: () => void;
@@ -17,19 +17,19 @@ export type UseDisclosureProps = {
 
 export const useDisclosure = (props?: UseDisclosureProps) => {
   const { defaultOpen, onOpen, onClose } = props ?? {};
-  const [isOpen, setIsOpen] = React.useState(!!defaultOpen);
+  const [isOpen, setIsOpen] = useState(!!defaultOpen);
 
-  const open = React.useCallback(() => {
+  const open = useCallback(() => {
     setIsOpen(true);
     onOpen?.();
   }, [onOpen]);
 
-  const close = React.useCallback(() => {
+  const close = useCallback(() => {
     setIsOpen(false);
     onClose?.();
   }, [onClose]);
 
-  const toggle = React.useCallback(() => {
+  const toggle = useCallback(() => {
     setIsOpen(prev => {
       if (prev) {
         onClose?.();
@@ -41,8 +41,5 @@ export const useDisclosure = (props?: UseDisclosureProps) => {
     });
   }, [onClose, onOpen]);
 
-  return React.useMemo<Disclosure>(
-    () => ({ open, close, isOpen, toggle, set: setIsOpen }),
-    [open, close, isOpen, toggle]
-  );
+  return useMemo<Disclosure>(() => ({ open, close, isOpen, toggle, set: setIsOpen }), [open, close, isOpen, toggle]);
 };

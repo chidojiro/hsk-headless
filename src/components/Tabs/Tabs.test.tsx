@@ -1,8 +1,7 @@
-import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { Tabs, TabsProps } from './Tabs';
 import { Tab } from './Tab';
 import { TabContent } from './TabContent';
+import { Tabs, TabsProps } from './Tabs';
 
 const renderDefault = (props?: Partial<TabsProps>) => {
   return render(

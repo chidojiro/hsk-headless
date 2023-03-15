@@ -1,9 +1,9 @@
-import { act, render, waitFor } from '@testing-library/react';
-import React from 'react';
-import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
-import * as mockUseIntersection from '../useIntersection';
-import userEvent from '@testing-library/user-event';
 import { sleep } from '@/utils';
+import { act, render, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { useRef } from 'react';
+import * as mockUseIntersection from '../useIntersection';
+import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
 
 const mockOnLoad = jest.fn().mockReturnValue([]);
 
@@ -13,7 +13,7 @@ type HookHostProps = Pick<UseInfiniteLoaderProps<any>, 'mode' | 'defaultPage'> &
 };
 
 const HookHost = (props: HookHostProps) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const { isExhausted, isLoading, loadMore } = useInfiniteLoader({
     until: () => true,

@@ -1,7 +1,7 @@
 import { useControllableState, useMountEffect } from '@/hooks';
 import { isNullOrUndefined, trimZeroes } from '@/utils';
 import { padStart } from 'lodash';
-import React from 'react';
+import { ChangeEvent, ChangeEventHandler, FocusEventHandler, useCallback, useMemo } from 'react';
 import { UseControllableStateProps } from '../useControllableState';
 
 const numberPatterns = [/^-?\d*$/, /^-?\d+(\.(\d)*)?$/];
@@ -9,7 +9,7 @@ const numberPatterns = [/^-?\d*$/, /^-?\d+(\.(\d)*)?$/];
 const isValidNumber = (num: string) => numberPatterns.some(pattern => pattern.test(num.toString().replace(/,/g, '')));
 
 export type UseNumberInputProps = Omit<
-  UseControllableStateProps<string, React.ChangeEvent<HTMLInputElement>>,
+  UseControllableStateProps<string, ChangeEvent<HTMLInputElement>>,
   'defaultValue'
 > & {
   separateThousands?: boolean;
@@ -38,14 +38,14 @@ export const useNumberInput = ({
 
   const paddedValue = padStart(trimZeroes(_value).toString(), pad, '0');
 
-  const guardInvalid = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(e => {
+  const guardInvalid = useCallback<ChangeEventHandler<HTMLInputElement>>(e => {
     const value = e.target.value;
     if (!isValidNumber(value)) {
       throw new Error();
     }
   }, []);
 
-  const guardNegative = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+  const guardNegative = useCallback<ChangeEventHandler<HTMLInputElement>>(
     e => {
       const value = e.target.value;
 
@@ -71,7 +71,7 @@ export const useNumberInput = ({
     [allowNegative, setValue]
   );
 
-  const guardLeadingZeroes = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+  const guardLeadingZeroes = useCallback<ChangeEventHandler<HTMLInputElement>>(
     e => {
       const value = e.target.value;
       const zerosTrimmedEvenValue = padStart(value, pad, '0');
@@ -80,7 +80,7 @@ export const useNumberInput = ({
     [pad]
   );
 
-  const guardMinMax = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+  const guardMinMax = useCallback<ChangeEventHandler<HTMLInputElement>>(
     e => {
       const value = e.target.value;
 
@@ -115,7 +115,7 @@ export const useNumberInput = ({
     }
   });
 
-  const handleChange = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     e => {
       try {
         guardNegative(e);
@@ -146,7 +146,7 @@ export const useNumberInput = ({
     [guardInvalid, guardLeadingZeroes, guardNegative, separateThousands, setValue]
   );
 
-  const value = React.useMemo(() => {
+  const value = useMemo(() => {
     if (separateThousands) {
       const [whole, decimal] = paddedValue.split('.');
       const valueWithSeparator = [whole && padStart((+whole).toLocaleString(), pad, '0'), decimal]
@@ -158,7 +158,7 @@ export const useNumberInput = ({
     return paddedValue;
   }, [pad, paddedValue, separateThousands]);
 
-  const handleBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(
+  const handleBlur = useCallback<FocusEventHandler<HTMLInputElement>>(
     e => {
       try {
         guardMinMax(e);
@@ -169,8 +169,5 @@ export const useNumberInput = ({
     [guardMinMax]
   );
 
-  return React.useMemo(
-    () => ({ onChange: handleChange, value, onBlur: handleBlur }),
-    [handleBlur, handleChange, value]
-  );
+  return useMemo(() => ({ onChange: handleChange, value, onBlur: handleBlur }), [handleBlur, handleChange, value]);
 };

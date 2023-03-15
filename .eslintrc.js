@@ -26,5 +26,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/no-anonymous-default-export': 'off',
     'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
 };

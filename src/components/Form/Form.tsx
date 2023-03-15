@@ -1,17 +1,17 @@
 import { useDisclosure } from '@/hooks';
-import React from 'react';
+import { createContext, DetailedHTMLProps, FormHTMLAttributes, ReactNode, useContext } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 
 export type FormProps<T extends FieldValues> = Omit<
-  React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
+  DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
   'onSubmit'
 > & {
-  children: React.ReactNode;
+  children: ReactNode;
   onSubmit?: SubmitHandler<T>;
   methods: UseFormReturn<T>;
 };
 
-const FormForceRerendererContext = React.createContext(() => null);
+const FormForceRerendererContext = createContext(() => null);
 
 export const Form = <TFieldValues extends FieldValues>({
   children,
@@ -34,4 +34,4 @@ export const Form = <TFieldValues extends FieldValues>({
   );
 };
 
-export const useFormForceRerenderer = () => React.useContext(FormForceRerendererContext);
+export const useFormForceRerenderer = () => useContext(FormForceRerendererContext);

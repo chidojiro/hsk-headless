@@ -1,7 +1,7 @@
 import { isRef } from '@/utils';
-import React from 'react';
+import { RefObject, useCallback, useEffect } from 'react';
 
-type ElementOrRef = HTMLElement | React.RefObject<HTMLElement>;
+type ElementOrRef = HTMLElement | RefObject<HTMLElement>;
 
 export const useOnEventOutside = <TEvent extends keyof GlobalEventHandlersEventMap>(
   event: TEvent,
@@ -9,7 +9,7 @@ export const useOnEventOutside = <TEvent extends keyof GlobalEventHandlersEventM
   handler?: (event: GlobalEventHandlersEventMap[TEvent]) => void
 ) => {
   const isEnabled = !!refsOrElements && !!handler;
-  const handleEvent = React.useCallback(
+  const handleEvent = useCallback(
     (event: GlobalEventHandlersEventMap[TEvent]) => {
       if (!isEnabled) return;
 
@@ -28,7 +28,7 @@ export const useOnEventOutside = <TEvent extends keyof GlobalEventHandlersEventM
     [handler, isEnabled, refsOrElements]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isEnabled) return;
 
     document.addEventListener(event, handleEvent);

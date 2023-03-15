@@ -1,5 +1,5 @@
 import { useControllableState } from '@/hooks';
-import React from 'react';
+import { ReactNode, useCallback, useMemo, useRef } from 'react';
 import { CheckboxGroupChangeHandler, CheckboxGroupProvider, CheckboxGroupProviderValue } from './CheckboxGroupProvider';
 
 type CheckboxGroupRenderPropState = {
@@ -12,7 +12,7 @@ export type CheckboxGroupProps = {
   value?: string[];
   defaultValue?: string[];
   error?: boolean;
-  children?: React.ReactNode | ((state: CheckboxGroupRenderPropState) => void);
+  children?: ReactNode | ((state: CheckboxGroupRenderPropState) => void);
 };
 
 export const CheckboxGroup = (props: CheckboxGroupProps) => {
@@ -24,21 +24,21 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     onChange: onChangeProp,
   });
 
-  const availableValueRef = React.useRef<string[]>([]);
+  const availableValueRef = useRef<string[]>([]);
 
-  const registerValue = React.useCallback((value: string) => {
+  const registerValue = useCallback((value: string) => {
     availableValueRef.current = [...availableValueRef.current, value];
 
     return availableValueRef.current;
   }, []);
 
-  const unregisterValue = React.useCallback((toBeUnregisteredValue: string) => {
+  const unregisterValue = useCallback((toBeUnregisteredValue: string) => {
     availableValueRef.current = availableValueRef.current.filter(value => value !== toBeUnregisteredValue);
 
     return availableValueRef.current;
   }, []);
 
-  const handleChange: CheckboxGroupChangeHandler = React.useCallback(
+  const handleChange: CheckboxGroupChangeHandler = useCallback(
     (targetValue, isChecked) => {
       let newValue: string[];
       if (isChecked) {
@@ -53,7 +53,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     [onChangeProp, setValue, value]
   );
 
-  const providerValue = React.useMemo<CheckboxGroupProviderValue>(
+  const providerValue = useMemo<CheckboxGroupProviderValue>(
     () => ({ handleChange, value, groupProps: props, registerValue, unregisterValue }),
     [handleChange, value, props, registerValue, unregisterValue]
   );
@@ -64,7 +64,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     return 'none';
   })();
 
-  const toggleSelectAll = React.useCallback(() => {
+  const toggleSelectAll = useCallback(() => {
     if (selection === 'none') {
       setValue(availableValueRef.current);
     } else {

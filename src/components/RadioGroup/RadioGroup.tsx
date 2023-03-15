@@ -1,6 +1,6 @@
-import React from 'react';
 import { useControllableState } from '@/hooks';
 import { Children } from '@/types';
+import { useCallback, useMemo } from 'react';
 import { RadioGroupProvider, RadioGroupProviderValue } from './RadioGroupProvider';
 
 export type RadioGroupProps = Children & {
@@ -14,7 +14,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
   const { value: valueProp, onChange: onChangeProp, defaultValue = '', children } = props;
   const [value, setValue] = useControllableState({ value: valueProp, onChange: onChangeProp, defaultValue });
 
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (value: string) => {
       setValue?.(value);
       onChangeProp?.(value);
@@ -22,7 +22,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
     [onChangeProp, setValue]
   );
 
-  const providerValue = React.useMemo<RadioGroupProviderValue>(
+  const providerValue = useMemo<RadioGroupProviderValue>(
     () => ({ handleChange, value, groupProps: props }),
     [handleChange, props, value]
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useMemo, useCallback, ReactNode, RefObject, useRef } from 'react';
 
 export type UseDelayableStateProps<TState> = {
   delayBy: number;
@@ -11,11 +11,11 @@ export const useDelayableState = <TState>({
   delayBy,
   defaultState,
 }: UseDelayableStateProps<TState>): [TState, SetDelayableState<TState>] => {
-  const [state, setState] = React.useState<TState>(defaultState);
+  const [state, setState] = useState<TState>(defaultState);
 
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const setDelayableState = React.useCallback<SetDelayableState<TState>>(
+  const setDelayableState = useCallback<SetDelayableState<TState>>(
     ({ state, shouldDelay }) => {
       clearTimeout(timeoutRef.current);
 
@@ -32,12 +32,12 @@ export const useDelayableState = <TState>({
     [delayBy]
   );
 
-  React.useEffect(
+  useEffect(
     () => () => {
       clearTimeout(timeoutRef.current);
     },
     []
   );
 
-  return React.useMemo(() => [state, setDelayableState], [setDelayableState, state]);
+  return useMemo(() => [state, setDelayableState], [setDelayableState, state]);
 };

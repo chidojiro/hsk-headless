@@ -1,4 +1,6 @@
-export type HTMLElementOrHTMLElementRef = HTMLElement | React.RefObject<HTMLElement>;
+import { ReactNode, RefObject } from 'react';
+
+export type HTMLElementOrHTMLElementRef = HTMLElement | RefObject<HTMLElement>;
 
 export type WithAsProps<
   TProps,
@@ -13,14 +15,14 @@ export type ValueTransformProps<T = any> = {
   changeAs?: (value: any) => T;
 };
 
-export type Option<TValue = string> = { label: React.ReactNode; value: TValue } & Record<string, any>;
+export type Option<TValue = string> = { label: ReactNode; value: TValue } & Record<string, any>;
 
 export type ClassName = {
   className?: string;
 };
 
 export type Children = {
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
 export type Fn = (...args: any[]) => any;

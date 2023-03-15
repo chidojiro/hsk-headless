@@ -1,6 +1,6 @@
-import { ComponentStory } from '@storybook/react';
-import React from 'react';
 import { sleep } from '@/utils';
+import { ComponentStory } from '@storybook/react';
+import { useRef, useState } from 'react';
 import { useInfiniteLoader, UseInfiniteLoaderProps } from './useInfiniteLoader';
 
 export default {
@@ -15,9 +15,9 @@ const Template: ComponentStory<any> = ({ mode }: Pick<UseInfiniteLoaderProps<any
     return data;
   };
 
-  const [loadedData, setLoadedData] = React.useState([]);
+  const [loadedData, setLoadedData] = useState([]);
 
-  const ref = React.useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   const { loadMore, isLoading, isExhausted } = useInfiniteLoader({
     mode,

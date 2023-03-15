@@ -1,6 +1,6 @@
-import React from 'react';
+import { FunctionComponent, ReactNode } from 'react';
 
-type Component = React.FunctionComponent<any> | keyof JSX.IntrinsicElements;
+type Component = FunctionComponent<any> | keyof JSX.IntrinsicElements;
 
 type BaseConfigOptions = {
   component: Component;
@@ -15,12 +15,12 @@ type ElseConfig = BaseConfigOptions;
 
 type Configs = IfConfig[] | [...ifConfigs: IfConfig[], elseConfig: ElseConfig];
 
-const FallbackComponent = (props: { children?: React.ReactNode }) => {
-  return <React.Fragment>{props.children}</React.Fragment>;
+const FallbackComponent = (props: { children?: ReactNode }) => {
+  return <>{props.children}</>;
 };
 
 export type ConditionalWrapperProps = {
-  children?: React.ReactNode;
+  children?: ReactNode;
   conditions: Configs;
 } & Record<string, any>;
 

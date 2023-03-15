@@ -1,10 +1,10 @@
 import { useMountEffect } from '@/hooks';
 import { get } from 'lodash-es';
-import React from 'react';
+import { ChangeEventHandler, ComponentType, FocusEventHandler, forwardRef, useCallback } from 'react';
 import { RegisterOptions, useController, useFormContext } from 'react-hook-form';
 
 type FieldOwnProps<TComponentProps, TValue> = {
-  component: React.ComponentType<TComponentProps>;
+  component: ComponentType<TComponentProps>;
   name: string;
   rules?: RegisterOptions;
   emptyValue?: TValue;
@@ -52,18 +52,18 @@ const ForwardedField = <TComponentProps, TValue>(
 
   const error = get(errors, name);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
     const _value = changeAs ? changeAs(e) : e ?? emptyValue;
     onChange(_value);
     onChangeProp?.(e);
   };
 
-  const handleBlur: React.FocusEventHandler<HTMLInputElement> = e => {
+  const handleBlur: FocusEventHandler<HTMLInputElement> = e => {
     onBlur();
     onBlurProp?.(e);
   };
 
-  const resolveValue = React.useCallback(
+  const resolveValue = useCallback(
     () => {
       if ([null, undefined].includes(value)) {
         return emptyValue;
@@ -97,4 +97,4 @@ const ForwardedField = <TComponentProps, TValue>(
   );
 };
 
-export const Field: typeof ForwardedField = React.forwardRef(ForwardedField) as any;
+export const Field: typeof ForwardedField = forwardRef(ForwardedField) as any;

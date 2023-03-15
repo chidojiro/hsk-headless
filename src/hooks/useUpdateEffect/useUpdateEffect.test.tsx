@@ -1,5 +1,5 @@
 import { act, render } from '@testing-library/react';
-import React from 'react';
+import { useState } from 'react';
 import { useMountEffect } from '../useMountEffect';
 import { useUpdateEffect } from './useUpdateEffect';
 
@@ -8,7 +8,7 @@ const mockListener = jest.fn();
 const UPDATE_AFTER = 1000;
 
 const HookHost = ({ updateAfter }: any) => {
-  const [state, setState] = React.useState(false);
+  const [state, setState] = useState(false);
 
   useMountEffect(() => {
     if (updateAfter) {

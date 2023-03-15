@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useHandler } from '../useHandler';
 
 export type UseOnDemandInfiniteLoaderProps<T = unknown> = {
@@ -19,7 +19,7 @@ export const useOnDemandInfiniteLoader = <T = unknown>({
   defaultPage,
   enabled,
 }: UseOnDemandInfiniteLoaderProps<T>): UseOnDemandInfiniteLoaderReturn => {
-  const [page, setPage] = React.useState(defaultPage ?? 1);
+  const [page, setPage] = useState(defaultPage ?? 1);
 
   const { handle: loadMore, isLoading } = useHandler(
     async () => {
@@ -31,12 +31,12 @@ export const useOnDemandInfiniteLoader = <T = unknown>({
     }
   );
 
-  const handleLoadMore = React.useCallback(() => {
+  const handleLoadMore = useCallback(() => {
     if (!enabled) return;
     loadMore();
   }, [enabled, loadMore]);
 
-  return React.useMemo(
+  return useMemo(
     () => ({
       isLoading,
       loadMore: handleLoadMore,

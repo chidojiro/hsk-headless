@@ -1,7 +1,7 @@
 import { useDisclosure } from '@/hooks';
-import React from 'react';
 import { HTMLElementOrHTMLElementRef } from '@/types';
 import { isRef } from '@/utils';
+import { useEffect } from 'react';
 
 export const useIntersection = (
   elementOrElementRef?: HTMLElementOrHTMLElementRef | null,
@@ -11,7 +11,7 @@ export const useIntersection = (
 
   const intersectedDisclosure = useDisclosure();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         intersectedDisclosure.set(entry.isIntersecting);

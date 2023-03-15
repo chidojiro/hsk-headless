@@ -1,6 +1,6 @@
 import { Portal } from '@/components';
 import { Children } from '@/types';
-import React from 'react';
+import { CSSProperties, forwardRef } from 'react';
 
 type DrawerPlacement = 'top' | 'bottom' | 'left' | 'right';
 
@@ -8,7 +8,7 @@ export type DrawerProps = Children & {
   placement?: 'top' | 'bottom' | 'left' | 'right';
 };
 
-const styleMap: Record<DrawerPlacement, React.CSSProperties> = {
+const styleMap: Record<DrawerPlacement, CSSProperties> = {
   top: {
     width: '100vw',
     bottom: '0',
@@ -31,7 +31,7 @@ const styleMap: Record<DrawerPlacement, React.CSSProperties> = {
   },
 };
 
-export const Drawer = React.forwardRef<any, DrawerProps>(({ placement = 'right', children }, ref) => {
+export const Drawer = forwardRef<any, DrawerProps>(({ placement = 'right', children }, ref) => {
   return (
     <Portal>
       <div

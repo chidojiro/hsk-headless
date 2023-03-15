@@ -1,7 +1,7 @@
-import React from 'react';
+import { useLayoutEffect } from 'react';
 
 export const useScrollDisable = (disable: boolean) => {
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (disable) {
       const currentWidth = document.documentElement.offsetWidth;
 
@@ -16,7 +16,7 @@ export const useScrollDisable = (disable: boolean) => {
     }
   }, [disable]);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     return () => {
       document.documentElement.style.removeProperty('overflow');
       document.documentElement.style.removeProperty('padding-right');

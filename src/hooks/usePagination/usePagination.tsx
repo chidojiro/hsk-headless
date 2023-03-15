@@ -1,5 +1,5 @@
+import { useCallback, useEffect, useMemo } from 'react';
 import { useControllableState } from '../useControllableState';
-import React from 'react';
 
 export type UsePaginationItem = {
   type: 'page' | 'next' | 'previous' | 'ellipsis';
@@ -47,12 +47,12 @@ export const usePagination = ({
 
   const [page, setPage] = useControllableState({ value: pageProp, onChange, defaultValue: 1 });
 
-  const validatePage = React.useCallback(() => {
+  const validatePage = useCallback(() => {
     if (page < 0) setPage(0);
     if (page > totalPage) setPage(totalPage);
   }, [page, setPage, totalPage]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     validatePage();
   }, [validatePage]);
 
@@ -77,7 +77,7 @@ export const usePagination = ({
 
   const isNextDisabled = page >= totalPage;
 
-  const next = React.useCallback(() => {
+  const next = useCallback(() => {
     if (isNextDisabled) return;
 
     setPage(prev => Math.min(prev + 1, totalPage));
@@ -85,20 +85,20 @@ export const usePagination = ({
 
   const isPrevDisabled = page === 1;
 
-  const prev = React.useCallback(() => {
+  const prev = useCallback(() => {
     if (isPrevDisabled) return;
 
     setPage(prev => Math.max(prev - 1, 1));
   }, [isPrevDisabled, setPage]);
 
-  const clickPage = React.useCallback(
+  const clickPage = useCallback(
     (page: number) => {
       setPage(page);
     },
     [setPage]
   );
 
-  const nextItem = React.useMemo<UsePaginationItem>(
+  const nextItem = useMemo<UsePaginationItem>(
     () => ({
       type: 'next',
       onClick: next,
@@ -108,7 +108,7 @@ export const usePagination = ({
     [isNextDisabled, next]
   );
 
-  const prevItem = React.useMemo<UsePaginationItem>(
+  const prevItem = useMemo<UsePaginationItem>(
     () => ({
       type: 'previous',
       onClick: prev,
@@ -118,7 +118,7 @@ export const usePagination = ({
     [isPrevDisabled, prev]
   );
 
-  const ellipsisItem = React.useMemo<UsePaginationItem>(
+  const ellipsisItem = useMemo<UsePaginationItem>(
     () => ({
       type: 'ellipsis',
       disabled: false,
@@ -127,7 +127,7 @@ export const usePagination = ({
     []
   );
 
-  const firstPageItem = React.useMemo<UsePaginationItem>(
+  const firstPageItem = useMemo<UsePaginationItem>(
     () => ({
       type: 'page',
       page: 1,
@@ -138,7 +138,7 @@ export const usePagination = ({
     [clickPage]
   );
 
-  const lastPageItem = React.useMemo<UsePaginationItem>(
+  const lastPageItem = useMemo<UsePaginationItem>(
     () => ({
       type: 'page',
       page: totalPage,
@@ -149,7 +149,7 @@ export const usePagination = ({
     [clickPage, totalPage]
   );
 
-  const showingPageItems = React.useMemo<UsePaginationItem[]>(
+  const showingPageItems = useMemo<UsePaginationItem[]>(
     () =>
       showingPages.map(showingPage => ({
         type: 'page',
@@ -161,7 +161,7 @@ export const usePagination = ({
     [clickPage, page, showingPages]
   );
 
-  const items = React.useMemo(
+  const items = useMemo(
     () =>
       [
         prevItem,
@@ -175,7 +175,7 @@ export const usePagination = ({
     [ellipsisItem, firstPageItem, lastPageItem, nextItem, prevItem, showingPages, showingPageItems, totalPage]
   );
 
-  const showingRange = React.useMemo(
+  const showingRange = useMemo(
     () => ({
       from: totalRecord === 0 ? 0 : (page - 1) * perPage + 1,
       to: Math.min(totalRecord, page * perPage),
@@ -184,7 +184,7 @@ export const usePagination = ({
     [page, perPage, totalRecord]
   );
 
-  const returnValue = React.useMemo<UsePaginationReturn>(
+  const returnValue = useMemo<UsePaginationReturn>(
     () => ({
       items,
       showingRange,

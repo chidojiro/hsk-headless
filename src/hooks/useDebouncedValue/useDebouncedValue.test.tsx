@@ -1,13 +1,13 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
+import { useState } from 'react';
 import { useDebouncedValue } from './useDebouncedValue';
 
 const getInput = () => screen.getByPlaceholderText('Enter text');
 const getDebouncedValueContainer = () => screen.getByTestId('debounced-value-container');
 
 const Component = () => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = useState('');
 
   const debouncedValue = useDebouncedValue(value, 500);
 

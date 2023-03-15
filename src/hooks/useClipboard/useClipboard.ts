@@ -1,5 +1,5 @@
 import copy from 'copy-to-clipboard';
-import React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type UseClipboardOptions = {
   timeout?: number;
@@ -7,17 +7,17 @@ export type UseClipboardOptions = {
 };
 
 export const useClipboard = (text: string, optionsOrTimeout: number | UseClipboardOptions = {}) => {
-  const [isCopied, setIsCopied] = React.useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const { timeout = 1500, ...copyOptions } =
     typeof optionsOrTimeout === 'number' ? { timeout: optionsOrTimeout } : optionsOrTimeout;
 
-  const onCopy = React.useCallback(() => {
+  const onCopy = useCallback(() => {
     const didCopy = copy(text, copyOptions);
     setIsCopied(didCopy);
   }, [text, copyOptions]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let timeoutId: number | null = null;
 
     if (isCopied) {
@@ -33,5 +33,5 @@ export const useClipboard = (text: string, optionsOrTimeout: number | UseClipboa
     };
   }, [timeout, isCopied]);
 
-  return React.useMemo(() => ({ value: text, onCopy, isCopied: isCopied }), [isCopied, onCopy, text]);
+  return useMemo(() => ({ value: text, onCopy, isCopied: isCopied }), [isCopied, onCopy, text]);
 };
