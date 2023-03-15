@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { useDebounce } from './useDebounce';
+import { useDebouncedValue } from './useDebouncedValue';
 
 const getInput = () => screen.getByPlaceholderText('Enter text');
 const getDebouncedValueContainer = () => screen.getByTestId('debounced-value-container');
@@ -9,7 +9,7 @@ const getDebouncedValueContainer = () => screen.getByTestId('debounced-value-con
 const Component = () => {
   const [value, setValue] = React.useState('');
 
-  const debouncedValue = useDebounce(value, 500);
+  const debouncedValue = useDebouncedValue(value, 500);
 
   return (
     <div>
